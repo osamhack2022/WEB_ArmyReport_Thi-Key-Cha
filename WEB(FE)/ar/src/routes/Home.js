@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Home = () => {
+  const [uid, setUid] = useState("");
+  
   return (
-    <div>Home</div>
+    <div className='AR_Home_Main_Page'>
+      
+    </div>
   )
 }
 
