@@ -2,7 +2,9 @@ import React from 'react'
 
 const Animation = () => {
   return (
-    <div>Animation</div>
+    <div className='AR_Main_Logo'>
+      <img src="" alt="" />
+    </div>
   )
 }
 

@@ -12,12 +12,12 @@ const Auth = () => {
     }else if (name === "userpwd"){
       setUserPwd(value);
     }
-
-
   };
+
   const onSubmit = (e) =>{
     e.preventDefault();
   };
+  
   return (
     <div className="AR_Login_Form">
       <form onSubmit={onSubmit}>
