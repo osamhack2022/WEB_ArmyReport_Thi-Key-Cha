@@ -87,7 +87,7 @@
 > 
 
 > 남경찬 
-`Email` rudcks0928
+`Email` rudcks0928@naver.com
 `Github` gclogs
 >
 
