@@ -1,17 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom';
 
+
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{8,16}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
 const Auth = () => {
-  
+  const userRef = useRef();
+  const errRef = useRef();
+
+  const [UserInfo, setUserInfo] = useState({
+    userid : '',
+    userpwd : '',
+  })
+
+  const { userid , userpwd } = UserInfo;
+
+  const [validId, setvalidId] = useState(false);
+  const [validPwd, setValidPwd] = useState(false);
+
+  useEffect(()=>{
+
+  })
   const onChange = (e) => {
     const {
       target : {name, value}
     } = e;
-    if (name === "userid"){
-      setUserId(value);
-    }else if (name === "userpwd"){
-      setUserPwd(value);
-    }
+    console.log(name, value)
+    setUserInfo({
+      ...UserInfo,
+      [name] : value
+    });
+    console.log(UserInfo);
   };
 
   const onSubmit = (e) =>{
@@ -27,11 +47,12 @@ const Auth = () => {
             type="text" 
             onChange={onChange}
             placeholder="ID를 입력해주세요"
+            ref={userRef}
             required
           />
           <input
             name="userpwd"
-            type="text"
+            type="password"
             onChange={onChange}
             placeholder="비밀번호를 입력해주세요"
             required
