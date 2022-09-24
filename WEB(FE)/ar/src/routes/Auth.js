@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { Link } from 'react-router-dom';
+import { AuthActions } from '../app/store';
 
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{8,16}$/;
@@ -23,6 +26,8 @@ const Auth = () => {
 
   })
   const onChange = (e) => {
+    const dispatch = useDispatch(); 
+
     const {
       target : {name, value}
     } = e;
@@ -36,6 +41,9 @@ const Auth = () => {
 
   const onSubmit = (e) =>{
     e.preventDefault();
+    /* ID, pwd 확인이 되었을 경우, 아래에 있는 dispatch 실행*/
+    dispatch(AuthActions.LogIn());
+    /* */
   };
   
   return (
