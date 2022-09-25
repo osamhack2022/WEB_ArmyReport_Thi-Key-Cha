@@ -59,8 +59,7 @@
 
 ### 데이터베이스
 
-- `SQLite`
-- `MariaDB`
+- `Firebase`
 
 ### 디자인
 
