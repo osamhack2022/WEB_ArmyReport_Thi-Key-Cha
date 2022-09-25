@@ -1,18 +1,22 @@
+// ./src/Register.js
+
 import React, { 
-useState,
-useEffect,
-useRef,
+    useState,
+    useEffect,
+    useRef,
+    useContext
 } from 'react'
-import Dropdown from 'react-bootstrap/Dropdown';
-
-
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{8,16}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+    
+import AuthContext from '../store/auth-context';
 
 const Register = () => {
-    const UserRef = useRef();
-    const errRef = useRef();
-    
+        const [fromDate, setFromDate] = useState("");
+
+    const [toDate, setToDate] = useState("");
+    const assignFromDate = e => {
+        console.log(e.target.value);
+        setFromDate(e.target.value);
+    };
     const [UserObj, setUserObj] = useState({
         'UserId' : '',
         'UserPwd' : '',
@@ -24,55 +28,36 @@ const Register = () => {
             'Batalion' : '',
             'Company' : ''
         },
-        'UserLastDate' : Date.now()
+        'UserLastDate' : new Date()
     });
 
-    const [errMsg, setErrMsg] = useState('');
+    const [isLoad, setisLoad] = useState(false);
 
-    const [validId, setvalidId] = useState(false);
-    const [validPwd, setvalidPwd] = useState(false);
-    const [validUserName, setvalidUserName] = useState(false);
-    const [validUserLocation, setvalidUserLocation] = useState(false);
-    const [validUserLastDate, setvalidUserLastDate] = useState(false);
+    const authCtx = useContext(AuthContext);
 
-    const [userFocus, setUserFocus] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
+    const emailInputRef = useRef();
+    const passwordInputRef = useRef();
+    const UserRef = useRef();
 
-    const [matchPwd, setMatchPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
-
-    const { UserId, UserPwd, UserName, UserClasses, UserLocation, UserLastDate} = UserObj;
-
-    const onDropDownBtnClick = () =>{
-        const change = document.getElementById("dropdown_classes");
-        const Army_class = document.getElementsByClassName("dropdown_class");
-        change.innerText = Army_class.innerText;
-    }
+    const Army_Classes = [
+        {id: null, value: '선택'},
+        {id: 1351 , value: '이병'},
+        {id: 1353 , value: '일병'},
+        {id: 1355 , value: '상병'},
+        {id: 1357 , value: '병장'}
+    ];
 
     useEffect(()=> {
         UserRef.current?.focus();
+        emailInputRef.current?.focus();
+        passwordInputRef.current?.focus();
     }, [])
 
-    useEffect(() => {
-        const result = USER_REGEX.test(UserObj.UserId);
-        console.log(result);
-        console.log(UserObj.UserId);
-        setvalidId(result);
-    }, [UserObj.UserId]);
-
-    useEffect(() => {
-        const result = PWD_REGEX.test(UserObj.UserPwd);
-        console.log(result);
-        console.log(UserObj.UserPwd);
-        setvalidPwd(result);
-        const match = UserObj.UserPwd === matchPwd;
-        setValidMatch(match);
-    }, [UserObj.UserPwd, matchPwd]);
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [UserObj.UserId, UserObj.UserPwd, matchPwd]);
+    const onDropDownBtnClick = (event) =>{
+        const {
+            target : {value}
+        } = event;
+    }
 
     const onChange = (event) => {
         const {
@@ -86,74 +71,82 @@ const Register = () => {
 
     const onSubmit = (event) =>{
         event.preventDefault();
+        const enteredEmail = emailInputRef.current.value;
+        const enteredPassword = passwordInputRef.current.value;
         
+        setisLoad(true);
+        fetch(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0',
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: enteredEmail,
+                    password: enteredPassword,
+                    returnSecureToken: true
+                }),
+                header: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        ).then((res) => {
+            setisLoad(false);
+            if(res.ok){
+                let okmessage = '가입하였습니다!';
+                alert(okmessage);
+                return res.json();
+            }else{
+                return res.json().then(data =>{
+                    let errormessage = '인증 실패!';
+                    if (data && data.error && data.error.message){
+                        errormessage = data.error.message;
+                    }
+                    throw new Error(errorMessage);
+                });
+            }
+        }).then(data => {
+            authCtx.login(data.idToken);
+        }).catch(err => {
+            alert(err.message);
+        });
     }
-
 
     return (
         <div className="AR_User_Making">
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}  aria-live="assertive">
-                {errMsg}
-            </p>
             <form onSubmit={onSubmit}>
                 <h1>Register</h1>
                 <div className="AR_Topic_Info">
                     <div className="Designate_Id">
                         <label htmlFor="UserId" className='UserId'>
                             ID
-                            <span className={validUserName ? "valid" : "hide"}>
-                                됐음!
-                            </span>
-                            <span className={validId || !UserObj.id ? "hide" : "invalid"}>
-                                안됐음.
+                            <span className='UserId_next'>
+
                             </span>
                         </label>
                         <input
-                            name="UserId"
-                            type="text"
+                            name="UserEmail"
+                            type="email"
                             onChange={onChange}
                             autoComplete="off"
-                            placeholder='ID를 입력해주세요.'
+                            ref={emailInputRef}
+                            placeholder='Email 또는 ID를 입력해주세요.'
                             required
-                            aria-invalid={validId ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
                     </div>
-                    <p id="uidnote" className={userFocus && UserId && 
-                    !validId ? "instructions" : "offscreen"}>
-                        8글자에서 16글자 사이여야 합니다. <br/>
-                        반드시 영문으로 시작되어야 합니다. <br/>
-                        문자, 숫자, _ , !, @, #, $, % 등이 가능 합니다.
-                    </p>
                     <div className="Designate_Pwd">
                         <label htmlFor="UserPwd" className='UserPwd'>
                             Password
-                            <span className={validPwd ? "valid" : "hide"}>
-                                됐음.
-                            </span>
-                            <span className={validPwd || !UserObj.UserPwd ? "hide" : "invalid"}>
-                                안됐음.
+                            <span className='UserPwd_next'>
+
                             </span>
                         </label>
                         <input
                             type="password"
                             id="password"
                             onChange={onChange}
+                            ref={passwordInputRef}
                             placeholder='비밀번호를 입력해주세요'
                             required
-                            aria-invalid={validPwd ? "false" : "true"}
-                            aria-describedby="pwdnote"
-                            onFocus={()=> setPwdFocus(true)}
-                            onBlur={()=>setPwdFocus(false)}
                         />
-                        <p id="pwdnote" className={pwdFocus && !validPwd ? "instruction" :
-                        "offscreen"}>
-                            8글자에서 24글자 사이여야 합니다. <br/>
-                            대문자, 소문자, 숫자, 특수문자를 포함해야 합니다. <br/>
-                            다음과 같은 특수문자를 허용합니다. ! @ # $ % <br/>
-                        </p>
                     </div>
                     <div className="Designate_Name">
                         <label htmlFor="UserName" className="UserName">이름</label>
@@ -163,29 +156,33 @@ const Register = () => {
                             onChange={onChange}
                             placeholder="이름을 적어주세요"
                             required
-                        />    
+                        />
                     </div>
-                    <div className="AR_Classes_Dropdown">
-                        <Dropdown>
-                            <Dropdown.Toggle variant="success" id="dropdown_classes">
-                                선택
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={onDropDownBtnClick} className="dropdown_class">이병</Dropdown.Item>
-                                <Dropdown.Item onClick={onDropDownBtnClick} className="dropdown_class">일병</Dropdown.Item>
-                                <Dropdown.Item onClick={onDropDownBtnClick} className="dropdown_class">상병</Dropdown.Item>
-                                <Dropdown.Item onClick={onDropDownBtnClick} className="dropdown_class">병장</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
+                    
                     <div className="AR_User_Location">
-
+                        <div className="AR_Classes_Dropdown">
+                            
+                        </div>
                     </div>
                     <div className="AR_User_Last_Date">
-
+                        <label htmlFor="UserLastDate">
+                            전역일
+                        </label>
+                        <input
+                            type="date"
+                            name="from"
+                            id="startdate"
+                            value={fromDate}
+                            onChange={assignFromDate}
+                            className="form-control datepicker"
+                            style={{ width: "150px" }}
+                        />
                     </div>
                 </div>
-                <button type="button">Sign Up</button>
+                <div className="Register_Btn">
+                    {!isLoad && <button type="button" onClick={onSubmit}>Sign Up</button>}
+                    {isLoad && <p>Sending...</p>}
+                </div>
             </form>
         </div>
     )

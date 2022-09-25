@@ -1,33 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { AuthActions } from '../app/store';
-
-
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{8,16}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+import AuthContext from '../store/auth-context';
 
 const Auth = () => {
-  const userRef = useRef();
-  const errRef = useRef();
-
   const [UserInfo, setUserInfo] = useState({
     userid : '',
     userpwd : '',
-  })
+  });
+  const [isLoad, setisLoad] = useState(false);
 
-  const { userid , userpwd } = UserInfo;
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  
 
-  const [validId, setvalidId] = useState(false);
-  const [validPwd, setValidPwd] = useState(false);
+  const authCtx = useContext(AuthContext);
 
-  useEffect(()=>{
 
-  })
+  useEffect(() => {
+    emailInputRef.current.focus();
+    passwordInputRef.current.focus();
+  }, []);
+
   const onChange = (e) => {
-    const dispatch = useDispatch(); 
-
     const {
       target : {name, value}
     } = e;
@@ -38,44 +34,96 @@ const Auth = () => {
     });
     console.log(UserInfo);
   };
+  
+  const onClick = (event) =>{
+    event.preventDefault();
+    
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
+    
+    setisLoad(true);
 
-  const onSubmit = (e) =>{
-    e.preventDefault();
-    /* ID, pwd 확인이 되었을 경우, 아래에 있는 dispatch 실행*/
-    dispatch(AuthActions.LogIn());
-    /* */
-  };
+    const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0';
+
+    fetch(
+        url,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                email: enteredEmail,
+                password: enteredPassword,
+                returnSecureToken: true
+            }),
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then((res) => {
+        setisLoad(false);
+        if(res.ok){
+            let okmessage = '로그인하였습니다!';
+            alert(okmessage);
+            return res.json();
+        }else{
+            return res.json().then(data =>{
+                let errormessage = '로그인 실패!';
+                if (data && data.error && data.error.message){
+                    errormessage = data.error.message;
+                }
+                throw new Error(errorMessage);
+            });
+        }
+    }).then(data => {
+        authCtx.login(data.idToken);
+    }).catch(err => {
+        alert(err.message);
+    });
+  }
   
   return (
-    <div className="AR_Login_Form">
-      <form onSubmit={onSubmit}>
-        <div className="AR_Login_">
-          <input 
-            name="userid"
-            type="text" 
-            onChange={onChange}
-            placeholder="ID를 입력해주세요"
-            ref={userRef}
-            required
-          />
-          <input
-            name="userpwd"
-            type="password"
-            onChange={onChange}
-            placeholder="비밀번호를 입력해주세요"
-            required
-          />
-        </div>
-        <div className="AR_Login_Btns">
-          <button type="button" className='AR_Login_Btn'>
+    <>
+      <div className="AR_Login_Form">
+        <form>
+          <label htmlFor="LoginForm">
             Log In
-          </button>
-          <button type="button" className="AR_Register_Btn">
-            <Link to='/Register'>Register</Link>
-          </button>
-        </div>
-      </form>
-    </div>
+          </label>
+          <div className="AR_Login_">
+            <input 
+              name="userid"
+              type="text" 
+              onChange={onChange}
+              placeholder="ID를 입력해주세요"
+              ref={emailInputRef}
+              required
+            />
+            <input
+              name="userpwd"
+              type="password"
+              onChange={onChange}
+              placeholder="비밀번호를 입력해주세요"
+              ref={passwordInputRef}
+              required
+            />
+          </div>
+          <div className="AR_Login_Btns">
+            {!isLoad && <button 
+              type="button" 
+              className='AR_Login_Btn'
+              onClick={onClick}
+            >
+              Log In
+            </button> 
+            }
+            {isLoad && <p>Sending...</p>
+            }
+            <button type="button" className="AR_Register_Btn">
+              <Link to='/Register'>Register</Link>
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
+    
   )
 }
 
