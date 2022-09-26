@@ -6,19 +6,14 @@ import React, {
     useRef,
     useContext
 } from 'react'
-    
+import { useNavigate } from 'react-router-dom';
 import AuthContext from '../store/auth-context';
 
 const Register = () => {
-        const [fromDate, setFromDate] = useState("");
+    const history = useNavigate();
 
-    const [toDate, setToDate] = useState("");
-    const assignFromDate = e => {
-        console.log(e.target.value);
-        setFromDate(e.target.value);
-    };
     const [UserObj, setUserObj] = useState({
-        'UserId' : '',
+        'UserEmail' : '',
         'UserPwd' : '',
         'UserName' : '',
         'UserClasses' : '',
@@ -53,12 +48,6 @@ const Register = () => {
         passwordInputRef.current?.focus();
     }, [])
 
-    const onDropDownBtnClick = (event) =>{
-        const {
-            target : {value}
-        } = event;
-    }
-
     const onChange = (event) => {
         const {
             target : {name, value}
@@ -67,6 +56,7 @@ const Register = () => {
             ...UserObj,
             [name] : value,
         });
+        console.log(UserObj);
     }
 
     const onSubmit = (event) =>{
@@ -100,11 +90,12 @@ const Register = () => {
                     if (data && data.error && data.error.message){
                         errormessage = data.error.message;
                     }
-                    throw new Error(errorMessage);
+                    throw new Error(errormessage);
                 });
             }
         }).then(data => {
             authCtx.login(data.idToken);
+            history(`/:${UserObj.UserEmail}`);
         }).catch(err => {
             alert(err.message);
         });
@@ -140,6 +131,7 @@ const Register = () => {
                             </span>
                         </label>
                         <input
+                            name="UserPwd"
                             type="password"
                             id="password"
                             onChange={onChange}
@@ -158,7 +150,6 @@ const Register = () => {
                             required
                         />
                     </div>
-                    
                     <div className="AR_User_Location">
                         <div className="AR_Classes_Dropdown">
                             
@@ -170,10 +161,10 @@ const Register = () => {
                         </label>
                         <input
                             type="date"
-                            name="from"
+                            name="UserLastDate"
                             id="startdate"
-                            value={fromDate}
-                            onChange={assignFromDate}
+                            value={UserObj.UserLastDate}
+                            onChange={onChange}
                             className="form-control datepicker"
                             style={{ width: "150px" }}
                         />

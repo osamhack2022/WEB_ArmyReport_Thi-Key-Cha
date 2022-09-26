@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import HomeProfile from './HomeProfile';
 
 import { AuthActions } from '../app/store';
-import { useSelector } from 'react-redux';
 
 const Home = () => {
   return (
