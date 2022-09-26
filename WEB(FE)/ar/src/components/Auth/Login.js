@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const history = useNavigate();
   const [UserInfo, setUserInfo] = useState({
     userid : '',
     userpwd : '',
@@ -75,6 +76,8 @@ const Login = () => {
         }
     }).then(data => {
         authCtx.login(data.idToken);
+        const uid = enteredEmail.split('@');
+        history(`/${uid[0]}`);
     }).catch(err => {
         alert(err.message);
     });
