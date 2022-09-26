@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import HomeProfile from './HomeProfile';
-
-import { AuthActions } from '../app/store';
+import HomeProfile from '../components/Home/HomeProfile';
+import BossMessage from '../components/Home/BossMessage'
+import Navigation from '../components/Home/Navigation'
 
 const Home = () => {
   return (

@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import AuthContext from '../store/auth-context';
+import AuthContext from '../../store/auth-context';
 
-const Auth = () => {
+const Login = () => {
   const [UserInfo, setUserInfo] = useState({
     userid : '',
     userpwd : '',
@@ -127,4 +127,4 @@ const Auth = () => {
   )
 }
 
-export default Auth;
+export default Login;

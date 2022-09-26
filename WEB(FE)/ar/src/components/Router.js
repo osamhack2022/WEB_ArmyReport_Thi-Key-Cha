@@ -1,11 +1,12 @@
 import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
-import Home from '../routes/Home';
-import Auth from '../routes/Auth';
-import Animation from '../routes/Animation';
-import Register from '../routes/Register';
-import Calender from '../routes/Calender.js';
+import Home from '../pages/Home';
+import Login from './Auth/Login';
+import Animation from '../pages/Animation';
+import Register from './Auth/Register';
+import Calender from '../pages/Calender';
+import Vacation from '../pages/Vacation';
 
 const AppRouter = () => {
   return (
@@ -16,9 +17,10 @@ const AppRouter = () => {
         </Routes>
         <Routes>
           <Route exact path="/:id" element={<Home />} />
-          <Route path="/Login" element={<Auth />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />}/>
           <Route path='/Calender' element={<Calender />}/>
+          <Route path='/Vacation' element={<Vacation />}></Route>
         </Routes>
       </Router>
     </>

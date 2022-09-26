@@ -1,5 +1,3 @@
-// ./src/Register.js
-
 import React, { 
     useState,
     useEffect,
@@ -7,11 +5,12 @@ import React, {
     useContext
 } from 'react'
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../store/auth-context';
+import AuthContext from '../../store/auth-context';
+import db from '../../database/DB_Manager';
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
     const history = useNavigate();
-
     const [UserObj, setUserObj] = useState({
         'UserEmail' : '',
         'UserPwd' : '',
@@ -35,11 +34,11 @@ const Register = () => {
     const UserRef = useRef();
 
     const Army_Classes = [
-        {id: null, value: '선택'},
-        {id: 1351 , value: '이병'},
-        {id: 1353 , value: '일병'},
-        {id: 1355 , value: '상병'},
-        {id: 1357 , value: '병장'}
+        {id: null, value: '선택', name: '선택'},
+        {id: 1351 , value: '이병', name: '이병'},
+        {id: 1353 , value: '일병', name: '일병'},
+        {id: 1355 , value: '상병', name: '상병'},
+        {id: 1357 , value: '병장', name: '병장'}
     ];
 
     useEffect(()=> {
@@ -56,7 +55,6 @@ const Register = () => {
             ...UserObj,
             [name] : value,
         });
-        console.log(UserObj);
     }
 
     const onSubmit = (event) =>{
@@ -93,8 +91,9 @@ const Register = () => {
                     throw new Error(errormessage);
                 });
             }
-        }).then(data => {
+        }).then(async(data) => {
             authCtx.login(data.idToken);
+            await setDoc(doc(db,"User",`${UserObj.UserEmail}`), UserObj);
             history(`/:${UserObj.UserEmail}`);
         }).catch(err => {
             alert(err.message);
@@ -150,9 +149,26 @@ const Register = () => {
                             required
                         />
                     </div>
-                    <div className="AR_User_Location">
+                    <div className="AR_User_Classes">
+                        <label htmlFor="UserClasses">
+                            계급
+                        </label>
                         <div className="AR_Classes_Dropdown">
-                            
+                            <select onChange={onChange}>
+                                <option value="이병">이병</option>
+                                <option value="일병">일병</option>
+                                <option value="상병">상병</option>
+                                <option value="병장">병장</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="AR_User_Located">
+                        <div className="AR_User_Location">
+                            <input 
+                                type="text" 
+
+                                required
+                            />
                         </div>
                     </div>
                     <div className="AR_User_Last_Date">
@@ -167,6 +183,7 @@ const Register = () => {
                             onChange={onChange}
                             className="form-control datepicker"
                             style={{ width: "150px" }}
+                            required
                         />
                     </div>
                 </div>
