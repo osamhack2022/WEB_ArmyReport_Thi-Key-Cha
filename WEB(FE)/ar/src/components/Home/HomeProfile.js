@@ -1,28 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import {useSelector, useDispatch} from 'react-redux';
-import db from '../../database/DB_Manager';
-import {doc, getDoc} from "firebase/firestore";
+import { useSelector } from 'react-redux';
 
-import { UserActions } from '../../app/UserSlice';
+const HomeProfile = () => {
+  const UserObj = useSelector((state) => state.User);
 
-const Profile = () => {
-  const dispatch = useDispatch();
-  const uid = useSelector((state)=> state.UserEmail);
-  console.log("uid", uid);
-  const UserObj = null;
-
-  useEffect(async() => {
-    const docRef = doc(db, "User", `${uid}`);
-    const docSnap = await getDoc(docRef);
-    try{
-        UserObj = docSnap.data();
-        dispatch(UserActions.CountLastDate(UserObj.UserLastDate));
-    }catch(error){
-      console.log(error);
-    }
-  });
-  
   return (
     <div className="AR_Sections_For_User">
       <section className='AR_User_Info'>
@@ -48,4 +30,4 @@ const Profile = () => {
   )
 }
 
-export default Profile;
+export default HomeProfile;

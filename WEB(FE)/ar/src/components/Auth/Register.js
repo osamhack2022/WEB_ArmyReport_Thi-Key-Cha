@@ -1,15 +1,14 @@
 import React, { 
     useState,
     useEffect,
-    useRef,
-    useContext
+    useRef
 } from 'react'
-import {useDispatch} from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../store/auth-context';
+import { useNavigate, Navigate } from 'react-router-dom';
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
-import { UserActions } from '../../app/UserSlice';
+
+import { AuthActions } from '../../app/AuthSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Register = () => {
     const history = useNavigate();
@@ -25,10 +24,9 @@ const Register = () => {
         },
         'UserLastDate' : new Date()
     });
-    const dispatch = useDispatch();
     const [isLoad, setisLoad] = useState(false);
 
-    const authCtx = useContext(AuthContext);
+    const dispatch = useDispatch();
 
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
@@ -49,7 +47,7 @@ const Register = () => {
             [name] : value,
         });
     }
-
+    const uid = null;
 
     const onSubmit = (event) =>{
         event.preventDefault();
@@ -86,7 +84,8 @@ const Register = () => {
                 });
             }
         }).then(async(data) => {
-            authCtx.login(data.idToken);
+            dispatch(AuthActions.Login(data.idToken));
+            uid = enteredEmail.split('@');
             await setDoc(doc(db,"User",`${UserObj.UserEmail}`), {
                 Email : UserObj.UserEmail,
                 Name : UserObj.UserName,
@@ -94,8 +93,6 @@ const Register = () => {
                 Location : UserObj.UserLocation,
                 Date : UserObj.UserLastDate
             });
-            dispatch(UserActions.CreateUserData(UserObj));
-            dispatch(UserActions.PrintState());
             history(`/`);
         }).catch(err => {
             alert(err.message);

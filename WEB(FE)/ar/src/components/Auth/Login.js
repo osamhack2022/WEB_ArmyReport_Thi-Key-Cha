@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-import { Link } from 'react-router-dom';
-import AuthContext from '../../store/auth-context';
+import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { UserActions } from '../../app/UserSlice';
+import { AuthActions } from '../../app/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { doc, getDoc } from 'firebase/firestore';
+
+import db from '../../database/DB_Manager';
 
 const Login = () => {
   const history = useNavigate();
@@ -14,10 +19,8 @@ const Login = () => {
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-  
 
-  const authCtx = useContext(AuthContext);
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     emailInputRef.current.focus();
@@ -28,12 +31,10 @@ const Login = () => {
     const {
       target : {name, value}
     } = e;
-    console.log(name, value)
     setUserInfo({
       ...UserInfo,
       [name] : value
     });
-    console.log(UserInfo);
   };
   
   const onClick = (event) =>{
@@ -74,8 +75,17 @@ const Login = () => {
                 throw new Error(errorMessage);
             });
         }
-    }).then(data => {
-        authCtx.login(data.idToken);
+    }).then(async(data) => {
+        dispatch(AuthActions.login(data.idToken));
+
+        const docRef = doc(db, "User", `${enteredEmail}`);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()){
+            const UserObj = docSnap.data();
+            dispatch(UserActions.Creating(UserObj));
+        }else{
+            console.log("umm..why?");
+        }
         const uid = enteredEmail.split('@');
         history(`/${uid[0]}`);
     }).catch(err => {

@@ -6,7 +6,9 @@
 4.
 */
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore,doc, getDoc } from 'firebase/firestore';
+
+import {useSelector} from 'react-redux';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0",
