@@ -8,8 +8,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore,doc, getDoc } from 'firebase/firestore';
 
-import {useSelector} from 'react-redux';
-
 const firebaseConfig = {
     apiKey: "AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0",
     authDomain: "thi-key-cha.firebaseapp.com",

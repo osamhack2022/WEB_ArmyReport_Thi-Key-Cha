@@ -46,8 +46,7 @@ const Register = () => {
             ...UserObj,
             [name] : value,
         });
-    }
-    const uid = null;
+    };
 
     const onSubmit = (event) =>{
         event.preventDefault();
@@ -84,14 +83,13 @@ const Register = () => {
                 });
             }
         }).then(async(data) => {
-            dispatch(AuthActions.Login(data.idToken));
-            uid = enteredEmail.split('@');
+            dispatch(AuthActions.login(data.idToken));
             await setDoc(doc(db,"User",`${UserObj.UserEmail}`), {
                 Email : UserObj.UserEmail,
                 Name : UserObj.UserName,
                 Classes : UserObj.UserClasses,
                 Location : UserObj.UserLocation,
-                Date : UserObj.UserLastDate
+                LastDate : UserObj.UserLastDate
             });
             history(`/`);
         }).catch(err => {

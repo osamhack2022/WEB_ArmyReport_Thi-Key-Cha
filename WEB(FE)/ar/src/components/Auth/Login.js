@@ -4,7 +4,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { UserActions } from '../../app/UserSlice';
 import { AuthActions } from '../../app/AuthSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doc, getDoc } from 'firebase/firestore';
 
 import db from '../../database/DB_Manager';
@@ -60,6 +60,7 @@ const Login = () => {
                 'Content-Type': 'application/json'
             }
         }
+        
     ).then((res) => {
         setisLoad(false);
         if(res.ok){
@@ -83,8 +84,6 @@ const Login = () => {
         if (docSnap.exists()){
             const UserObj = docSnap.data();
             dispatch(UserActions.Creating(UserObj));
-        }else{
-            console.log("umm..why?");
         }
         const uid = enteredEmail.split('@');
         history(`/${uid[0]}`);
@@ -120,7 +119,7 @@ const Login = () => {
           </div>
           <div className="AR_Login_Btns">
             {!isLoad && <button 
-              type="button" 
+              type="button"
               className='AR_Login_Btn'
               onClick={onClick}
             >

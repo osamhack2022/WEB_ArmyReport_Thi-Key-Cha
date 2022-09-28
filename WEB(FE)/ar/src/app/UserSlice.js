@@ -2,19 +2,24 @@ import { createSlice } from '@reduxjs/toolkit';
   
 const UserSlice = createSlice({
     name : 'User',
-    initialState : {},
+    initialState : { 
+        UserObj: { 
+            Name: "", 
+            Classes: "", 
+            Location: {
+                Division : "",
+                Brigade : "",
+                Batalion : "",
+                Company : ""
+            },
+            LastDate : "",
+        }},
     reducers : {
         Creating(state,action){
+            state.UserObj = action.payload;
         },
-        CountLastDate(state){
-            const later = new Date(state.UserLastDate);
-            const curr = new Date();
-            const result = later.getTime() - curr.getTime();
-            state.UserLastDate = new Date(result);
-        },
-        PrintState(state){
-            console.log(`email : ${state.UserEmail}`);
-            console.log(`Name : ${state.UserName}`);
+        PutingState(state){
+            return state;
         },
     }
 });

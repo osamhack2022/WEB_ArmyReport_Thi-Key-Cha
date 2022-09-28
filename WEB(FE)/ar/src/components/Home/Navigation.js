@@ -1,30 +1,32 @@
-import React from 'react'
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown'
-
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const Navigation = () => {
   return (
     <>
-      <Navbar bg="light" expand="lg">
-      <Container>
-        <div className="AR_Logo">
-          <Nav.Link href="/">AR Logo</Nav.Link>
+      <nav>
+        <div>
+          <NavLink to='/'>
+            <img src="" alt="" />
+          </NavLink>
+          <div>
+            <NavLink to='/Calender'>
+              캘린더
+            </NavLink>
+          </div>
+          <div>
+            <NavLink to='/Vacation'>
+              군인이 죄인가
+            </NavLink>
+          </div>
+          <div>
+            <NavLink to='/'>
+              나는 한 부대의 지휘관이다.
+            </NavLink>
+          </div>
         </div>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/Calender">Calender</Nav.Link>
-            <Nav.Link href="/Vacation">Vacation</Nav.Link>
-            <Nav.Link href="/Post">Posting</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-      </Navbar>
+      </nav>
     </>
-    
   )
 }
 

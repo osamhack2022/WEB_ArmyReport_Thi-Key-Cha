@@ -10,11 +10,12 @@ const AuthSlice = createSlice({
         login(state,action){
             state.token = action.payload;
             state.isLoggedIn = true;
-            return state
+            return state;
         },
         logout(state){
             state.token = null;
             state.isLoggedIn = false;
+            return state;
         },
         statevalue(state){
             return state;
