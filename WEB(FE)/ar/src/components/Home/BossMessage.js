@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 
+
 const BossMessage = () => {
     const [BossMessage, setBossMessage] = useState('');
     return (

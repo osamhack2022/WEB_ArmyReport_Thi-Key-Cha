@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { UserActions } from '../../app/UserSlice';
 import { AuthActions } from '../../app/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { doc, getDoc } from 'firebase/firestore';
+
+import "./Login.module.css";
 
 import db from '../../database/DB_Manager';
 
@@ -78,7 +80,6 @@ const Login = () => {
         }
     }).then(async(data) => {
         dispatch(AuthActions.login(data.idToken));
-
         const docRef = doc(db, "User", `${enteredEmail}`);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()){
@@ -86,6 +87,7 @@ const Login = () => {
             dispatch(UserActions.Creating(UserObj));
         }
         const uid = enteredEmail.split('@');
+        dispatch(UserActions.SetUid(uid));
         history(`/${uid[0]}`);
     }).catch(err => {
         alert(err.message);
@@ -94,18 +96,21 @@ const Login = () => {
   
   return (
     <>
-      <div className="AR_Login_Form">
+      <div className="ar-login-form">
+        <img 
+          src="AR_Logo.png" 
+          alt='AR_Logo'
+          className="ar-logo-img" 
+        />
         <form>
-          <label htmlFor="LoginForm">
-            Log In
-          </label>
-          <div className="AR_Login_">
+          <div className="ar-login">
             <input 
               name="userid"
               type="text" 
               onChange={onChange}
               placeholder="ID를 입력해주세요"
               ref={emailInputRef}
+              className="ar-login-input"
               required
             />
             <input
@@ -114,13 +119,14 @@ const Login = () => {
               onChange={onChange}
               placeholder="비밀번호를 입력해주세요"
               ref={passwordInputRef}
+              className="ar-login-input"
               required
             />
           </div>
-          <div className="AR_Login_Btns">
+          <div className="ar-login-btns">
             {!isLoad && <button 
               type="button"
-              className='AR_Login_Btn'
+              className='ar-login_btn'
               onClick={onClick}
             >
               Log In
@@ -128,14 +134,13 @@ const Login = () => {
             }
             {isLoad && <p>Sending...</p>
             }
-            <button type="button" className="AR_Register_Btn">
+            <button type="button" className="ar-register-btn">
               <Link to='/Register'>Register</Link>
             </button>
           </div>
         </form>
       </div>
     </>
-    
   )
 }
 

@@ -13,7 +13,9 @@ const UserSlice = createSlice({
                 Company : ""
             },
             LastDate : "",
-        }},
+        },
+        uid : ""
+    },
     reducers : {
         Creating(state,action){
             state.UserObj = action.payload;
@@ -21,6 +23,9 @@ const UserSlice = createSlice({
         PutingState(state){
             return state;
         },
+        SetUid(state,action){
+            state.uid = action.payload;
+        }
     }
 });
 

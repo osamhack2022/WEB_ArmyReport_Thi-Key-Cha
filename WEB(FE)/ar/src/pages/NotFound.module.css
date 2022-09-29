@@ -1,0 +1,53 @@
+.go-away-page-text{
+    position: absolute;
+    width: 805px;
+    height: 80px;
+    left: 557px;
+    top: 567px;
+
+    font-family: 'Gothic A1';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 64px;
+    line-height: 80px;
+    color: #FFFFFF;
+}
+
+.go-main{
+    position: absolute;
+    width: 250px;
+    height: 65px;
+    left: 835px;
+    top: 662px;
+}
+
+.main-btn-text{
+    position: absolute;
+    visibility: hidden;
+    left: 35.6%;
+    right: 35.6%;
+    top: 32.31%;
+    bottom: 33.85%;
+
+    font-family: 'Gothic A1';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 30px;
+
+    color: #FFFFFF;
+}
+
+.main-btn{
+    position: absolute;
+    height: 65px;
+    width: 250px;
+    border-radius: 100px;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+
+    background: #574F7D;
+    border-radius: 100px;
+}
