@@ -4,7 +4,23 @@
     height: 100px;
 }
 
-.nav-bar-text-home{
+.nav-bar-active{
+    position: absolute;
+    width: 1920px;
+    height: 300px;
+    left: 0px;
+    top: 0px;
+}
+
+.nav-bar-home{
+    position: absolute;
+    left: 5%;
+    right: 85.94%;
+    top: 27%;
+    bottom: 29%;
+}
+
+.nav-bar-home-text{
     position: absolute;
     left: 5%;
     right: 85.94%;
@@ -16,22 +32,24 @@
     font-weight: 400;
     font-size: 36px;
     line-height: 44px;
+    /* identical to box height */
+
 
     color: #FFFFFF;
 }
 
-.thi-key-cha-logo{
+.nav-menu-active{
     position: absolute;
-    left: 5%;
-    right: 85.94%;
-    top: 27%;
-    bottom: 29%;
+    left: 19.06%;
+    right: 59.11%;
+    top: 37%;
+    bottom: 40%;
 }
 
-.nav-bar-unit-text{
+.nav-item-text{
     position: absolute;
-    left: 29.95%;
-    right: 59.11%;
+    left: 19.06%;
+    right: 78.23%;
     top: 37%;
     bottom: 40%;
 
@@ -40,6 +58,5 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
-
     color: #FFFFFF;
 }

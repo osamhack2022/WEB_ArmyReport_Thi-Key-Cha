@@ -33,33 +33,33 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="nav-bar">
+      <nav className={click ? "nav-bar-active" : "nav-bar" }>
         <Link to={`/:${uid}`} className='nav-bar-home' onClick={closeMobileMenu}>
           <div className='nav-bar-home'>
             <h3 className='nav-bar-logo'>ThiKeyCha</h3>
           </div>
         </Link>
+        <ul className={click ? 'nav-menu-active' : 'nav-menu'}>
+          <li  
+            className='nav-item'
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+          >
+            <h4 className='nav-item-text'>캘린더</h4>
+            {dropdown && <ProductNavBar props={CalenderItems}/>}
+          </li>
+        </ul>
+        <ul className={click ? 'nav-menu-active' : 'nav-menu'}>
+          <li  
+            className='nav-item'
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+          >
+            <h4 className='nav-item-text'>군인이 죄인가</h4>
+            {dropdown && <ProductNavBar props={VacationItems}/>}
+          </li>
+        </ul>
       </nav>
-      <ul className={click ? 'nav-menu-active' : 'nav-menu'}>
-        <li  
-          className='nav-item'
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-        >
-          <h4 className='nav-item-calender-text'>캘린더</h4>
-          {dropdown && <ProductNavBar props={CalenderItems}/>}
-        </li>
-      </ul>
-      <ul className={click ? 'nav-menu-active' : 'nav-menu'}>
-        <li  
-          className='nav-item'
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-        >
-          <h4 className='nav-item-calender-text'>군인이 죄인가</h4>
-          {dropdown && <ProductNavBar props={VacationItems}/>}
-        </li>
-      </ul>
     </>
   )
 }
