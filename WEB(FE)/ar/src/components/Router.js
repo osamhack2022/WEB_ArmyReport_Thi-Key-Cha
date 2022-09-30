@@ -23,7 +23,7 @@ const AppRouter = () => {
           <Route path='/Vacation' element={<Vacation />}/>
           <Route path="/Calender/ArmyUnit" element={<ArmyUnitCalender />} />
           <Route path="/Calender/:id" element={<ArmyUnitCalender />} />
-          <Route component={<NotFound />}/>
+          <Route element={<NotFound />}/>
         </Routes>
       </Router>
     </>

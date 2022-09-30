@@ -4,46 +4,62 @@ import { Link, NavLink } from 'react-router-dom';
 import ProductNavBar from './ProductNavBar';
 import UserActions from '../../app/UserSlice';
 
+import { VacationItems, CalenderItems } from './MenuItem'
+
 const Navigation = () => {
   const uid = useSelector((state)=>state.User.uid);
 
-  const CalenderList = [
-    {title : "부대 일정 종합", items : `/Calender/ArmyUnit` },
-    {title : "부대 휴가 일정", items : `/Calender/${uid}/vacation`},
-  ];
-  console.log(CalenderList[0].title);
+  const [click, setClick] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
+
+  const handleClick = () => setClick(!click);
+  const closeMobileMenu = () => setClick(false);
+
+  const onMouseEnter = () => {
+    if (window.innerWidth < 960){
+      setDropdown(false);
+    }else{
+      setDropdown(true);
+    }
+  };
+
+  const onMouseLeave = () => {
+    if (window.innerWidth < 960){
+      setDropdown(false);
+    } else{
+      setDropdown(false);
+    }
+  };
+
   return (
     <>
       <nav className="nav-bar">
-        <div className="nav-bar-containers">
-          <div className="thi-key-cha-logo">
-            <li className="dropdown">
-              <Link to={`/:${uid}`}>
-                <h3 className="nav-bar-text-home">ThiKeyCha</h3>
-              </Link>
-              <div className="dropDownMenu">
-                {
-                  CalenderList.map(list => (
-                    <ProductNavBar title={list.title} items={list.items} />
-                ))}
-              </div>
-            </li>
+        <Link to={`/:${uid}`} className='nav-bar-home' onClick={closeMobileMenu}>
+          <div className='nav-bar-home'>
+            <h3 className='nav-bar-logo'>ThiKeyCha</h3>
           </div>
-          <div>
-            <h4 className="nav-bar-unit-text">캘린더</h4>
-          </div>
-          <div>
-            <NavLink to='/Vacation'>
-              <h4 className="nav-bar-unit-text">군인이 죄인가</h4>
-            </NavLink>
-          </div>
-          <div>
-            <NavLink to='/'>
-              <h4 className="nav-bar-unit-text">나는 한 부대의 지휘관이다.</h4>
-            </NavLink>
-          </div>
-        </div>
+        </Link>
       </nav>
+      <ul className={click ? 'nav-menu-active' : 'nav-menu'}>
+        <li  
+          className='nav-item'
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <h4 className='nav-item-calender-text'>캘린더</h4>
+          {dropdown && <ProductNavBar props={CalenderItems}/>}
+        </li>
+      </ul>
+      <ul className={click ? 'nav-menu-active' : 'nav-menu'}>
+        <li  
+          className='nav-item'
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <h4 className='nav-item-calender-text'>군인이 죄인가</h4>
+          {dropdown && <ProductNavBar props={VacationItems}/>}
+        </li>
+      </ul>
     </>
   )
 }

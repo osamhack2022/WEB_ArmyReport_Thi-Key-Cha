@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { UserActions } from '../../app/UserSlice';
 import { AuthActions } from '../../app/AuthSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { doc, getDoc } from 'firebase/firestore';
 
 import "./Login.module.css";
