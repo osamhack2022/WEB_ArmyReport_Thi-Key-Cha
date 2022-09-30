@@ -1,0 +1,45 @@
+.nav-bar{
+    position: absolute;
+    width: 1920px;
+    height: 100px;
+}
+
+.nav-bar-text-home{
+    position: absolute;
+    left: 5%;
+    right: 85.94%;
+    top: 27%;
+    bottom: 29%;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 44px;
+
+    color: #FFFFFF;
+}
+
+.thi-key-cha-logo{
+    position: absolute;
+    left: 5%;
+    right: 85.94%;
+    top: 27%;
+    bottom: 29%;
+}
+
+.nav-bar-unit-text{
+    position: absolute;
+    left: 29.95%;
+    right: 59.11%;
+    top: 37%;
+    bottom: 40%;
+
+    font-family: 'Gothic A1';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: #FFFFFF;
+}
