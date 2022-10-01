@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
 
+
+
 import './ProductNavBar.module.css';
 
 const ProductNavBar = ({props}) => {
@@ -10,6 +12,7 @@ const ProductNavBar = ({props}) => {
   const handleClick = () => {
     setClick(!click);
   }
+
   return (
     <>
       <ul onClick={handleClick} className={click ? 'dropdown-menu-clicked' : 'dropdown-menu'}>

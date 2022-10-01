@@ -7,7 +7,7 @@ import { AuthActions } from '../../app/AuthSlice';
 import { useDispatch } from 'react-redux';
 import { doc, getDoc } from 'firebase/firestore';
 
-import "./Login.module.css";
+import styles from "./Login.module.css";
 
 import db from '../../database/DB_Manager';
 
@@ -87,7 +87,7 @@ const Login = () => {
             dispatch(UserActions.Creating(UserObj));
         }
         const uid = enteredEmail.split('@');
-        dispatch(UserActions.SetUid(uid));
+        dispatch(UserActions.SetUid(uid[0]));
         history(`/${uid[0]}`);
     }).catch(err => {
         alert(err.message);
@@ -96,21 +96,16 @@ const Login = () => {
   
   return (
     <>
-      <div className="ar-login-form">
-        <img 
-          src="AR_Logo.png" 
-          alt='AR_Logo'
-          className="ar-logo-img" 
-        />
+      <div className={styles.loginform}>
         <form>
-          <div className="ar-login">
+          <div className={styles.login}>
             <input 
               name="userid"
               type="text" 
               onChange={onChange}
               placeholder="ID를 입력해주세요"
               ref={emailInputRef}
-              className="ar-login-input"
+              className={styles.idinput}
               required
             />
             <input
@@ -119,24 +114,32 @@ const Login = () => {
               onChange={onChange}
               placeholder="비밀번호를 입력해주세요"
               ref={passwordInputRef}
-              className="ar-login-input"
+              className={styles.pwdinput}
               required
             />
           </div>
-          <div className="ar-login-btns">
-            {!isLoad && <button 
-              type="button"
-              className='ar-login_btn'
-              onClick={onClick}
-            >
-              Log In
-            </button> 
-            }
-            {isLoad && <p>Sending...</p>
-            }
-            <button type="button" className="ar-register-btn">
-              <Link to='/Register'>Register</Link>
-            </button>
+          <div className={styles.loginbtns}>
+            <div className={styles.loginbtn}>
+              {!isLoad && <button 
+                type="button"
+                className={styles.loginbtn}
+                onClick={onClick}
+              >
+                <span>Log In</span>
+              </button> 
+              }
+              {isLoad && <p>Sending...</p>} 
+            </div>
+            <div className={styles.loginbot}>
+              <span className={styles.findid}>아이디 찾기</span>
+              <span className={styles.findpwd}>비밀번호 찾기</span>
+              <span className={styles.registertext}>회원가입</span>
+              <div className={styles.logintoadmin}>
+                <span className={styles.loginadmin}>
+                  관리자 로그인
+                </span>
+              </div>
+            </div>
           </div>
         </form>
       </div>

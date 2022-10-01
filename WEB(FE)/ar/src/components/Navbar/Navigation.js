@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProductNavBar from './ProductNavBar';
 import UserActions from '../../app/UserSlice';
 
+import './Navigation.module.css';
 import { VacationItems, CalenderItems } from './MenuItem'
 
 const Navigation = () => {

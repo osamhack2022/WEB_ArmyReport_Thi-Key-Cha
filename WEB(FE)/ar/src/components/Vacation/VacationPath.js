@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import VacationInput from './VacationInput';
 
+import './VacationPath.module.css';
+
 const VacationPath = () => {
   const PathInfo = [
     {

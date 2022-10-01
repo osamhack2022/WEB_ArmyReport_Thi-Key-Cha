@@ -1,23 +1,21 @@
 import React, { useRef, useState } from 'react'
 
+import './VacationInput.module.css'
+
 const VacationInput = () => {
 
     const nextID = useRef(1);
     const [inputItems, setInputItems] = useState([{
         'id' : '0',
-        'title' : ''
-    }]);
-
-    const [PathInfo, setPathInfo] = useState({
         'Station' : '',
-        'IsArrived' : false
-    });
-    const inputRef = useRef();
+        'IsArrived' : false,
+    }]);
     
     const addInput = () => {
         const input = {
             id : nextID.current,
-            title : ''
+            Station : '',
+            IsArrived : false,
         };
 
         setInputItems([...inputItems, input]);
@@ -27,38 +25,33 @@ const VacationInput = () => {
     const deleteInput = () => {
         setInputItems(inputItems.filter(item => item.id !== index))
     }
-    const  handleChange = (e, index) => {
+
+    const handleChange = (e, index) => {
         e.preventDefault();
         if (index > inputItems.length) return ;
 
         const inputItemsCopy = JSON.parse(JSON.stringify(inputItems));
-        inputItemsCopy[index].title = e.target.value; 
+        inputItemsCopy[index].Station = e.target.value; 
         setInputItems(inputItemsCopy);
     }
 
-    const onChange = (e) => {
-        const {
-            target: {name, value}
-        } = e;
-        setPathInfo({
-            ...PathInfo,
-            [name] : value
-        });
-    };
-
-    const onClick = (e) => {
-        if (e.target.value === '-'){
-            
-        }else if(e.target.value === '+'){
-
-        }else{
-            console.log(error);
-        }
+    const ArrivedCheckbox = ({target}) => {
+        
     }
+
     return (
         <>
             { inputItems.map((item, index) => (
-                <div className='vacation-path' key={index}>
+                <div className='vacation-path' key={index}>            
+                    <div id='vacation-path'>
+                        <input 
+                            name="IsArrived"
+                            type="checkbox"
+                            checked={item.IsArrived}
+                            onChange={(e)=> ArrivedCheckbox(e)}
+                            className='path-pass'
+                        />
+                    </div>
                     <label htmlFor="path-text">
                         경로 {index}
                     </label>
@@ -66,9 +59,8 @@ const VacationInput = () => {
                         name="station"
                         type="text" 
                         placeholder='경로를 입력하세요'
-                        ref={inputRef}
-                        maxlength='20'
-                        value={item.title}
+                        maxLength='20'
+                        value={item.Station}
                         onChange={handleChange}
                         autoComplete='off'
                         className={`title-${index}`}
@@ -87,16 +79,6 @@ const VacationInput = () => {
                     )}
                 </div>
             ))}
-            <div id='vacation-path'>
-                <input 
-                    name="IsArrived"
-                    type="checkbox"
-                    onChange={onChange}
-                    className='path-pass'
-                />
-                
-                
-            </div>
         </>
     )
 }

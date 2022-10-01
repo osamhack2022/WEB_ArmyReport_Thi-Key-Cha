@@ -1,4 +1,6 @@
 import React from 'react'
+import './VacationInfo.module.css';
+
 
 const VacationInfo = () => {
   return (
