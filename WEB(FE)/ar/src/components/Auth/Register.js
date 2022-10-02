@@ -12,16 +12,17 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Register = () => {
     const history = useNavigate();
+    const [userLocation, setUserLocation] = useState({
+        'Division' : '',
+        'Brigade' : '',
+        'Batalion' : '',
+        'Company' : ''
+    });
     const [UserObj, setUserObj] = useState({
         'UserEmail' : '',
         'UserName' : '',
         'UserClasses' : '',
-        'UserLocation' : {
-            'Division' : '',
-            'Brigade' : '',
-            'Batalion' : '',
-            'Company' : ''
-        },
+        'UserLocation' : useLocation,
         'UserLastDate' : new Date()
     });
     const [isLoad, setisLoad] = useState(false);
@@ -30,13 +31,15 @@ const Register = () => {
 
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
-    const UserRef = useRef();
+    const UserRef = db.collection('AR').doc('02501504').collection('9중대');
+
+    
 
     useEffect(()=> {
-        UserRef.current?.focus();
         emailInputRef.current?.focus();
         passwordInputRef.current?.focus();
     }, [])
+
 
     const onChange = async(event) => {
         const {
@@ -84,7 +87,8 @@ const Register = () => {
             }
         }).then(async(data) => {
             dispatch(AuthActions.login(data.idToken));
-            await setDoc(doc(db,"User",`${UserObj.UserEmail}`), {
+            await setDoc(doc(db, UserRef,'User'), {
+                /* UUID 를 이용해 UID 변수를 만들 생각입니다. */
                 Email : UserObj.UserEmail,
                 Name : UserObj.UserName,
                 Classes : UserObj.UserClasses,
@@ -96,7 +100,7 @@ const Register = () => {
             alert(err.message);
         });
     }
-
+    // 소속부대는 dropdown 으로 판별할 생각이며, 중대급은 Input type=text 로 받아 처리할 예정입니다.
     return (
         <>
             <div className="AR_User_Making">
@@ -105,7 +109,7 @@ const Register = () => {
                     <div className="AR_Topic_Info">
                         <div className="Designate_Id">
                             <label htmlFor="UserId" className='UserId'>
-                                ID
+                                Email
                                 <span className='UserId_next'>
 
                                 </span>
@@ -160,14 +164,17 @@ const Register = () => {
                                 </select>
                             </div>
                         </div>
-                        <div className="AR_User_Located">
-                            <div className="AR_User_Location">
-                                <input 
-                                    type="text"
-                                    name="UserLocation"
-                                    placeholder='??군단'
-                                    required
-                                />
+                        <div className="user_located">
+                            <label htmlFor="userclasses">
+                                소속 부대
+                            </label>
+                            <div className="user_classes_dropdown"> 
+                                <select name="division" onChange={onChange}>
+                                    <option value="이병">군단</option>
+                                    <option value="일병">사단</option>
+                                    <option value="상병">여단</option>
+                                    <option value="병장">대대</option>
+                                </select>
                             </div>
                         </div>
                         <div className="AR_User_Last_Date">

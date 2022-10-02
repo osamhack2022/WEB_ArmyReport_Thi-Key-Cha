@@ -1,40 +1,45 @@
+.loginform{
+    position: absolute;
+}
 
-.login{
+.idlogin{
+    position: absolute;
+    width: 550px;
+    height: 94px;
+    left: 685px;
+    top: 522px;
+
+    transform: matrix(1, 0, 0, -1, 0, 0);
 }
 
 .idinput{
+    position: absolute;
+    left: 0.71%;
+    right: -0.71%;
+    top: 103.33%;
+    bottom: -103.33%;
+
+    border-radius: 20px;
+    transform: matrix(1, 0, 0, -1, 0, 0);
+}
+
+.pwdlogin{
+    position: absolute;
+    width: 550px;
+    height: 94px;
+    left: 685px;
+    top: 632px;
+
+    transform: matrix(1, 0, 0, -1, 0, 0);
 }
 
 .pwdinput{
-}
+    position: absolute;
+    left: 0.71%;
+    right: -0.71%;
+    top: 103.33%;
+    bottom: -103.33%;
 
-.loginbtns{
-}
-
-.loginbtn{
-}
-
-.loginbot{
-}
-
-.findid{
-
-}
-
-.findpwd{
-
-}
-
-.registertext{
-}
-
-.logintoadmin{
-}
-
-.loginadmin{
-    
-}
-
-.loginform{
-
+    border-radius: 20px;
+    transform: matrix(1, 0, 0, -1, 0, 0);
 }

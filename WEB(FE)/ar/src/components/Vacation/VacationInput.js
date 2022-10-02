@@ -66,13 +66,13 @@ const VacationInput = () => {
                         className={`title-${index}`}
                         required
                     />
-                    { index === 0 && item.length < 4 && (
+                    { index === 0 && item.length < 5 && (
                         <button className='vacation-path-btn' onClick={addInput}>
                         +
                         </button> 
                     )}
                     { index > 0 && item[index-1] ? (
-                        <button className='vacation-path-btn' onClick={deleteInput}>
+                        <button className='vacation-path-btn' onClick={deleteInput(index)}>
                         -
                         </button>) : (
                             ''

@@ -1,10 +1,10 @@
-.nav-bar{
+.nav_bar{
     position: absolute;
     width: 1920px;
     height: 100px;
 }
 
-.nav-bar-active{
+.nav_bar_active{
     position: absolute;
     width: 1920px;
     height: 300px;

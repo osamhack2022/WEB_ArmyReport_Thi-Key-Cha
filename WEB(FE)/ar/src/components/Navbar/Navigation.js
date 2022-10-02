@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ProductNavBar from './ProductNavBar';
 import UserActions from '../../app/UserSlice';
 
-import './Navigation.module.css';
+import styles from './Navigation.module.css';
 import { VacationItems, CalenderItems } from './MenuItem'
 
 const Navigation = () => {
@@ -34,7 +34,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className={click ? "nav-bar-active" : "nav-bar" }>
+      <nav className={click ? 'nav_bar_active' : 'nav_bar'}>
         <Link to={`/:${uid}`} className='nav-bar-home' onClick={closeMobileMenu}>
           <div className='nav-bar-home'>
             <h3 className='nav-bar-logo'>ThiKeyCha</h3>
