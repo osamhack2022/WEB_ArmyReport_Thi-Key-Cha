@@ -1,48 +1,45 @@
-.ar-logo-img{
-    height: 170.5045928955078px;
-    width: 170.50460815429688px;
-
-    left: 7.16%;
-    right: 7.16%;
-    top: 7.32%;
-    bottom: 7%;
-
-    filter: drop-shadow(0px 4px 0px #AAC3D6);
-}
-
-.ar-login-input{
+.loginform{
     position: absolute;
-    width: 700px;
-    height: 120px;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.ar-login-btn{
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
-    background: #574F7D;
-    border-radius: 100px;
-}
-
-.ar-register-btn{
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
-    background: #574F7D;
-    border-radius: 100px;
-}
-
-.ar-login-form{
+.idlogin{
     position: absolute;
     width: 550px;
-    height: 204px;
+    height: 94px;
     left: 685px;
-    top: 428px;
+    top: 522px;
+
+    transform: matrix(1, 0, 0, -1, 0, 0);
+}
+
+.idinput{
+    position: absolute;
+    left: 0.71%;
+    right: -0.71%;
+    top: 103.33%;
+    bottom: -103.33%;
+
+    border-radius: 20px;
+    transform: matrix(1, 0, 0, -1, 0, 0);
+}
+
+.pwdlogin{
+    position: absolute;
+    width: 550px;
+    height: 94px;
+    left: 685px;
+    top: 632px;
+
+    transform: matrix(1, 0, 0, -1, 0, 0);
+}
+
+.pwdinput{
+    position: absolute;
+    left: 0.71%;
+    right: -0.71%;
+    top: 103.33%;
+    bottom: -103.33%;
+
+    border-radius: 20px;
+    transform: matrix(1, 0, 0, -1, 0, 0);
 }

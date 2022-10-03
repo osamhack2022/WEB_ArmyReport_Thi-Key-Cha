@@ -3,25 +3,44 @@ import React, {
     useEffect,
     useRef
 } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
-
+import { Cropsdata, Divisiondata, Bataliondata } from './Unitdata';
+import "antd/dist/antd.min.css";
 import { AuthActions } from '../../app/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  DatePicker,
+  Space
+} from 'antd';
+import moment from 'moment';
+
+const { Option } = Select;
+const { TextArea } = Input;
+const dateFormat = 'YYYY/MM/DD';
+
 
 const Register = () => {
     const history = useNavigate();
+    const [userLocation, setUserLocation] = useState({
+        'Crop' : '',
+        'Division' : '',
+        'Brigade' : '',
+        'Batalion' : '',
+        'Company' : ''
+    });
     const [UserObj, setUserObj] = useState({
         'UserEmail' : '',
+        'Userpwd' : '',
         'UserName' : '',
         'UserClasses' : '',
-        'UserLocation' : {
-            'Division' : '',
-            'Brigade' : '',
-            'Batalion' : '',
-            'Company' : ''
-        },
+        'UserLocation' : userLocation,
         'UserLastDate' : new Date()
     });
     const [isLoad, setisLoad] = useState(false);
@@ -30,28 +49,48 @@ const Register = () => {
 
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
-    const UserRef = useRef();
 
-    useEffect(()=> {
-        UserRef.current?.focus();
-        emailInputRef.current?.focus();
-        passwordInputRef.current?.focus();
-    }, [])
+    const army_classes = [
+        '이병','일병','상병','병장','하사','중사','상사','원사','준위',
+        '소위','중위','대위','소령','중령','대령','준장','소장','중장','대장'
+    ];
 
-    const onChange = async(event) => {
+    const [Crop, setCrop] = useState(Cropsdata[4]);
+    const [Division, setDivision] = useState(Divisiondata[Crop][0]);
+    const [Batalion, setBatalion] = useState(Bataliondata[Division][0]);
+
+    const onCropChange = (value) => {
+        setCrop(Cropsdata[value]);
+        setDivision(Divisiondata[value][0]);
+    };
+    const onDivisionChange = (value) => {
+        setDivision(value);
+        setBatalion(Bataliondata[value][0]);
+    };
+    const onBatalionChange = (value) => {
+        setBatalion(value);
+        setUserLocation({
+            'Crop' : '',
+            'Division' : '',
+            'Brigade' : '',
+            'Batalion' : '',
+            'Company' : ''
+        })
+    }
+
+    const onChange = (event) => {
         const {
             target : {name, value}
         } = event;
-        await setUserObj({
+        setUserObj({
             ...UserObj,
             [name] : value,
         });
     };
 
-    const onSubmit = (event) =>{
-        event.preventDefault();
-        const enteredEmail = emailInputRef.current.value;
-        const enteredPassword = passwordInputRef.current.value;
+    const onSubmit = () =>{
+        const enteredEmail = UserObj.UserEmail;
+        const enteredPassword = UserObj.Userpwd;
         
         setisLoad(true);
         fetch(
@@ -84,115 +123,144 @@ const Register = () => {
             }
         }).then(async(data) => {
             dispatch(AuthActions.login(data.idToken));
-            await setDoc(doc(db,"User",`${UserObj.UserEmail}`), {
-                Email : UserObj.UserEmail,
-                Name : UserObj.UserName,
-                Classes : UserObj.UserClasses,
-                Location : UserObj.UserLocation,
-                LastDate : UserObj.UserLastDate
+            const uid = enteredEmail.split('@');
+            await setDoc(doc(db, "02155004", "본부중대", "User",`${uid[0]}`), {
+                Useremail : UserObj.UserEmail,
+                Username : UserObj.UserName,
+                Userclass : UserObj.UserClasses,
+                Userlocated : UserObj.UserLocation,
+                Userlastdate : UserObj.UserLastDate
             });
             history(`/`);
         }).catch(err => {
             alert(err.message);
         });
     }
-
     return (
-        <>
-            <div className="AR_User_Making">
-                <form onSubmit={onSubmit}>
-                    <h1>Register</h1>
-                    <div className="AR_Topic_Info">
-                        <div className="Designate_Id">
-                            <label htmlFor="UserId" className='UserId'>
-                                ID
-                                <span className='UserId_next'>
-
-                                </span>
-                            </label>
-                            <input
-                                name="UserEmail"
-                                type="email"
-                                onChange={onChange}
-                                autoComplete="off"
-                                ref={emailInputRef}
-                                placeholder='Email 또는 ID를 입력해주세요.'
-                                required
-                            />
-                        </div>
-                        <div className="Designate_Pwd">
-                            <label htmlFor="UserPwd" className='UserPwd'>
-                                Password
-                                <span className='UserPwd_next'>
-
-                                </span>
-                            </label>
-                            <input
-                                name="UserPwd"
-                                type="password"
-                                id="password"
-                                onChange={onChange}
-                                ref={passwordInputRef}
-                                placeholder='비밀번호를 입력해주세요'
-                                required
-                            />
-                        </div>
-                        <div className="Designate_Name">
-                            <label htmlFor="UserName" className="UserName">이름</label>
-                            <input 
-                                name="UserName"
-                                type="text" 
-                                onChange={onChange}
-                                placeholder="이름을 적어주세요"
-                                required
-                            />
-                        </div>
-                        <div className="AR_User_Classes">
-                            <label htmlFor="UserClasses">
-                                계급
-                            </label>
-                            <div className="AR_Classes_Dropdown">
-                                <select name="UserClasses" onChange={onChange}>
-                                    <option value="이병">이병</option>
-                                    <option value="일병">일병</option>
-                                    <option value="상병">상병</option>
-                                    <option value="병장">병장</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="AR_User_Located">
-                            <div className="AR_User_Location">
-                                <input 
-                                    type="text"
-                                    name="UserLocation"
-                                    placeholder='??군단'
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="AR_User_Last_Date">
-                            <label htmlFor="UserLastDate">
-                                전역일
-                            </label>
-                            <input
-                                type="date"
-                                name="UserLastDate"
-                                id="startdate"
-                                value={UserObj.UserLastDate}
-                                onChange={onChange}
-                                className="form-control datepicker"
-                                style={{ width: "150px" }}
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div className="Register_Btn">
-                        {!isLoad && <button type="button" onClick={onSubmit}>Sign Up</button>}
-                        {isLoad && <p>Sending...</p>}
-                    </div>
-                </form>
-            </div>
-        </> 
+        <Form
+            labelCol={{
+                span: 5,
+            }}
+            wrapperCol={{
+                span: 15,
+            }}
+            initialValues={{
+                UserObj : UserObj,   
+            }}
+            onFinish={onSubmit}
+            autoComplete="off"
+            layout="horizontal"
+            onSubmit={(e)=>e.preventDefault()}
+        >
+            <Form.Item
+                label="Email"
+                name="UserEmail"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please input your Email!',
+                }]}
+            >
+                <Input 
+                    name='userid'
+                    onChange={onChange}
+                />
+            </Form.Item>
+            <Form.Item
+                label="Password"
+                name="Userpwd"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please input your password!',
+                }]}
+                
+            >
+                <Input.Password 
+                    name='userpwd'
+                    onChange={onChange}
+                />
+            </Form.Item>
+            <Form.Item label="이름" name='UserName'>
+                <Input name='UserName' maxLength={8}/>
+            </Form.Item>
+            <Form.Item label="계급" name='UserClasses' >
+                <Select
+                    name='UserClasses'
+                    defaultValue={army_classes[0]}
+                    style={{
+                    width: 80,
+                    }}
+                    onChange={onChange}
+                >
+                    {army_classes.map((army) => (
+                    <Option key={army}>{army}</Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <Form.Item label='전역일' name='UserLastDate'>
+                <Space direction="vertical" size={12}>
+                    <DatePicker 
+                        name='UserLastDate'
+                        defaultValue={moment(new Date(), dateFormat)} 
+                        format={dateFormat} 
+                        onChange={onChange}
+                    />
+                </Space>
+            </Form.Item>
+            <Form.Item label='소속부대'>
+                <Select
+                    name=''
+                    defaultValue={Cropsdata[0]}
+                    style={{
+                    width: 120,
+                    }}
+                    onChange={onCropChange}
+                >
+                    {Cropsdata.map((crop) => (
+                    <Option key={crop}>{crop}</Option>
+                    ))}
+                </Select>
+                <Select
+                    style={{
+                    width: 120,
+                    }}
+                    value={Divisiondata[Cropsdata[0]]}
+                    onChange={onDivisionChange}
+                >
+                    {Divisiondata[Crop].map((division) => (
+                    <Option key={division}>{division}</Option>
+                    ))}
+                </Select>
+                <Select
+                    style={{
+                    width: 120,
+                    }}
+                    value={Bataliondata[Divisiondata[Cropsdata[0]]]}
+                    onChange={onBatalionChange}
+                >
+                    {Bataliondata[Division].map((batalion) => (
+                    <Option key={batalion}>{batalion}</Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}    
+            >
+                <Button onSubmit={onSubmit}>회원가입</Button>
+            </Form.Item>
+            <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}
+            >
+                <Button>취소</Button>
+            </Form.Item>
+        </Form>
     )
 }
 
