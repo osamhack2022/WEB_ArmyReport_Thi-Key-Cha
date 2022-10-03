@@ -42,7 +42,7 @@ export const Divisiondata = {
     ]
 };
 
-export const Bataliondata = {
+export const Brigadedata = {
     '1사단' : [
         '제 11보병여단', '제 12보병여단', '제 15보병여단',
         '본부근무대'

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
-import { Cropsdata, Divisiondata, Bataliondata } from './Unitdata';
+import { Cropsdata, Divisiondata, Brigadedata } from './Unitdata';
 import "antd/dist/antd.min.css";
 import { AuthActions } from '../../app/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,7 +57,7 @@ const Register = () => {
 
     const [Crop, setCrop] = useState(Cropsdata[4]);
     const [Division, setDivision] = useState(Divisiondata[Crop][0]);
-    const [Batalion, setBatalion] = useState(Bataliondata[Division][0]);
+    const [Brigade, setBrigade] = useState(Brigadedata[Division][0]);
 
     const onCropChange = (value) => {
         setCrop(Cropsdata[value]);
@@ -65,17 +65,24 @@ const Register = () => {
     };
     const onDivisionChange = (value) => {
         setDivision(value);
-        setBatalion(Bataliondata[value][0]);
+        setBrigade(Brigadedata[value][0]);
     };
-    const onBatalionChange = (value) => {
-        setBatalion(value);
+    const onBrigadeChange = (event, value) => {
+        const {
+            target : {name}
+        } = event;
+        setBrigade(value);
         setUserLocation({
-            'Crop' : '',
-            'Division' : '',
-            'Brigade' : '',
+            'Crop' : Crop,
+            'Division' : Division,
+            'Brigade' : Brigade,
             'Batalion' : '',
             'Company' : ''
         })
+        setUserObj({
+            ...UserObj,
+            [UserLocation] : userLocation,
+        });
     }
 
     const onChange = (event) => {
@@ -236,11 +243,11 @@ const Register = () => {
                     style={{
                     width: 120,
                     }}
-                    value={Bataliondata[Divisiondata[Cropsdata[0]]]}
-                    onChange={onBatalionChange}
+                    value=""
+                    onChange={onBrigadeChange}
                 >
-                    {Bataliondata[Division].map((batalion) => (
-                    <Option key={batalion}>{batalion}</Option>
+                    {Brigadedata[Division].map((brigade) => (
+                    <Option key={brigade}>{brigade}</Option>
                     ))}
                 </Select>
             </Form.Item>
