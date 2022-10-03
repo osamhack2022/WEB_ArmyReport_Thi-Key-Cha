@@ -22,7 +22,7 @@ const Login = () => {
     userid : '',
     userpwd : '',
   });
-
+/*
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -30,7 +30,7 @@ const Login = () => {
     emailInputRef.current.focus();
     passwordInputRef.current.focus();
   }, []);
-
+*/
   const onChange = (e) => {
     const {
       target : {name, value}
@@ -45,12 +45,13 @@ const Login = () => {
   const dispatch = useDispatch();
   const [isLoad, setisLoad] = useState(false);
 
-  const onClick = (event) =>{
-    event.preventDefault();
-    
+  const onSubmit = () =>{
+    /*
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    
+    */
+    const enteredEmail = UserInfo.userid;
+    const enteredPassword = UserInfo.userpwd;
     setisLoad(true);
     const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0';
     fetch(
@@ -105,35 +106,37 @@ const Login = () => {
         initialValues={{
           requiredMarkValue: requiredMark,
         }}
+        onSubmit={(e) =>e.preventDefault()}
+        onFinish={onSubmit}
       >
         <Form.Item 
           label="Email" 
-          required tooltip="어! 이건 작성해주셔야되는데.."
+          required tooltip="작성해주셔야 합니다. ㅡ3ㅡ"
         >
           <Input 
             name='userid'
             placeholder="이메일입니다만?"
             onChange={onChange}
-            ref={emailInputRef}
           />
         </Form.Item>
         <Form.Item
           label="Password"
           tooltip={{
-            title: '전역하실래요? 안됩니다~',
+            title: '조금만 더 힘내요!',
             icon: <InfoCircleOutlined />,
           }}
+          
         >
           <Input.Password
             name='userpwd'
             placeholder="비밀번호입니다만?" 
             onChange={onChange}
-            ref={passwordInputRef}
           />
         </Form.Item>
-        {!isLoad && <Form.Item>
-          <Button type="primary" onClick={onClick}>Submit</Button>
-        </Form.Item>}
+        {!isLoad && 
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>}
         {isLoad && <Form.Item>
           <Button type="primary" disabled>Loading...</Button>
         </Form.Item>}

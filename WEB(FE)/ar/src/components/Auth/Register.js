@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
 import { Cropsdata, Divisiondata, Bataliondata } from './Unitdata';
-
+import "antd/dist/antd.min.css";
 import { AuthActions } from '../../app/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -29,6 +29,7 @@ const dateFormat = 'YYYY/MM/DD';
 const Register = () => {
     const history = useNavigate();
     const [userLocation, setUserLocation] = useState({
+        'Crop' : '',
         'Division' : '',
         'Brigade' : '',
         'Batalion' : '',
@@ -36,6 +37,7 @@ const Register = () => {
     });
     const [UserObj, setUserObj] = useState({
         'UserEmail' : '',
+        'Userpwd' : '',
         'UserName' : '',
         'UserClasses' : '',
         'UserLocation' : userLocation,
@@ -53,11 +55,6 @@ const Register = () => {
         '소위','중위','대위','소령','중령','대령','준장','소장','중장','대장'
     ];
 
-    useEffect(()=> {
-        emailInputRef.current?.focus();
-        passwordInputRef.current?.focus();
-    }, [])
-
     const [Crop, setCrop] = useState(Cropsdata[4]);
     const [Division, setDivision] = useState(Divisiondata[Crop][0]);
     const [Batalion, setBatalion] = useState(Bataliondata[Division][0]);
@@ -72,30 +69,28 @@ const Register = () => {
     };
     const onBatalionChange = (value) => {
         setBatalion(value);
+        setUserLocation({
+            'Crop' : '',
+            'Division' : '',
+            'Brigade' : '',
+            'Batalion' : '',
+            'Company' : ''
+        })
     }
 
-    const onChange = async(event) => {
+    const onChange = (event) => {
         const {
             target : {name, value}
         } = event;
-        await setUserObj({
+        setUserObj({
             ...UserObj,
             [name] : value,
         });
     };
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-      };
-    
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    const onSubmit = (event) =>{
-        event.preventDefault();
-        const enteredEmail = emailInputRef.current.value;
-        const enteredPassword = passwordInputRef.current.value;
+    const onSubmit = () =>{
+        const enteredEmail = UserObj.UserEmail;
+        const enteredPassword = UserObj.Userpwd;
         
         setisLoad(true);
         fetch(
@@ -130,7 +125,6 @@ const Register = () => {
             dispatch(AuthActions.login(data.idToken));
             const uid = enteredEmail.split('@');
             await setDoc(doc(db, "02155004", "본부중대", "User",`${uid[0]}`), {
-                /* UUID 를 이용해 UID 변수를 만들 생각입니다. */
                 Useremail : UserObj.UserEmail,
                 Username : UserObj.UserName,
                 Userclass : UserObj.UserClasses,
@@ -142,133 +136,131 @@ const Register = () => {
             alert(err.message);
         });
     }
-    // 소속부대는 dropdown 으로 판별할 생각이며, 중대급은 Input type=text 로 받아 처리할 예정입니다.
     return (
         <Form
             labelCol={{
-            span: 4,
+                span: 5,
             }}
             wrapperCol={{
-            span: 14,
+                span: 15,
             }}
+            initialValues={{
+                UserObj : UserObj,   
+            }}
+            onFinish={onSubmit}
+            autoComplete="off"
             layout="horizontal"
+            onSubmit={(e)=>e.preventDefault()}
         >
-            <Form
-                labelCol={{
-                    span: 8,
-                }}
-                wrapperCol={{
-                    span: 16,
-                }}
-                initialValues={{
-                    remember: true,
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                layout="horizontal"
-                onSubmit={onSubmit}
+            <Form.Item
+                label="Email"
+                name="UserEmail"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please input your Email!',
+                }]}
             >
-                <Form.Item
-                    label="Email"
-                    name="Email"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please input your Email!',
-                    }]}
+                <Input 
+                    name='userid'
+                    onChange={onChange}
+                />
+            </Form.Item>
+            <Form.Item
+                label="Password"
+                name="Userpwd"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please input your password!',
+                }]}
+                
+            >
+                <Input.Password 
+                    name='userpwd'
+                    onChange={onChange}
+                />
+            </Form.Item>
+            <Form.Item label="이름" name='UserName'>
+                <Input name='UserName' maxLength={8}/>
+            </Form.Item>
+            <Form.Item label="계급" name='UserClasses' >
+                <Select
+                    name='UserClasses'
+                    defaultValue={army_classes[0]}
+                    style={{
+                    width: 80,
+                    }}
+                    onChange={onChange}
                 >
-                    <Input 
-                        ref={emailInputRef}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please input your password!',
-                    }]}
-                    
-                >
-                    <Input.Password 
-                        ref={passwordInputRef}
-                    />
-                </Form.Item>
-                <Form.Item label="이름" >
-                    <Input />
-                </Form.Item>
-                <Form.Item label="계급">
-                <Select>
-                    <Select.Option value="userclass" onChange={onChange}>
-                        {army_classes.map((item)=>{
-                            {item}
-                        })}
-                    </Select.Option>
+                    {army_classes.map((army) => (
+                    <Option key={army}>{army}</Option>
+                    ))}
                 </Select>
-                </Form.Item>
-                <Form.Item label='전역일'>
+            </Form.Item>
+            <Form.Item label='전역일' name='UserLastDate'>
+                <Space direction="vertical" size={12}>
                     <DatePicker 
-                        name='Userlastdate'
+                        name='UserLastDate'
                         defaultValue={moment(new Date(), dateFormat)} 
                         format={dateFormat} 
                         onChange={onChange}
                     />
-                </Form.Item>
-                <Form.Item label='소속부대'>
-                    <Select
-                        defaultValue={Cropsdata[0]}
-                        style={{
-                        width: 120,
-                        }}
-                        onChange={onCropChange}
-                    >
-                        {Cropsdata.map((crop) => (
-                        <Option key={crop}>{crop}</Option>
-                        ))}
-                    </Select>
-                    <Select
-                        style={{
-                        width: 120,
-                        }}
-                        value={Divisiondata[0]}
-                        onChange={onDivisionChange}
-                    >
-                        {Divisiondata[Crop].map((division) => (
-                        <Option key={division}>{division}</Option>
-                        ))}
-                    </Select>
-                    <Select
-                        style={{
-                        width: 120,
-                        }}
-                        value={Bataliondata[0]}
-                        onChange={onBatalionChange}
-                    >
-                        {Bataliondata[Division].map((batalion) => (
-                        <Option key={batalion}>{batalion}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}    
-                >
-                    <Button onSubmit={onSubmit}>회원가입</Button>
-                </Form.Item>
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
+                </Space>
+            </Form.Item>
+            <Form.Item label='소속부대'>
+                <Select
+                    name=''
+                    defaultValue={Cropsdata[0]}
+                    style={{
+                    width: 120,
                     }}
+                    onChange={onCropChange}
                 >
-                    <Button>취소</Button>
-                </Form.Item>
-            </Form>
-        </Form> 
+                    {Cropsdata.map((crop) => (
+                    <Option key={crop}>{crop}</Option>
+                    ))}
+                </Select>
+                <Select
+                    style={{
+                    width: 120,
+                    }}
+                    value={Divisiondata[Cropsdata[0]]}
+                    onChange={onDivisionChange}
+                >
+                    {Divisiondata[Crop].map((division) => (
+                    <Option key={division}>{division}</Option>
+                    ))}
+                </Select>
+                <Select
+                    style={{
+                    width: 120,
+                    }}
+                    value={Bataliondata[Divisiondata[Cropsdata[0]]]}
+                    onChange={onBatalionChange}
+                >
+                    {Bataliondata[Division].map((batalion) => (
+                    <Option key={batalion}>{batalion}</Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}    
+            >
+                <Button onSubmit={onSubmit}>회원가입</Button>
+            </Form.Item>
+            <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}
+            >
+                <Button>취소</Button>
+            </Form.Item>
+        </Form>
     )
 }
 
