@@ -1,20 +1,18 @@
 import React from 'react'
 import Login from '../components/Auth/Login';
 
-import styles from './Animation.module.css';
-
 const Animation = () => {
   return (
     <>
-      <div className={styles.body}>
-        <div className={styles.logo_img}>
+      <div className='body'>
+        <div className='logo'>
         <img 
             src="AR_Logo.png" 
             alt='AR_Logo'
-            className={styles.logo}
+            className='logoimg'
           />
         </div>
-        <section className={styles.loginform}>
+        <section className='loginform'>
           <Login />
         </section>
       </div> 

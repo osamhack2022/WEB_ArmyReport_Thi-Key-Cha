@@ -1,9 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Radio } from 'antd';
+
 import styles from "./Login.module.css";
-import LoginBtn from './LoginBtn';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { doc, getDoc } from 'firebase/firestore';
+import db from '../../database/DB_Manager';
+
+import { UserActions } from '../../app/UserSlice';
+import { AuthActions } from '../../app/AuthSlice';
 
 const Login = () => {
+
+  const [form] = Form.useForm();
+  const [requiredMark, setRequiredMarkType] = useState('required');
+
   const [UserInfo, setUserInfo] = useState({
     userid : '',
     userpwd : '',
@@ -26,43 +40,109 @@ const Login = () => {
       [name] : value
     });
   };
+
+  const history = useNavigate();
+  const dispatch = useDispatch();
+  const [isLoad, setisLoad] = useState(false);
+
+  const onClick = (event) =>{
+    event.preventDefault();
+    
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
+    
+    setisLoad(true);
+    const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0';
+    fetch(
+        url,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                email: enteredEmail,
+                password: enteredPassword,
+                returnSecureToken: true
+            }),
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }
+      ).then((res) => {
+        setisLoad(false);
+        if(res.ok){
+            let okmessage = '로그인하였습니다!';
+            alert(okmessage);
+            return res.json();
+        }else{
+            return res.json().then(data =>{
+                let errormessage = '로그인 실패!';
+                if (data && data.error && data.error.message){
+                    errormessage = data.error.message;
+                }
+                throw new Error(errormessage);
+            });
+        }
+      }).then(async(data) => {
+        const uid = enteredEmail.split('@');
+        dispatch(AuthActions.login(data.idToken));
+        const docRef = doc(db, "02155004", "본부중대", "User",`${uid[0]}`);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()){
+            const UserObj = docSnap.data();
+            dispatch(UserActions.Creating(UserObj));
+        }
+        dispatch(UserActions.SetUid(uid[0]));
+        history(`/${uid[0]}`);
+      }).catch(err => {
+        alert(err.message);
+      });
+  }
   
   return (
     <>
-      <div className={styles.loginform}>
-        <form>
-          <div className={styles.login}>
-            <div className={styles.idlogin}>
-              <input 
-                name="userid"
-                type="text" 
-                onChange={onChange}
-                placeholder="ID를 입력해주세요"
-                ref={emailInputRef}
-                className={styles.idinput}
-                required
-              />
-            </div>
-            <div className={styles.pwdlogin}>
-              <input
-                name="userpwd"
-                type="password"
-                onChange={onChange}
-                placeholder="비밀번호를 입력해주세요"
-                ref={passwordInputRef}
-                className={styles.pwdinput}
-                required
-              />
-            </div>
-          </div>
-          <div className="loginbtn">
-            <LoginBtn 
-              email={emailInputRef} 
-              pwd={passwordInputRef}
-            />
-          </div>
-        </form>
-      </div>
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={{
+          requiredMarkValue: requiredMark,
+        }}
+      >
+        <Form.Item 
+          label="Email" 
+          required tooltip="어! 이건 작성해주셔야되는데.."
+        >
+          <Input 
+            name='userid'
+            placeholder="이메일입니다만?"
+            onChange={onChange}
+            ref={emailInputRef}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          tooltip={{
+            title: '전역하실래요? 안됩니다~',
+            icon: <InfoCircleOutlined />,
+          }}
+        >
+          <Input.Password
+            name='userpwd'
+            placeholder="비밀번호입니다만?" 
+            onChange={onChange}
+            ref={passwordInputRef}
+          />
+        </Form.Item>
+        {!isLoad && <Form.Item>
+          <Button type="primary" onClick={onClick}>Submit</Button>
+        </Form.Item>}
+        {isLoad && <Form.Item>
+          <Button type="primary" disabled>Loading...</Button>
+        </Form.Item>}
+        <Form.Item>
+          <Button type="primary" onClick={() => history('/register')}>
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   )
 }

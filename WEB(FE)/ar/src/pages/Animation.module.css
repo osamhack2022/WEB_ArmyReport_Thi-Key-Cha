@@ -1,34 +1,5 @@
- .body{
-    position: relative;
-    width: 1920px;
-    height: 1080px;
-
-    background: #222831;
-}
-
-.logo_img{
-    position: absolute;
-width: 199px;
-height: 199px;
-left: 860px;
-top: 197px;
-}
-
-.logo{
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
-    background: #574F7D;
-    border-radius: 50px;
-}
-
-.loginform{
-    position: absolute;
-    width: 550px;
-    height: 204px;
-    left: 685px;
-    top: 428px;
+.site-layout-content {
+    min-height: 280px;
+    padding: 24px;
+    background: #fff;
 }
