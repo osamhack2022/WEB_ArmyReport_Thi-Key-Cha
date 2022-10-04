@@ -12,16 +12,12 @@ const Navigation = () => {
   return (
     <>
       <Header>
-        <div className="logo">
-          <h5>ThiKeyCha</h5>
-        </div>
+        <div className="logo" value="ThiKeyCha" />
         <Menu
           theme="dark"
           mode="horizontal"
           items={VacationItems.map((obj) => {
-            const key = index + 1;
             return {
-              key,
               label: `${obj.title}`,
             };
           })}

@@ -1,16 +1,15 @@
 import React, { 
     useState,
-    useEffect,
     useRef
 } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
-import { Cropsdata, Divisiondata, Brigadedata } from './Unitdata';
+import { Cropsdata, Divisiondata, Brigadedata, Bataliondata } from './Unitdata';
 import "antd/dist/antd.min.css";
 import { AuthActions } from '../../app/AuthSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   Form,
   Input,
@@ -22,7 +21,6 @@ import {
 import moment from 'moment';
 
 const { Option } = Select;
-const { TextArea } = Input;
 const dateFormat = 'YYYY/MM/DD';
 
 
@@ -41,26 +39,44 @@ const Register = () => {
         'UserName' : '',
         'UserClasses' : '',
         'UserLocation' : userLocation,
-        'UserLastDate' : new Date()
+        'UserLastDate' : new Date(),
+        'isLocated' : '',
+        'isVacation' : false,
     });
     const [isLoad, setisLoad] = useState(false);
 
     const dispatch = useDispatch();
-
-    const emailInputRef = useRef();
-    const passwordInputRef = useRef();
-
     const army_classes = [
         '이병','일병','상병','병장','하사','중사','상사','원사','준위',
         '소위','중위','대위','소령','중령','대령','준장','소장','중장','대장'
     ];
 
+    const [classes, setClasses] = useState(army_classes[0]);
+
+    const onhandleclass = (value) => {
+        setClasses(value);
+        setUserObj({
+            ...UserObj,
+            'UserClasses' : classes
+        });
+    }
+
+    const [lastdate, setLastdate] = useState(new Date());
+    const onhandledate = (value) => {
+        setLastdate(value);
+        setUserObj({
+            ...UserObj,
+            'UserLastDate' : lastdate
+        });
+    }
+
     const [Crop, setCrop] = useState(Cropsdata[4]);
-    const [Division, setDivision] = useState(Divisiondata[Crop][0]);
-    const [Brigade, setBrigade] = useState(Brigadedata[Division][0]);
+    const [Division, setDivision] = useState(Divisiondata[Cropsdata[4]][0]);
+    const [Brigade, setBrigade] = useState(Brigadedata[Divisiondata[Cropsdata[4]][0]][0]);
 
     const onCropChange = (value) => {
-        setCrop(Cropsdata[value]);
+        setCrop(value);
+        console.log(Divisiondata[value])
         setDivision(Divisiondata[value][0]);
     };
     const onDivisionChange = (value) => {
@@ -68,9 +84,6 @@ const Register = () => {
         setBrigade(Brigadedata[value][0]);
     };
     const onBrigadeChange = (event, value) => {
-        const {
-            target : {name}
-        } = event;
         setBrigade(value);
         setUserLocation({
             'Crop' : Crop,
@@ -81,10 +94,11 @@ const Register = () => {
         })
         setUserObj({
             ...UserObj,
-            [UserLocation] : userLocation,
+            'UserLocation' : userLocation,
         });
     }
 
+    const [loadings, setLoadings] = useState([]);
     const onChange = (event) => {
         const {
             target : {name, value}
@@ -94,6 +108,21 @@ const Register = () => {
             [name] : value,
         });
     };
+
+    const enterLoading = (index) => {
+        setLoadings((prevLoadings) => {  
+          const newLoadings = [...prevLoadings];
+          newLoadings[index] = true;
+          return newLoadings;
+        });
+        setTimeout(() => {
+          setLoadings((prevLoadings) => {
+            const newLoadings = [...prevLoadings];
+            newLoadings[index] = false;
+            return newLoadings;
+          });
+        }, 6000);
+      };
 
     const onSubmit = () =>{
         const enteredEmail = UserObj.UserEmail;
@@ -136,7 +165,9 @@ const Register = () => {
                 Username : UserObj.UserName,
                 Userclass : UserObj.UserClasses,
                 Userlocated : UserObj.UserLocation,
-                Userlastdate : UserObj.UserLastDate
+                Userlastdate : UserObj.UserLastDate,
+                IsLocated : UserObj.isLocated,
+                IsVacation : UserObj.isVacation,
             });
             history(`/`);
         }).catch(err => {
@@ -152,7 +183,7 @@ const Register = () => {
                 span: 15,
             }}
             initialValues={{
-                UserObj : UserObj,   
+                UserObj : UserObj,
             }}
             onFinish={onSubmit}
             autoComplete="off"
@@ -169,7 +200,7 @@ const Register = () => {
                 }]}
             >
                 <Input 
-                    name='userid'
+                    name='UserEmail'
                     onChange={onChange}
                 />
             </Form.Item>
@@ -184,7 +215,7 @@ const Register = () => {
                 
             >
                 <Input.Password 
-                    name='userpwd'
+                    name='Userpwd'
                     onChange={onChange}
                 />
             </Form.Item>
@@ -194,11 +225,11 @@ const Register = () => {
             <Form.Item label="계급" name='UserClasses' >
                 <Select
                     name='UserClasses'
-                    defaultValue={army_classes[0]}
+                    initialvalue={army_classes[0]}
                     style={{
                     width: 80,
                     }}
-                    onChange={onChange}
+                    onChange={onhandleclass}
                 >
                     {army_classes.map((army) => (
                     <Option key={army}>{army}</Option>
@@ -208,17 +239,16 @@ const Register = () => {
             <Form.Item label='전역일' name='UserLastDate'>
                 <Space direction="vertical" size={12}>
                     <DatePicker 
-                        name='UserLastDate'
-                        defaultValue={moment(new Date(), dateFormat)} 
+                        initialvalue={moment(new Date(), dateFormat)} 
                         format={dateFormat} 
-                        onChange={onChange}
+                        onChange={onhandledate}
                     />
                 </Space>
             </Form.Item>
             <Form.Item label='소속부대'>
                 <Select
-                    name=''
-                    defaultValue={Cropsdata[0]}
+                    name='Crop'
+                    initialvalue={Cropsdata[0]}
                     style={{
                     width: 120,
                     }}
@@ -229,10 +259,11 @@ const Register = () => {
                     ))}
                 </Select>
                 <Select
+                    name='Division'
                     style={{
                     width: 120,
                     }}
-                    value={Divisiondata[Cropsdata[0]]}
+                    initialvalue={Divisiondata[Cropsdata[0]]}
                     onChange={onDivisionChange}
                 >
                     {Divisiondata[Crop].map((division) => (
@@ -240,10 +271,11 @@ const Register = () => {
                     ))}
                 </Select>
                 <Select
+                    name="Brigade"
                     style={{
                     width: 120,
                     }}
-                    value=""
+                    initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
                     onChange={onBrigadeChange}
                 >
                     {Brigadedata[Division].map((brigade) => (
@@ -255,9 +287,16 @@ const Register = () => {
                 wrapperCol={{
                     offset: 8,
                     span: 16,
-                }}    
+                }}
             >
-                <Button onSubmit={onSubmit}>회원가입</Button>
+                <Button 
+                    type="primary" 
+                    loading={loadings[0]} 
+                    onClick={() => enterLoading(0)}
+                    htmlType="submit"
+                >
+                    회원가입
+                </Button>
             </Form.Item>
             <Form.Item
                 wrapperCol={{
@@ -265,7 +304,7 @@ const Register = () => {
                     span: 16,
                 }}
             >
-                <Button>취소</Button>
+                <Button type="button" onClick={() => history('/')}>취소</Button>
             </Form.Item>
         </Form>
     )
