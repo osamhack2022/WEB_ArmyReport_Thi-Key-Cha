@@ -4,6 +4,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Radio } from 'antd';
 
 import styles from "./Login.module.css";
+import "antd/dist/antd.min.css";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,15 +23,6 @@ const Login = () => {
     userid : '',
     userpwd : '',
   });
-/*
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-
-  useEffect(() => {
-    emailInputRef.current.focus();
-    passwordInputRef.current.focus();
-  }, []);
-*/
   const onChange = (e) => {
     const {
       target : {name, value}
@@ -46,10 +38,6 @@ const Login = () => {
   const [isLoad, setisLoad] = useState(false);
 
   const onSubmit = () =>{
-    /*
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
-    */
     const enteredEmail = UserInfo.userid;
     const enteredPassword = UserInfo.userpwd;
     setisLoad(true);

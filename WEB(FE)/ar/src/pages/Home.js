@@ -1,36 +1,30 @@
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import React from 'react';
-const { Header, Content, Footer } = Layout;
-
+const { Content, Footer } = Layout;
+import "antd/dist/antd.min.css";
 import Navigation from '../components/Navbar/Navigation';
+import Whereareyou from '../components/Home/Whereareyou';
 
 const Home = () => {
+
   return (
     <Layout className="layout">
       <Navigation />
-      
       <Content
         style={{
           padding: '0 50px',
         }}
       >
-        <Breadcrumb
-          style={{
-            margin: '16px 0',
-          }}
-        >
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
-        <div className="site-layout-content">Content</div>
+        <div className="site-layout-content">
+          <Whereareyou />
+        </div>
       </Content>
       <Footer
         style={{
           textAlign: 'center',
         }}
       >
-        Ant Design ©2018 Created by Ant UED
+        @ ThiKeyCha Army-Report All rights reserved.
       </Footer>
     </Layout>
   );

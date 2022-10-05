@@ -3,18 +3,22 @@ import { createSlice } from '@reduxjs/toolkit';
 const UserSlice = createSlice({
     name : 'User',
     initialState : { 
-        UserObj: { 
-            Name: "", 
+        UserObj: {
+            UserEmail: "", 
+            UserName: "", 
             Classes: "", 
-            Location: {
+            UserLocation: {
+                Crop : "",
                 Division : "",
                 Brigade : "",
                 Batalion : "",
                 Company : ""
             },
-            LastDate : "",
+            UserLastDate : "",
         },
-        uid : ""
+        uid : "",
+        isLocated: "",
+        isVacation : false,
     },
     reducers : {
         Creating(state,action){
@@ -25,6 +29,16 @@ const UserSlice = createSlice({
         },
         SetUid(state,action){
             state.uid = action.payload;
+        },
+        ImVacation(state){
+            state.isVacation = true;
+            return state;
+        },
+        IsLocated(state,action){
+            state.isLocated = action.payload;
+        },
+        IsVacation(state){
+            return state.isVacation;
         }
     }
 });

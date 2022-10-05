@@ -1,4 +1,4 @@
-export const crops = [  
+export const crops = [
     {
         value : '01',
         label : '1군단',
@@ -219,4 +219,4 @@ export const division = [
         value : '75',
         label : '75사단',
     },
-]
+];
