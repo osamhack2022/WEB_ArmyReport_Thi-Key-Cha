@@ -8,28 +8,18 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+import { UserActions } from '../../app/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { doc, updateDoc } from "firebase/firestore";
+import db from '../../database/DB_Manager';
 
 const Whereareyou = () => {
-
+  const uid = useSelector((state)=>state.User.uid);
+  const dispatch = useDispatch();
   const locations = [
     '생활관', '연병장', '화장실', '행정반', '사이버 지식 정보방',
     '노래방', 'PX', '병영쉼터', '흡연장', '위병소', '당신의 마음 속'
   ];
-  console.log(locations);
-  console.log(locations.map((item)=> {
-    {item}
-  }));
 
   const [loc, setLoc] = useState([]);
   const [rightnow, setRightnow] = useState(new Date());
@@ -37,10 +27,19 @@ const Whereareyou = () => {
     const {
       target: { value },
     } = event;
-    setLoc(
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  }
+    setLoc("");
+    setLoc(value);
+  };
+
+  const onhandlelocation = async() => {
+    await updateDoc(doc(db, "02155004", "본부중대", "User",`${uid}`), {
+      "IsLocated" : loc
+    }).then(()=>{
+      alert("보고 되었습니다!");
+    }).catch((error)=> {
+      alert(error);
+    });
+  };
 
   return (
     <>
@@ -64,18 +63,17 @@ const Whereareyou = () => {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={loc}
-            multiple
             label="Location"
             onChange={onChange}
           >
-            {locations.map((basho) => {
+            {locations.map((basho) => (
                 <MenuItem 
                   key={basho}
                   value={basho}
                 >
                   {basho}
                 </MenuItem>
-            })}
+            ))}
           </Select>
         </FormControl>
         <Typography variant="body2">
@@ -83,7 +81,7 @@ const Whereareyou = () => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">보고</Button>
+        <Button size="small" onClick={onhandlelocation}>보고</Button>
       </CardActions>
     </Card>
     </>

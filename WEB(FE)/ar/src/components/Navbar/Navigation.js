@@ -19,6 +19,7 @@ const Navigation = () => {
           items={VacationItems.map((obj) => {
             return {
               label: `${obj.title}`,
+              link : `${obj.path}`,
             };
           })}
         />

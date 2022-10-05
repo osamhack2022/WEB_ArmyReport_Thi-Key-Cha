@@ -6,6 +6,7 @@ import Navigation from '../components/Navbar/Navigation';
 import Whereareyou from '../components/Home/Whereareyou';
 
 const Home = () => {
+
   return (
     <Layout className="layout">
       <Navigation />
