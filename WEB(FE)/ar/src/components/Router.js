@@ -6,7 +6,7 @@ import Animation from '../pages/Animation';
 import Register from './Auth/Register';
 import Vacation from '../pages/Vacation';
 import NotFound from '../pages/NotFound';
-import Post from '../pages/Post';
+import Post from '../pages/Post'
 
 const AppRouter = () => {
   return (
