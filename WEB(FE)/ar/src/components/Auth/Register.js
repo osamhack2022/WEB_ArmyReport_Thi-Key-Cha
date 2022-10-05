@@ -3,7 +3,6 @@ import React, {
     useRef
 } from 'react'
 import { useNavigate } from 'react-router-dom';
-
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
 import { Cropsdata, Divisiondata, Brigadedata, Bataliondata } from './Unitdata';
@@ -39,7 +38,7 @@ const Register = () => {
         'UserName' : '',
         'UserClasses' : '',
         'UserLocation' : userLocation,
-        'UserLastDate' : new Date(),
+        'UserLastDate' : '',
         'isLocated' : '',
         'isVacation' : false,
     });
@@ -51,29 +50,31 @@ const Register = () => {
         '소위','중위','대위','소령','중령','대령','준장','소장','중장','대장'
     ];
 
-    const [classes, setClasses] = useState(army_classes[0]);
+    const [classes, setClasses] = useState("");
 
     const onhandleclass = (value) => {
         setClasses(value);
         setUserObj({
             ...UserObj,
-            'UserClasses' : classes
+            ['UserClasses'] : classes
         });
     }
 
-    const [lastdate, setLastdate] = useState(new Date());
+    const [lastdate, setLastdate] = useState("");
     const onhandledate = (value) => {
-        setLastdate(value);
+        setLastdate(value._d);
+        console.log(lastdate);
         setUserObj({
             ...UserObj,
-            'UserLastDate' : lastdate
+            ['UserLastDate'] : lastdate
         });
     }
 
-    const [Crop, setCrop] = useState(Cropsdata[4]);
-    const [Division, setDivision] = useState(Divisiondata[Cropsdata[4]][0]);
-    const [Brigade, setBrigade] = useState(Brigadedata[Divisiondata[Cropsdata[4]][0]][0]);
-
+    const [Crop, setCrop] = useState(Cropsdata[3]);
+    const [Division, setDivision] = useState(Divisiondata[Cropsdata[3]][0]);
+    const [Brigade, setBrigade] = useState(Brigadedata[Divisiondata[Cropsdata[3]][0]][0]);
+    const [Batalion, setBatalion] = useState(Bataliondata[Brigade]);
+    const [Company, setCompany] = useState("");
     const onCropChange = (value) => {
         setCrop(value);
         console.log(Divisiondata[value])
@@ -83,18 +84,27 @@ const Register = () => {
         setDivision(value);
         setBrigade(Brigadedata[value][0]);
     };
-    const onBrigadeChange = (event, value) => {
+    const onBrigadeChange = (value) => {
         setBrigade(value);
+        setBatalion(Bataliondata[value][0]);
+        
+    };
+    const onBatalionChange = (value) => {
+        setBatalion(value);
+    };
+    const onCompanyChange = (e) => {
+        setCompany(e.target.value);
         setUserLocation({
-            'Crop' : Crop,
-            'Division' : Division,
-            'Brigade' : Brigade,
-            'Batalion' : '',
-            'Company' : ''
-        })
+            ['Crop'] : Crop,
+            ['Division'] : Division,
+            ['Brigade'] : Brigade,
+            ['Batalion'] : Batalion,
+            ['Company'] : Company
+        });
+        console.log(userLocation);
         setUserObj({
             ...UserObj,
-            'UserLocation' : userLocation,
+            ['UserLocation'] : userLocation,
         });
     }
 
@@ -107,6 +117,7 @@ const Register = () => {
             ...UserObj,
             [name] : value,
         });
+        console.log(UserObj);
     };
 
     const enterLoading = (index) => {
@@ -220,7 +231,7 @@ const Register = () => {
                 />
             </Form.Item>
             <Form.Item label="이름" name='UserName'>
-                <Input name='UserName' maxLength={8}/>
+                <Input name='UserName' maxLength={8} onChange={onChange}/>
             </Form.Item>
             <Form.Item label="계급" name='UserClasses' >
                 <Select
@@ -282,6 +293,19 @@ const Register = () => {
                     <Option key={brigade}>{brigade}</Option>
                     ))}
                 </Select>
+                <Select
+                    name="Batalion"
+                    style={{
+                    width: 120,
+                    }}
+                    initialvalue={Bataliondata[Brigade]}
+                    onChange={onBatalionChange}
+                >
+                    {Bataliondata[Brigade].map((batalion) => (
+                    <Option key={batalion}>{batalion}</Option>
+                    ))}
+                </Select>
+                <Input placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
             </Form.Item>
             <Form.Item
                 wrapperCol={{

@@ -91,7 +91,7 @@ export const Brigadedata = {
     ]
 };
 
-const Bataliondata = {
+export const Bataliondata = {
     '제 11보병여단' : [
         '여단 직할대', '1대대', '2대대', '3대대'
     ],
