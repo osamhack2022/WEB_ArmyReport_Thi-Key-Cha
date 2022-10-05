@@ -27,9 +27,11 @@ class Letter  {
 }
 
 const LetterInput = () => {
-  const [victim, setVictim] = useState('');
-  const [attacker, setAttacker] = useState('');
-  const [content, setContent] = useState('');
+  const [letter, setLetter] = useState({
+    attacker: "",
+    victim: "",
+    content: "",
+  })
 
   const onAddLetter = async (attacker, victim, content) => {
     const newLetter = new Letter(
@@ -52,25 +54,20 @@ const LetterInput = () => {
     }
   }
 
-  const onChangeAttacker = (e) => {
-    setAttacker(e.target.value);
+  const handleChange = (e) => {
+    setLetter(prev => ({...prev, [e.target.name]:e.target.value}))
   }
 
-  const onChangeVictim = (e) => {
-    setVictim(e.target.value);
-  }
-
-  const onChangeContent = (e) => {
-    setContent(e.target.value) // 마음의 편지의 내용을 저장
-  }
+  console.log(letter);
 
   return(
     <>
     <div className="PostLetterInput">
-      <input type="text" onChange={onChangeVictim} placeholder='작성자'/>
-      <input type="text" onChange={onChangeAttacker} placeholder='누가'/>
+      <input type="text" name="victim" onChange={handleChange} placeholder='작성자'/>
+      <input type="text" name="attacker" onChange={handleChange} placeholder='누가'/>
       <input
-        onChange={onChangeContent}
+        name="content"
+        onChange={handleChange}
         type="text"
         maxLength={1000}
         autoComplete="off"
