@@ -18,8 +18,8 @@ const AppRouter = () => {
         <Routes>
           <Route exact path="/:id" element={<Home />} />
           <Route path="/Register" element={<Register />}/>
-          <Route path='/:id/Vacation' element={<Vacation />}/>
-          <Route path='/:id/POST' element={<Post />}/>
+          <Route path='/Vacation' element={<Vacation />}/>
+          <Route path='/Post' element={<Post/>} />
           <Route element={<NotFound />}/>
         </Routes>
       </Router>
