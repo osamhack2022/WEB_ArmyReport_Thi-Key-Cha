@@ -63,7 +63,6 @@ const Register = () => {
     const [lastdate, setLastdate] = useState("");
     const onhandledate = (value) => {
         setLastdate(value._d);
-        console.log(lastdate);
         setUserObj({
             ...UserObj,
             ['UserLastDate'] : lastdate
@@ -77,7 +76,6 @@ const Register = () => {
     const [Company, setCompany] = useState("");
     const onCropChange = (value) => {
         setCrop(value);
-        console.log(Divisiondata[value])
         setDivision(Divisiondata[value][0]);
     };
     const onDivisionChange = (value) => {
@@ -101,7 +99,6 @@ const Register = () => {
             ['Batalion'] : Batalion,
             ['Company'] : Company
         });
-        console.log(userLocation);
         setUserObj({
             ...UserObj,
             ['UserLocation'] : userLocation,
@@ -117,7 +114,6 @@ const Register = () => {
             ...UserObj,
             [name] : value,
         });
-        console.log(UserObj);
     };
 
     const enterLoading = (index) => {
