@@ -4,7 +4,6 @@ import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Post } from './PostViewer';
 
 /**
  * TODO:
@@ -16,31 +15,35 @@ import { Post } from './PostViewer';
  * mui에서 컴포넌트로 디자인하기
  */
 
-class Letter extends Post  {
+class Letter {
   /**
    * @param content the contents of a letter of one's heart
    * @param victim user's name
    * @param attacker the person who hit the user
    */
-  constructor(attacker, victim, content) {
-    super(victim, content);
+  constructor(attacker, content) {
+    this.userId = Math.random().toString().slice(2);
+    this.userName = 'username'
     this.attacker = attacker;
+    this.content = content;
+    this.date = new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'short'}).format(new Date());
   }
 }
 
 const PostLetter = () => {
   const [letter, setLetter] = useState({
     attacker: "",
-    victim: "",
     content: "",
+    err: ""
   })
 
-  const onSaveLetter = async (attacker, victim, content) => {
+  const onSaveLetter = async (attacker, content) => {
     const newLetter = new Letter(
       attacker,
-      victim,
       content
     )
+
+    console.log({...newLetter})
 
     try {
       const docRef = await addDoc(collection(db, "post-letters"), {...newLetter});
@@ -51,20 +54,43 @@ const PostLetter = () => {
   }
 
   const onConfirmSave = () => {
-    if (letter.victim && letter.attacker && letter.content) { // 마음의 편지의 내용이 공백이 아니라면
-      onSaveLetter(letter);
+    if (letter.attacker && letter.content) {
+      onSaveLetter(letter.attacker, letter.content);
     }
+  }
+
+  const setLetterErrorMsg = (str) => {
+    letter.err = str;
+    return letter.err
   }
 
   const handleChange = (e) => {
     setLetter(prev => ({...prev, [e.target.name]:e.target.value}))
+    console.log(letter);
+  }
+
+  const validateAttacker = () => {
+    if (!letter.attacker) {
+      return setLetterErrorMsg('정확히 누구인지 작성해주세요.');
+    } else if (letter.attacker.length < 2) {
+      return setLetterErrorMsg('이름은 최소 1자 이상입니다.')
+    }
+  }
+
+  const validateContent = () => {
+    if (!letter.content) {
+      return setLetterErrorMsg('내용은 필수 기입란 입니다.')
+    } else if (letter.content.length > 1000) {
+      return setLetterErrorMsg('내용은 1000자 이내로 작성해야 합니다.')
+    }
   }
 
   return(
     <>
     <div className="PostLetterInput">
-      <input type="text" name="victim" onChange={handleChange} placeholder='작성자'/>
-      <input type="text" name="attacker" onChange={handleChange} placeholder='누가'/>
+      <input type="text" name="attacker" onChange={handleChange} placeholder='누가' required/>
+      {validateAttacker() && <small role="alert">{validateAttacker()}</small>}
+      
       <input
         name="content"
         onChange={handleChange}
@@ -74,9 +100,8 @@ const PostLetter = () => {
         placeholder='1000자 이내로 작성해주세요!'
         required
       />
-      <button onClick={onConfirmSave}>
-          전송
-      </button>
+      {validateContent() && <small role="alert">{validateContent()}</small>}
+      <button onClick={onConfirmSave}>전송</button>
       <ToastContainer/>
       </div>
     </>
