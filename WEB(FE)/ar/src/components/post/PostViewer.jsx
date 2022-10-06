@@ -4,7 +4,11 @@ import PostList from './PostList';
 import db from '../../database/DB_Manager';
 import { setDoc, addDoc, collection, query, getDocs } from 'firebase/firestore';
 
-export class Post {
+/**
+ * 무슨 이유인지 모르겠는데 다른 파일에서 extends 상속이 안됨.
+ * 컴포넌트 라는 타입을 가지고 있기 때문인지...
+ */
+class Post {
   contructor(userName, content) {
     this.userId = Math.random().toString().slice(2);
     this.userName = userName
