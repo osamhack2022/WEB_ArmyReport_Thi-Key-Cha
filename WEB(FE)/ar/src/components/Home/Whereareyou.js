@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+
+import { UserActions } from '../../app/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import db from '../../database/DB_Manager';
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -8,17 +14,13 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { UserActions } from '../../app/UserSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { doc, updateDoc } from "firebase/firestore";
-import db from '../../database/DB_Manager';
 
 const Whereareyou = () => {
   const uid = useSelector((state)=>state.User.uid);
   const dispatch = useDispatch();
   const locations = [
     '생활관', '연병장', '화장실', '행정반', '사이버 지식 정보방',
-    '노래방', 'PX', '병영쉼터', '흡연장', '위병소', '당신의 마음 속'
+    '노래방', 'PX', '병영쉼터', '흡연장', '위병소', '병원', '체력단련실','의무반'
   ];
 
   const [loc, setLoc] = useState([]);
@@ -41,49 +43,64 @@ const Whereareyou = () => {
     });
   };
 
+  /* Firebase 에서 User 들의 Location 정보 빼내오는 과정 */
+
+  const [Userlocs, setUserLocs] = useState([]);
+  const q = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "==" , "PX"));
+  
+  const queryhandle = async() => {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc)=>{
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+
+  console.log(queryhandle());
+
+  /* return component */
   return (
     <>
-     <Card sx={{ minWidth: 400 }}>
-      <CardContent>
-        <Typography 
-          sx={{ fontSize: 28 }} 
-          value={rightnow}
-          color="text.secondary" 
-          gutterBottom
-        >
-        </Typography>
-        <Typography variant="h5" component="div">
-          어디에 계십니까?!
-        </Typography>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">
-            장소
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={loc}
-            label="Location"
-            onChange={onChange}
+      <Card sx={{ minWidth: 150 }}>
+        <CardContent>
+          <Typography 
+            sx={{ fontSize: 28 }} 
+            value={rightnow}
+            color="text.secondary" 
+            gutterBottom
           >
-            {locations.map((basho) => (
-                <MenuItem 
-                  key={basho}
-                  value={basho}
-                >
-                  {basho}
-                </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Typography variant="body2">
-          
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={onhandlelocation}>보고</Button>
-      </CardActions>
-    </Card>
+          </Typography>
+          <Typography variant="h5" component="div">
+            어디에 계십니까?!
+          </Typography>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              장소
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={loc}
+              label="Location"
+              onChange={onChange}
+            >
+              {locations.map((basho) => (
+                  <MenuItem 
+                    key={basho}
+                    value={basho}
+                  >
+                    {basho}
+                  </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </CardContent>
+        <CardContent>
+          <span>다들 어디 계신지..?</span>
+        </CardContent>
+        <CardActions>
+          <Button size="small" onClick={onhandlelocation}>보고</Button>
+        </CardActions>
+      </Card>
     </>
   )
 }
