@@ -59,8 +59,7 @@
 
 ### 데이터베이스
 
-- `SQLite`
-- `MariaDB`
+- `Firebase`
 
 ### 디자인
 
@@ -87,7 +86,7 @@
 > 
 
 > 남경찬 
-`Email` rudcks0928
+`Email` rudcks0928@naver.com
 `Github` gclogs
 >
 

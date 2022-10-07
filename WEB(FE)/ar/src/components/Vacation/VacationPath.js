@@ -56,9 +56,8 @@ const VacationPath = () => {
     return (
         <>
             <Stack direction="row" spacing={2}>
-                <Button color="secondary">Secondary</Button>
-                <Button variant="contained" color="success">
-                    Success
+                <Button variant="outlined" color="error">
+                    -
                 </Button>
                 <Button variant="outlined" color="success">
                     +

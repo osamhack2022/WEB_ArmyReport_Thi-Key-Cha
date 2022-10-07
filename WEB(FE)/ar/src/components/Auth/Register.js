@@ -85,7 +85,6 @@ const Register = () => {
     const onBrigadeChange = (value) => {
         setBrigade(value);
         setBatalion(Bataliondata[value][0]);
-        
     };
     const onBatalionChange = (value) => {
         setBatalion(value);
@@ -175,6 +174,7 @@ const Register = () => {
                 Userlastdate : UserObj.UserLastDate,
                 IsLocated : UserObj.isLocated,
                 IsVacation : UserObj.isVacation,
+                Timetorollcall : false,
             });
             history(`/`);
         }).catch(err => {

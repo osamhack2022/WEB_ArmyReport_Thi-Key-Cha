@@ -17,12 +17,12 @@ import Select from '@mui/material/Select';
 
 const Whereareyou = () => {
   const uid = useSelector((state)=>state.User.uid);
+  console.log(uid);
   const dispatch = useDispatch();
   const locations = [
     '생활관', '연병장', '화장실', '행정반', '사이버 지식 정보방',
     '노래방', 'PX', '병영쉼터', '흡연장', '위병소', '병원', '체력단련실','의무반'
   ];
-
   const [loc, setLoc] = useState([]);
   const [rightnow, setRightnow] = useState(new Date());
   const onChange = (event) => {
@@ -42,20 +42,6 @@ const Whereareyou = () => {
       alert(error);
     });
   };
-
-  /* Firebase 에서 User 들의 Location 정보 빼내오는 과정 */
-
-  const [Userlocs, setUserLocs] = useState([]);
-  const q = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "==" , "PX"));
-  
-  const queryhandle = async() => {
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc)=>{
-      console.log(doc.id, " => ", doc.data());
-    });
-  };
-
-  console.log(queryhandle());
 
   /* return component */
   return (

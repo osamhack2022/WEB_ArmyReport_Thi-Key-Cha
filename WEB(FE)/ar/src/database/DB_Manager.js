@@ -19,6 +19,24 @@ const firebaseConfig = {
     measurementId: "G-X1NYBHGJBX"
 };
 
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
+
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://firebase.google.com/docs/web/learn-more#config-object
+const RealtimeDBConfig = {
+  // ...
+  // The value of `databaseURL` depends on the location of the database
+  databaseURL: "https://thi-key-cha-default-rtdb.firebaseio.com",
+};
+
+// Initialize Firebase
+const realapp = initializeApp(RealtimeDBConfig);
+
+
+// Initialize Realtime Database and get a reference to the service
+export const database = getDatabase(realapp);
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
