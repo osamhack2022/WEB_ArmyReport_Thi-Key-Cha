@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
@@ -6,18 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 /* mui materials */
-import { Box, InputAdornment, TextField } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-
-/**
- * TODO:
- * PostLetter validation 검증 로직 마무리
- * PostLetter의 데이터가 잘 들어가는지 확인
- * 
- * 나머지 PostSuggest나 PostViwer에서 부족한 부분도 보충해야함.
- * 스타일 역시 디자인해야하고.
- * mui에서 컴포넌트로 디자인하기
- */
+import { Stack, Button, Box, TextField } from '@mui/material';
 
 class Letter {
   /**
@@ -47,11 +36,9 @@ const PostLetter = () => {
       content
     )
 
-    console.log({...newLetter})
-
     try {
       const docRef = await addDoc(collection(db, "post-letters"), {...newLetter});
-      if (docRef.id) toast.success("🦄 슈웅 ! 마음의 편지를 보냈습니다.")
+      if (docRef.id) toast.success("💌 팔랑 ~ 마음의 편지를 보냈습니다.")
     } catch (e) {
       console.log(e);
     }
@@ -70,7 +57,6 @@ const PostLetter = () => {
 
   const handleChange = (e) => {
     setLetter(prev => ({...prev, [e.target.name]:e.target.value}))
-    console.log(letter);
   }
 
   const validateAttacker = () => {
@@ -93,31 +79,29 @@ const PostLetter = () => {
     <>
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
         <div className="PostLetterInput">
-          <input type="text" name="attacker" onChange={handleChange} placeholder='누가' required/>
-          {validateAttacker() && <small role="alert">{validateAttacker()}</small>}
-          
           <TextField
-            id="input-with-icon-textfield"
+            id="outlined-size-small"
+            type="text"
+            name="attacker"
+            onChange={handleChange}
+            label="누가 그랬나요?"
+            placeholder="예) 계급 홍길동"
+            size="small"
+          />
+          {validateAttacker() && <small className="error" role="alert">{validateAttacker()}</small>}
+          <TextField
+            id="outlined-size-normal"
             name="content"
             onChange={handleChange}
             type="text"
             maxLength={1000}
             autoComplete="off"
             placeholder='1000자 이내로 작성해주세요!'
-            required
-            label="TextField"
-            InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
+            label="마음의 편지"
           />
-          {validateContent() && <small role="alert">{validateContent()}</small>}
+          {validateContent() && <small className="error" role="alert">{validateContent()}</small>}
           <Stack>
-            <Button onClick={onSaveLetter} variant="contained">전송</Button>
+            <Button onClick={onConfirmSave} variant="contained">전송</Button>
           </Stack>
         </div>
       </Box>
