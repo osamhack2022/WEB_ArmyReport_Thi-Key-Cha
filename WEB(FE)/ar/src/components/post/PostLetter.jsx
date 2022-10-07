@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 /* mui materials */
 import { Stack, Button, Box, TextField } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { UserActions } from '../../app/UserSlice';
 
 class Letter {
   /**
@@ -14,9 +16,9 @@ class Letter {
    * @param victim user's name
    * @param attacker the person who hit the user
    */
-  constructor(attacker, content) {
-    this.userId = Math.random().toString().slice(2);
-    this.userName = 'username'
+  constructor(uid, uname, attacker, content) {
+    this.uid = uid;
+    this.uname = uname;
     this.attacker = attacker;
     this.content = content;
     this.date = new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'short'}).format(new Date());
@@ -30,11 +32,20 @@ const PostLetter = () => {
     err: ""
   })
 
+  const uid = useSelector((state)=> state.User.uid);
+  const uname = useSelector((state)=>state.User.UserObj.UserName);
+
+  console.log(uid)
+
   const onSaveLetter = async (attacker, content) => {
     const newLetter = new Letter(
+      uid,
+      '시발',
       attacker,
       content
     )
+
+    console.log(uid, uname, newLetter)
 
     try {
       const docRef = await addDoc(collection(db, "post-letters"), {...newLetter});

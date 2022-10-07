@@ -3,6 +3,7 @@ import PostSuggest from './PostSuggest';
 import PostList from './PostList';
 import db from '../../database/DB_Manager';
 import { setDoc, addDoc, collection, query, getDocs } from 'firebase/firestore';
+import styled from "styled-components";
 
 /**
  * 무슨 이유인지 모르겠는데 다른 파일에서 extends 상속이 안됨.
