@@ -4,6 +4,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 
+/* mui materials */
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
 const PostSuggest = () => {
   const { register, handleSubmit, formState: { isSubmitting, isDirty, errors } } = useForm();
 
@@ -29,6 +33,7 @@ const PostSuggest = () => {
 
   return(
     <>
+      <Stack>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="content">건의사항</label>
         <input type="text" placeholder='건의사항' aria-invalid={!isDirty ? undefined : errors.content ? "true" : "false"} {...register('content', {
@@ -39,8 +44,9 @@ const PostSuggest = () => {
           }
         })}/>
         {errors.content && <small role="alert">{errors.content.message}</small>}
-        <button type='submit'>전송</button>
+        <Button type="submit" variant="contained">전송</Button>
       </form>
+      </Stack>
       <ToastContainer/>
     </>
   )
