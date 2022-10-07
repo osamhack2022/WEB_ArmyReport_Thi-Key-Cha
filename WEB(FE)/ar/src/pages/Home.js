@@ -1,15 +1,15 @@
-import { Layout } from 'antd';
-import React from 'react';
-const { Content, Footer } = Layout;
 import "antd/dist/antd.min.css";
-import Navigation from '../components/Navbar/Navigation';
+import React from 'react';
+import Header from '../components/base/Header';
 import Whereareyou from '../components/Home/Whereareyou';
+import { Layout } from 'antd';
+
+const { Content, Footer } = Layout;
 
 const Home = () => {
-
   return (
     <Layout className="layout">
-      <Navigation />
+      <Header />
       <Content
         style={{
           padding: '0 50px',
