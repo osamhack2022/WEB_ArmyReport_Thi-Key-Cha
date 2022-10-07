@@ -5,8 +5,7 @@ import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 
 /* mui materials */
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import { Stack, Button, TextField, Box } from '@mui/material';
 
 const PostSuggest = () => {
   const { register, handleSubmit, formState: { isSubmitting, isDirty, errors } } = useForm();
@@ -33,20 +32,22 @@ const PostSuggest = () => {
 
   return(
     <>
-      <Stack>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="content">건의사항</label>
-        <input type="text" placeholder='건의사항' aria-invalid={!isDirty ? undefined : errors.content ? "true" : "false"} {...register('content', {
-          required: '내용은 필수 입력입니다.',
-          minLength: {
-            value: 30,
-            message: "최소 30자 이상은 작성해야 합니다."
-          }
-        })}/>
+        <Box>
+          <TextField id="outlined-basic" label="건의사항" variant="outlined" type="text" placeholder='건의사항' aria-invalid={!isDirty ? undefined : errors.content ? "true" : "false"} {...register('content', {
+            required: '내용은 필수 입력입니다.',
+            minLength: {
+              value: 30,
+              message: "최소 30자 이상은 작성해야 합니다."
+            }
+          })} />
+        </Box>
+      <Stack>
         {errors.content && <small role="alert">{errors.content.message}</small>}
         <Button type="submit" variant="contained">전송</Button>
-      </form>
       </Stack>
+      </form>
       <ToastContainer/>
     </>
   )

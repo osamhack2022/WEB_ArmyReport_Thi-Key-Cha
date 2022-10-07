@@ -6,8 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 /* mui materials */
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import { Box, InputAdornment, TextField } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 /**
  * TODO:
@@ -91,24 +91,36 @@ const PostLetter = () => {
 
   return(
     <>
-    <Stack>
-      <div className="PostLetterInput">
-        <input type="text" name="attacker" onChange={handleChange} placeholder='누가' required/>
-        {validateAttacker() && <small role="alert">{validateAttacker()}</small>}
-        
-        <input
-          name="content"
-          onChange={handleChange}
-          type="text"
-          maxLength={1000}
-          autoComplete="off"
-          placeholder='1000자 이내로 작성해주세요!'
-          required
-        />
-        {validateContent() && <small role="alert">{validateContent()}</small>}
-        <Button onClick={onSaveLetter} variant="contained">전송</Button>
-      </div>
-    </Stack>
+      <Box sx={{ '& > :not(style)': { m: 1 } }}>
+        <div className="PostLetterInput">
+          <input type="text" name="attacker" onChange={handleChange} placeholder='누가' required/>
+          {validateAttacker() && <small role="alert">{validateAttacker()}</small>}
+          
+          <TextField
+            id="input-with-icon-textfield"
+            name="content"
+            onChange={handleChange}
+            type="text"
+            maxLength={1000}
+            autoComplete="off"
+            placeholder='1000자 이내로 작성해주세요!'
+            required
+            label="TextField"
+            InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+          />
+          {validateContent() && <small role="alert">{validateContent()}</small>}
+          <Stack>
+            <Button onClick={onSaveLetter} variant="contained">전송</Button>
+          </Stack>
+        </div>
+      </Box>
       <ToastContainer/>
     </>
   )
