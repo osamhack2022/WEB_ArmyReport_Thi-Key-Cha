@@ -2,13 +2,14 @@ import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/
 import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import UserReducer from './UserSlice';
+import UserReducer from '../slice/UserSlice';
 import AuthReducer from '../slice/AuthSlice';
 import persistStore from 'redux-persist/es/persistStore';
 
 const persistConfig = {
   key: "root", // save to localStorage
-  storage
+  storage,
+  whitelist: ["user", "auth"]
 }
 
 const rootReducer = combineReducers({
