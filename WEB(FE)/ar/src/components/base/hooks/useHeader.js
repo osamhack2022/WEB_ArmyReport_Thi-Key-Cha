@@ -1,10 +1,23 @@
-import { createStoreHook, useDispatch, useSelector, } from 'react-redux';
-import { rootReducer } from '../../../app/store';
-import { UserActions } from '../../../app/slice/UserSlice';
+import { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function useHeader() {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.User.uid);
+  const dispath = useDispatch();
+  const userId = useSelector((state) => state.user.uid)
+  const userData = useSelector((state) => state.user.UserObj)
+  const user = {
+    uid: userId,
+    data: userData
+  }
 
-  return { user };
+  /* TODO: 마이프로필 드롭 메뉴중에서 logout시, 발생하는 이벤트 */
+  const onLogout = useCallback(async () => {
+  })
+
+  /* TODO: 검색 아이콘 클릭시, 열리는 이벤트 */
+  const onSerachClick = useCallback(() => {
+
+  })
+
+  return { user }
 }
