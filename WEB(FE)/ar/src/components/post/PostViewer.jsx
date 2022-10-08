@@ -1,9 +1,13 @@
+import useUserLoader from '../base/hooks/useUserLoader';
 import PostLetter from './PostLetter';
 import PostSuggest from './PostSuggest';
 import PostList from './PostList';
+import { ToastContainer } from 'react-toastify'
+import Header from '../base/Header'
 import db from '../../database/DB_Manager';
 import { setDoc, addDoc, collection, query, getDocs } from 'firebase/firestore';
 import styled from "styled-components";
+import { useSelect } from '@mui/base';
 
 /**
  * 무슨 이유인지 모르겠는데 다른 파일에서 extends 상속이 안됨.
@@ -40,12 +44,15 @@ class Post {
 }
 
 const PostViewer = () => {
-  
+  const { getCurrentUserId: uid, getCurrentUserObj: udata } = useUserLoader();
+
   return (
     <>
-      <PostLetter></PostLetter>
-      <PostSuggest></PostSuggest>
-      <PostList></PostList>
+      <Header />
+      <PostLetter uid={uid} udata={udata}></PostLetter>
+      <PostSuggest uid={uid} udata={udata}></PostSuggest>
+      <PostList uid={uid} udata={udata}></PostList>
+      <ToastContainer />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 import styled from "styled-components";
@@ -14,15 +14,15 @@ const PostSuggestLayout = styled.div(`
   text-align: center;
 `);
 
-const PostSuggest = () => {
+const PostSuggest = ({ uid, udata }) => {
   const { register, handleSubmit, formState: { isSubmitting, isDirty, errors } } = useForm();
 
   const onSubmit = async (content) => {
-    await new Promise((delay) => setTimeout(delay, 1000)); // 중복 전송을 방지하기 위해 딜레이를 걸어줌
+    await new Promise((delay) => setTimeout(delay, 1500)); // 중복 전송을 방지하기 위해 딜레이를 걸어줌
 
     const data = {
-      userId: Math.random().toString().slice(2),
-      userName: 'testName',
+      uid,
+      uname: udata.Username,
       ...content,
       date: new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'medium'}).format(new Date())
     }
@@ -56,8 +56,6 @@ const PostSuggest = () => {
         </Stack>
         </form>
       </PostSuggestLayout>
-
-      <ToastContainer/>
     </>
   )
 }

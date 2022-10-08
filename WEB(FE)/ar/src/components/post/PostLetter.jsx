@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import useUserLoader from '../base/hooks/useUserLoader';
 import 'react-toastify/dist/ReactToastify.css';
 
 /* mui materials */
 import { Stack, Button, Box, TextField } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { UserActions } from '../../app/UserSlice';
+import { UserActions } from '../../app/slice/UserSlice';
 
 class Letter {
   /**
@@ -25,29 +26,26 @@ class Letter {
   }
 }
 
-const PostLetter = () => {
+const PostLetter = ({ uid, udata }) => {
   const [letter, setLetter] = useState({
     attacker: "",
     content: "",
     err: ""
   })
-
-  const uid = useSelector((state)=> state.User.uid);
-  const uname = useSelector((state)=>state.User.UserObj.UserName);
-
-  console.log(uid)
-
+  
   const onSaveLetter = async (attacker, content) => {
+    await new Promise((delay) => setTimeout(delay, 1500)); // 중복 전송을 방지하기 위해 딜레이를 걸어줌
+
     const newLetter = new Letter(
       uid,
-      '시발',
+      udata.Username,
       attacker,
       content
     )
 
-    console.log(uid, uname, newLetter)
-
     try {
+            // TODO: 테스트 중이라 post-letters 컬렉션으로 지정 되어 있습니다.
+      // 추후에 '사단-여단-대대-부대' 콜렉션으로 들어가 데이터를 저장해야 합니다.
       const docRef = await addDoc(collection(db, "post-letters"), {...newLetter});
       if (docRef.id) toast.success("💌 팔랑 ~ 마음의 편지를 보냈습니다.")
     } catch (e) {
@@ -116,7 +114,6 @@ const PostLetter = () => {
           </Stack>
         </div>
       </Box>
-      <ToastContainer/>
     </>
   )
 }
