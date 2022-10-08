@@ -1,7 +1,4 @@
-import React, { 
-    useState,
-    useRef
-} from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
