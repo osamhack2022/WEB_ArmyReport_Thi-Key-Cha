@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import db from '../../database/DB_Manager';
-import { updateDoc } from 'firebase/firestore';
+import { doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
 import { UserActions } from '../../app/UserSlice';
 import UserRollCallCard from './UserRollCallCard';
+import { collection, query, where } from "firebase/firestore";
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -13,7 +14,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 
-import { getDoc } from "firebase/database";
+import { getDoc } from "firebase/firestore";
 
 const Commander = () => {
     /* Variables */
@@ -42,9 +43,9 @@ const Commander = () => {
     const queryhandle = async() => {
         setIsRollcall(true);
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async(doc)=>{
-            console.log(doc.id, " => ", doc.data());
-            await updateDoc(doc(db,"02155004", "본부중대", "User",`${doc.id}`),{
+        querySnapshot.forEach(async(docSnap)=>{
+            console.log(docSnap.id, " => ", docSnap.data());
+            await updateDoc(doc(db,"02155004", "본부중대", "User",`${docSnap.id}`),{
                 Timetorollcall : true,
             });
         });
