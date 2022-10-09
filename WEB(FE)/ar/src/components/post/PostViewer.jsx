@@ -49,12 +49,18 @@ const PostViewer = () => {
   return (
     <>
       <Header />
-      <PostLetter uid={uid} udata={udata}></PostLetter>
-      <PostSuggest uid={uid} udata={udata}></PostSuggest>
-      <PostList uid={uid} udata={udata}></PostList>
+      <Block>        
+        <PostLetter uid={uid} udata={udata}></PostLetter>
+        <PostSuggest uid={uid} udata={udata}></PostSuggest>
+        <PostList uid={uid} udata={udata}></PostList>
+      </Block>
       <ToastContainer />
     </>
   )
 }
+
+const Block = styled.div`
+  position: absolute;
+`
 
 export default PostViewer
