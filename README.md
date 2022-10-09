@@ -1,5 +1,7 @@
 # WEB_ArmyReport_Thi-Key-Cha
 
+![1차 브랜드 로고AR_Logo.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51a09c2d-ad8a-407c-950a-8b00f7ca712b/1%EC%B0%A8_%EB%B8%8C%EB%9E%9C%EB%93%9C_%EB%A1%9C%EA%B3%A0AR_Logo.png)
+
 ## Army Report(AR)
 <aside>
 💡 군 장병들 휴대폰 활성화와 코로나 시대의 도입으로 인한 많은 보고 체계와 대면으로 말하기 힘든 사안들을 종합한 리포트 웹입니다.
