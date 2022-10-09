@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "GothicA1 Regular";
+  src: url("../fonts/GothicA1/GothicA1-Regular.ttf");
+}
+
+@font-face {
+  font-family: "GothicA1 Medium";
+  src: url("../fonts/GothicA1/GothicA1-Medium.ttf");
+}
+
+@font-face {
+  font-family: "GothicA1 Bold";
+  src: url("../fonts/GothicA1/GothicA1-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Light";
+  src: url("../fonts/Roboto/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Medium";
+  src: url("../fonts/Roboto/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Regular";
+  src: url("../fonts/Roboto/Roboto-Regular.ttf");
+}
