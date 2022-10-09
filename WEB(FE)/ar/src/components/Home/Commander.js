@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import db from '../../database/DB_Manager';
 import { useSelector } from 'react-redux';
@@ -21,6 +21,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const Commander = () => {
+
     /* Variables */
     const [Soldier, setSoldier] = useState({
         Name : "",
@@ -33,16 +34,29 @@ const Commander = () => {
         Content : ""
     });
     const [SoldierList, setSoldierList] = useState([]);
-    const uid = useSelector((state)=>state.User.uid);
     const [isRollcall, setIsRollcall] = useState(false);
 
     /* Reference */
    
     /* Firebase 에서 User 들의 uid 정보 빼내오는 과정 */
     const q = query(collection(db, "02155004", "본부중대", "User"), where("IsBoss", "==" , false));
-    
+  
+    /* Firebase 에서 user들의 loc 정보를 빼내오는 과정 */
+    const Locquery = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "!=" , ""));
+    const Locationhandle = async() => {
+        const querySnapshot = await getDocs(Locquery);
+        querySnapshot.forEach(async(dataSnap)=>{
+          console.log(dataSnap.id);
+          console.log(dataSnap.data());
+        });
+    };
+
     // 지휘관, 당직사관인 아이디를 찾고 난뒤에,
     // 그 인원들을 제외하고 Data 를 가져오는 편이 속도면에서 우수
+
+    useEffect(()=>{
+        Locationhandle();
+    }, []);
 
     const Onrollcallhandle = async() => {
         setIsRollcall(true);
@@ -54,8 +68,6 @@ const Commander = () => {
             });
         });
     };
-
-    
 
     const Offrollcallhandle = async() => {
         const querySnapshot = await getDocs(q);

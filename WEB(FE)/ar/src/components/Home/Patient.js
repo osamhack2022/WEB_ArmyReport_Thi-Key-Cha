@@ -130,7 +130,7 @@ const Patient = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <FormControl>
+                    <FormControl required>
                         <FormLabel id="demo-controlled-radio-buttons-group">아픈 곳 있나요?</FormLabel>
                         <RadioGroup
                             aria-labelledby='demo-controlled-radio-buttons-group'
@@ -168,7 +168,7 @@ const Patient = () => {
                         { islastlight && <TextField id="outlined-basic" inputRef={lastlightRef} label="무슨 연등하시나요?" variant="outlined" required/> }
                         { !islastlight && <TextField id="outlined-basic" inputRef={lastlightRef} label="무슨 연등하시나요?" variant="outlined" disabled/> }
                         <LoadingButton
-                            onSubmit={onhandlePatient}
+                            onClick={onhandlePatient}
                             loading={loading}
                             loadingIndicator="🤔"
                             variant="outlined"
