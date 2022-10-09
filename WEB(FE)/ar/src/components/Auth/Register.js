@@ -50,10 +50,9 @@ const Register = () => {
     const [classes, setClasses] = useState("");
 
     const onhandleclass = (value) => {
-        setClasses(value);
         setUserObj({
             ...UserObj,
-            ['UserClasses'] : classes
+            ['UserClasses'] : value
         });
     }
 
@@ -62,7 +61,7 @@ const Register = () => {
         setLastdate(value._d);
         setUserObj({
             ...UserObj,
-            ['UserLastDate'] : lastdate
+            ['UserLastDate'] : value._d
         });
     }
 
@@ -171,6 +170,7 @@ const Register = () => {
                 Userlastdate : UserObj.UserLastDate,
                 IsLocated : UserObj.isLocated,
                 IsVacation : UserObj.isVacation,
+                IsBoss : false,
                 Timetorollcall : false,
             });
             history(`/`);
@@ -243,6 +243,7 @@ const Register = () => {
             <Form.Item label='전역일' name='UserLastDate'>
                 <Space direction="vertical" size={12}>
                     <DatePicker 
+                        name='UserLastDate'
                         initialvalue={moment(new Date(), dateFormat)} 
                         format={dateFormat} 
                         onChange={onhandledate}

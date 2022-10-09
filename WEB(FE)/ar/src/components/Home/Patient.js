@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,6 +13,19 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { doc, setDoc} from "firebase/firestore";
 
 import db from '../../database/DB_Manager';
+import { useSelector } from 'react-redux';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 const Patient = () => {
     /* Variables */
@@ -21,29 +33,19 @@ const Patient = () => {
 
     const [loading, setLoading] = useState(false);
  
-    const [patient, setPatient] = useState(true);
-    const [absent, setAbsent] = useState(true);
-    const [islastlight, setIslastlight] = useState(true);
+    const [patient, setPatient] = useState(false);
+    const [absent, setAbsent] = useState(false);
+    const [islastlight, setIslastlight] = useState(false);
 
     const [open, setOpen] = useState(true);
 
     /* Reference */
-    const patientbtnRef = useRef();
-    const absentbtnRef = useRef();
-    const lastlightbtnRef = useRef();
     const patientRef = useRef();
     const absentRef = useRef();
     const lastlightRef = useRef();
 
-    useEffect(async()=>{
-        patientbtnRef.current.focus();
-        absentbtnRef.current.focus();
-        lastlightbtnRef.current.focus();
-        patientRef.current.focus();
-        absentRef.current.focus();
-        lastlightRef.current.focus();
-        
-        await setDoc(doc(db, "02155004", "본부중대", "RollCall",`${uid}`), {
+    async function setData(uid){
+        await setDoc(doc(db,"02155004", "본부중대", "RollCall",`${uid}`),{
             Uniqueness : false,
             Symptom : "",
             Isabsent : false,
@@ -51,25 +53,25 @@ const Patient = () => {
             Islastlight : false,
             Content : ""
         });
-    });
+    };
+
+    useEffect(()=>{
+        setData(uid);
+    }, []);
 
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleChange = (e) => {
-        if (e.target.name === "patient-radio-button"|| e.target.value === 'Yes'){
-            setPatient(true);
-        }else if(e.target.name === "patient-radio-button" || e.target.value === 'No'){
-            setPatient(false);
-        }else if(e.target.name === "absent-radio-button" || e.target.value === 'Yes'){
-            setAbsent(true);
-        }else if(e.target.name === "absent-radio-button" || e.target.value === 'No'){
-            setAbsent(false);
-        }else if(e.target.name === "lastlight-radio-button" || e.target.value === 'Yes'){
-            setIslastlight(true);
-        }else if(e.target.name === "lastlight-radio-button" || e.target.value === 'No'){
-            setIslastlight(false);
+        if (e.target.name === "patient-radio-button"){
+            setPatient(e.target.value);
+        }
+        if(e.target.name === "absent-radio-button"){
+            setAbsent(e.target.value);
+        }
+        if(e.target.name === "lastlight-radio-button"){
+            setIslastlight(e.target.value);
         }
     };
 
@@ -80,13 +82,22 @@ const Patient = () => {
         e.preventDefault();
 
         const Uniqueness = patient;
-        const Symptom = patientRef.current.value;
-
-        const Isabsent = absent;
-        const Reason = absentRef.current.value;
+        let Symptom = "";
+        if (Uniqueness === true){
+            Symptom = patientRef.current.value;            
+        }
         
+        const Isabsent = absent;
+        let Reason = "";
+        if (Isabsent === true){
+            Reason = absentRef.current.value;
+        }
+        
+        let Content = "";
         const Islastlight = islastlight;
-        const Content = lastlightRef.current.value;
+        if (Islastlight === true) {
+            Content = lastlightRef.current.value;
+        }
 
         await setDoc(doc(db, "02155004", "본부중대", "RollCall",`${uid}`), {
             Uniqueness : Uniqueness,
@@ -96,9 +107,16 @@ const Patient = () => {
             Islastlight : Islastlight,
             Content : Content
         });
+
         setTimeout(() => {
-            setLoading(false);    
+            setLoading(false);
+            alert("보고하였습니다!");
+            handleClose();
         }, 1000);
+
+        setPatient(false);
+        setAbsent(false);
+        setIslastlight(false);
     };
 
     /* Return the components */
@@ -108,10 +126,10 @@ const Patient = () => {
             <Modal
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
             >
-                <Box>
+                <Box sx={style}>
                     <FormControl>
                         <FormLabel id="demo-controlled-radio-buttons-group">아픈 곳 있나요?</FormLabel>
                         <RadioGroup
@@ -120,11 +138,11 @@ const Patient = () => {
                             value={patient}
                             onChange={handleChange}
                         >
-                            <FormControlLabel value="Yes" control={<Radio inputRef={patientbtnRef} />} label="Yes" />
-                            <FormControlLabel value="No" control={<Radio inputRef={patientbtnRef} />} label="No" />
+                            <FormControlLabel control={<Radio />} label="Yes" value={true}/>
+                            <FormControlLabel control={<Radio />} label="No" value={false}/>
                         </RadioGroup>
-                        { patient && <TextField id="outlined-basic" inputRef={patientRef} label="어디가 아픈가요?" variant="outlined"/> }
-
+                        { patient && <TextField id="outlined-basic" inputRef={patientRef} label="어디가 아픈가요?" variant="outlined" required/> }
+                        { !patient && <TextField id="outlined-basic" inputRef={patientRef} label="어디가 아픈가요?" variant="outlined" disabled/> }
                         <FormLabel id="demo-controlled-radio-buttons-group">점호 열외하십니까?</FormLabel>
                         <RadioGroup
                             aria-labelledby='demo-controlled-radio-buttons-group'
@@ -132,11 +150,11 @@ const Patient = () => {
                             value={absent}
                             onChange={handleChange}
                         >
-                            <FormControlLabel value="Yes" control={<Radio inputRef={absentbtnRef} />} label="Yes" />
-                            <FormControlLabel value="No" control={<Radio inputRef={absentbtnRef} />} label="No" />
+                            <FormControlLabel control={<Radio />} label="Yes" value={true} />
+                            <FormControlLabel control={<Radio />} label="No" value={false} />
                         </RadioGroup>
-                        { absent && <TextField id="outlined-basic" inputRef={absentRef} label="왜 열외하시나요?" variant="outlined"/> }
-                        
+                        { absent && <TextField id="outlined-basic" inputRef={absentRef} label="왜 열외하시나요?" variant="outlined" required/> }
+                        { !absent && <TextField id="outlined-basic" inputRef={absentRef} label="왜 열외하시나요?" variant="outlined" disabled/> }
                         <FormLabel id="demo-controlled-radio-buttons-group">연등하시나요?</FormLabel>
                         <RadioGroup
                             aria-labelledby='demo-controlled-radio-buttons-group'
@@ -144,13 +162,13 @@ const Patient = () => {
                             value={islastlight}
                             onChange={handleChange}
                         >
-                            <FormControlLabel value="Yes" control={<Radio inputRef={lastlightbtnRef} />} label="Yes" />
-                            <FormControlLabel value="No" control={<Radio inputRef={lastlightbtnRef} />} label="No" />
+                            <FormControlLabel control={<Radio />} label="Yes" value={true} />
+                            <FormControlLabel control={<Radio />} label="No" value={false} />
                         </RadioGroup>
-                        { islastlight && <TextField id="outlined-basic" inputRef={lastlightRef} label="무슨 연등하시나요?" variant="outlined"/> }
-
+                        { islastlight && <TextField id="outlined-basic" inputRef={lastlightRef} label="무슨 연등하시나요?" variant="outlined" required/> }
+                        { !islastlight && <TextField id="outlined-basic" inputRef={lastlightRef} label="무슨 연등하시나요?" variant="outlined" disabled/> }
                         <LoadingButton
-                            onClick={onhandlePatient}
+                            onSubmit={onhandlePatient}
                             loading={loading}
                             loadingIndicator="🤔"
                             variant="outlined"

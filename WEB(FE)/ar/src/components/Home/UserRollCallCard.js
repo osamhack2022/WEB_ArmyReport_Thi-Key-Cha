@@ -7,49 +7,51 @@ import Typography from '@mui/material/Typography';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const UserRollCallCard = (Uobj) => {
-
+    console.log(Uobj);
     return (
-        <Card sx={{ minWidth: 300 }}>
+        <Card sx={{ minWidth: 200 }}>
             <CardContent>
-                <Typography variant="h5" component="div">
-                    <span>계급 : {Uobj.Name}</span><br/>
-                    <span>이름 : {Uobj.Classses}</span> 
+                <Typography variant="h5">
+                    계급 : {Uobj.Uobj.Classes}
                 </Typography>
-                <Typography variant="body2">
-                    { Uobj.Uniqueness && 
+                <Typography variant="h5">
+                    이름 : {Uobj.Uobj.Name}
+                </Typography>
+                <CardContent variant="body2">
+                    { Uobj.Uobj.Uniqueness && 
                     <CardContent>
                         아픈 곳 : <CheckOutlined /> <br/>
-                        증상 : {Uobj.Symptom}
+                        증상 : {Uobj.Uobj.Symptom}
                     </CardContent>
                     }
-                    { !Uobj.Uniqueness && 
+                    { !Uobj.Uobj.Uniqueness && 
                     <CardContent>
                         아픈 곳 : <CloseOutlined /> <br/>
                     </CardContent>
                     }
-                    { Uobj.Isabsent && 
+                    { Uobj.Uobj.Isabsent && 
                     <CardContent>
                         점호 열외 : <CheckOutlined /> <br/>
-                        이유 : {Uobj.Reason}
+                        이유 : {Uobj.Uobj.Reason}
                     </CardContent>
                     }
-                    { !Uobj.Isabsent && 
+                    { !Uobj.Uobj.Isabsent && 
                     <CardContent>
                         점호 열외 : <CloseOutlined /> <br/>
                     </CardContent>
                     }
-                    { Uobj.Islastlight &&
+                    { Uobj.Uobj.Islastlight &&
                     <CardContent>
                         연등 희망 : <CheckOutlined /> <br/>
-                        내용 : {Uobj.Content}
+                        내용 : {Uobj.Uobj.Content}
                     </CardContent>
                     }
-                    { !Uobj.Islastlight &&
+                    { !Uobj.Uobj.Islastlight &&
                     <CardContent>
                         연등 희망 : <CloseOutlined /> <br/>
                     </CardContent>
                     }
-                </Typography>
+                </CardContent>
             </CardContent>
         </Card>
     );

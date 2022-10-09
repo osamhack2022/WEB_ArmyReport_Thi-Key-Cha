@@ -18,7 +18,7 @@ const { Content, Footer } = Layout;
 const Home = () => {
   const uid = useSelector((state)=>state.User.uid);
   console.log(uid);
-  const [rollcall, IsRollCall] = useState(false);
+  const [rollcall, setRollCall] = useState(false);
   const [Boss, setBoss] = useState(false);
   console.log(Boss);
   async function getData(){
@@ -26,10 +26,18 @@ const Home = () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()){
+      if(docSnap.data().IsBoss){
+        setBoss(docSnap.data().IsBoss);
+      }else{
+        if (docSnap.data().Timetorollcall){
+          setRollCall(true);
+        }else{
+          console.log("이 사람은 병사입니다 :)");  
+        }
+      }
       console.log(docSnap.data());
-      setBoss(docSnap.data().IsBoss);
     }else{
-      console.log("이 사람은 병사입니다 :)");
+      console.log("데이터가 없는데요?");
     }
   }
   useEffect(() => {

@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 
 import db from '../../database/DB_Manager';
-import { doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
 import { UserActions } from '../../app/UserSlice';
 import UserRollCallCard from './UserRollCallCard';
-import { collection, query, where } from "firebase/firestore";
+import { 
+    doc, 
+    getDoc, 
+    getDocs, 
+    updateDoc, 
+    collection, 
+    query, 
+    where 
+} from "firebase/firestore";
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
-
-import { getDoc } from "firebase/firestore";
 
 const Commander = () => {
     /* Variables */
@@ -40,7 +44,7 @@ const Commander = () => {
     // 지휘관, 당직사관인 아이디를 찾고 난뒤에,
     // 그 인원들을 제외하고 Data 를 가져오는 편이 속도면에서 우수
 
-    const queryhandle = async() => {
+    const Onrollcallhandle = async() => {
         setIsRollcall(true);
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach(async(docSnap)=>{
@@ -51,22 +55,45 @@ const Commander = () => {
         });
     };
 
+    
+
+    const Offrollcallhandle = async() => {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async(docSnap)=>{
+            console.log(docSnap.id, " => ", docSnap.data());
+            await updateDoc(doc(db,"02155004", "본부중대", "User",`${docSnap.id}`),{
+                Timetorollcall : false,
+            });
+        });
+        setTimeout(() => {
+            setIsRollcall(false);    
+        }, 1000);
+    };
+
     const Loadhandle = async() => {
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async(doc)=>{
-            console.log(doc.id);
-            const docRef = doc(db, "02155004", "본부중대", "RollCall",`${uid}`);
+        querySnapshot.forEach(async(data)=>{
+            const docRef = doc(db, "02155004", "본부중대", "RollCall",`${data.id}`);
+            const UserRef = doc(db, "02155004", "본부중대", "User",`${data.id}`);
             const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setSoldier({
-                    Uniqueness : docSnap.data().Uniqueness,
-                    Symptom : docSnap.data().Symptom,
-                    Isabsent : docSnap.data().Isabsent,
-                    Reason : docSnap.data().Reason,
-                    Islastlight : docSnap.data().Islastlight,
-                    Content : docSnap.data().Content
-                });
-                setSoldierList([...SoldierList, Soldier]);
+            const UserSnap = await getDoc(UserRef);
+            if (docSnap.exists() && UserSnap.exists()) {
+                if (UserSnap.data().Timetorollcall){
+                    const test = {
+                        Name : UserSnap.data().Username,
+                        Classes : UserSnap.data().Userclass,
+                        Uniqueness : docSnap.data().Uniqueness,
+                        Symptom : docSnap.data().Symptom,
+                        Isabsent : docSnap.data().Isabsent,
+                        Reason : docSnap.data().Reason,
+                        Islastlight : docSnap.data().Islastlight,
+                        Content : docSnap.data().Content
+                    }
+                    setSoldierList(prevSoldierList => [...prevSoldierList, test]);
+                    await updateDoc(doc(db,"02155004", "본부중대", "User",`${data.id}`),{
+                        Timetorollcall : false,
+                    });
+                }
             } else {
                 console.log("No such document!");
             }
@@ -84,7 +111,7 @@ const Commander = () => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" onClick={queryhandle}>점호를 시작한다</Button>
+                    <Button size="small" onClick={Onrollcallhandle}>점호를 시작한다</Button>
                 </CardActions> 
             </>
             }
@@ -92,13 +119,12 @@ const Commander = () => {
             <>
                 { SoldierList.map((obj)=>{
                     return (
-                        <CardContent>
-                            <UserRollCallCard Uobj={obj} />
-                        </CardContent>
+                        <UserRollCallCard key={obj.Name} Uobj={obj} />
                     )
                 })}
                 <CardActions>
                     <Button size="small" onClick={Loadhandle}>새로고침</Button>
+                    <Button size="small" onClick={Offrollcallhandle}>점호 끝!</Button>
                 </CardActions>
             </>
             }
