@@ -8,7 +8,7 @@ import Whereareyou from '../components/Home/Whereareyou';
 import {  onSnapshot, doc, getDoc } from "firebase/firestore";
 import db from '../database/DB_Manager';
 
-import { UserActions } from '../app/UserSlice';
+import { UserActions } from '../slice/UserSlice';
 import Patient from '../components/Home/Patient';
 import { useSelector } from 'react-redux';
 import Commander from '../components/Home/Commander';
@@ -44,15 +44,6 @@ const Home = () => {
   return (
     <Layout className="layout">
       <Navigation />
-      <Content
-        style={{
-          padding: '0 50px',
-        }}
-      >
-        <div className="site-layout-content">
-          <Whereareyou />
-        </div>
-      </Content>
       <Content>
         { !Boss && 
         <>

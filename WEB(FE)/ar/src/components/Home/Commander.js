@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import db from '../../database/DB_Manager';
-import { useSelector } from 'react-redux';
-import { UserActions } from '../../app/UserSlice';
+import { UserActions } from '../../slice/UserSlice';
 import UserRollCallCard from './UserRollCallCard';
 import { 
     doc, 
+    onSnapshot,
     getDoc, 
     getDocs, 
     updateDoc, 
@@ -19,45 +19,41 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import UserLocCard from './UserLocCard';
 
 const Commander = () => {
 
     /* Variables */
-    const [Soldier, setSoldier] = useState({
-        Name : "",
-        Classes : "",
-        Uniqueness : false,
-        Symptom : "",
-        Isabsent : false,
-        Reason : "",
-        Islastlight : false,
-        Content : ""
-    });
     const [SoldierList, setSoldierList] = useState([]);
     const [isRollcall, setIsRollcall] = useState(false);
 
-    /* Reference */
-   
+    const [Users, setUsers] = useState([]);
+
     /* Firebase 에서 User 들의 uid 정보 빼내오는 과정 */
     const q = query(collection(db, "02155004", "본부중대", "User"), where("IsBoss", "==" , false));
-  
+
     /* Firebase 에서 user들의 loc 정보를 빼내오는 과정 */
     const Locquery = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "!=" , ""));
-    const Locationhandle = async() => {
-        const querySnapshot = await getDocs(Locquery);
-        querySnapshot.forEach(async(dataSnap)=>{
-          console.log(dataSnap.id);
-          console.log(dataSnap.data());
-        });
-    };
 
+
+
+    const Locationhandle = onSnapshot(Locquery, (querySnapshot) => {
+        querySnapshot.forEach((dataSnap)=>{
+            const info = {
+                Name : dataSnap.data().Username,
+                Class : dataSnap.data().Userclass,
+                Located : dataSnap.data().IsLocated
+            };
+            setUsers([
+                ...Users,
+                info
+            ]);
+        });
+    });
+    
     // 지휘관, 당직사관인 아이디를 찾고 난뒤에,
     // 그 인원들을 제외하고 Data 를 가져오는 편이 속도면에서 우수
-
-    useEffect(()=>{
-        Locationhandle();
-    }, []);
-
+    
     const Onrollcallhandle = async() => {
         setIsRollcall(true);
         const querySnapshot = await getDocs(q);
@@ -115,6 +111,17 @@ const Commander = () => {
     return (
     <>
         <Card sx={{ minWidth: 275 }}>
+
+            <CardContent>
+                { Users.map((User) => {
+                    return (
+                        <UserLocCard User={User} />
+                    )
+                })}
+                <CardActions>
+                    <Button size="small" onClick={Locationhandle}>너네 다 어디있냐?</Button>
+                </CardActions>
+            </CardContent>
             { !isRollcall && 
             <>
                 <CardContent>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { UserActions } from '../../app/UserSlice';
+import { UserActions } from '../../slice/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import db from '../../database/DB_Manager';
 import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
