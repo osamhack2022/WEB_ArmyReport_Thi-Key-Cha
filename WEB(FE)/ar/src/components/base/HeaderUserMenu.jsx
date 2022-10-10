@@ -31,7 +31,6 @@ const HeaederUserMenu = ({
   visible
 }) => {
   if (!visible) return null;
-  console.log(user)
   return (
     <>
       <OutsideClickHandler>
@@ -45,6 +44,7 @@ const HeaederUserMenu = ({
             <p>전역일: </p>
             <p>위치:</p>
             <HeaderUserMenuItem to={`/@${user.uid}`}>정보</HeaderUserMenuItem>
+            <HeaderUserMenuItem onClick={onLogout}>로그아웃</HeaderUserMenuItem>
           </div>
         </HeaederUserMenuBlock>
       </OutsideClickHandler>
