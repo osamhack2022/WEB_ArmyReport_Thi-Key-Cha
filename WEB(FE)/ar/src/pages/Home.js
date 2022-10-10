@@ -2,7 +2,6 @@ import { Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import "antd/dist/antd.min.css";
-import Navigation from '../components/Navbar/Navigation';
 import Whereareyou from '../components/Home/Whereareyou';
 
 import {  onSnapshot, doc, getDoc } from "firebase/firestore";
