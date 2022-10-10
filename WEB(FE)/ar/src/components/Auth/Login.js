@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Radio } from 'antd';
 
-import styles from "./Login.module.css";
 import "antd/dist/antd.min.css";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
