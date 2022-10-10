@@ -1,8 +1,13 @@
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { onMessage, onBackgroundMessage } from 'firebase/messaging'
+import { messaging } from '../../../database/message/messaging_init_in_sw'
+import { persistor } from '../../../app/store'
+import useThrottle from '../../../lib/hooks/useThrottle';
 
 export default function useHeader() {
   const dispath = useDispatch();
+  const timerRef = useThrottle();
   const userId = useSelector((state) => state.user.uid)
   const userData = useSelector((state) => state.user.UserObj)
   const user = {
@@ -10,14 +15,17 @@ export default function useHeader() {
     data: userData
   }
 
-  /* TODO: 마이프로필 드롭 메뉴중에서 logout시, 발생하는 이벤트 */
-  const onLogout = useCallback(async () => {
-  })
+  const onLogout = useCallback(async (timeout=500) => {
+    try {
+      if (user.uid) {
+        timerRef.throttle(async () => {
+          alert('로그아웃 되었습니다.');
+          await persistor.purge();
+          window.location.href = '/';
+        }, timeout)
+      }
+    } catch {}
+  });
 
-  /* TODO: 검색 아이콘 클릭시, 열리는 이벤트 */
-  const onSerachClick = useCallback(() => {
-
-  })
-
-  return { user }
+  return { user, onLogout }
 }

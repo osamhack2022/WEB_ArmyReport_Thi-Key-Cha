@@ -2,14 +2,16 @@ import React, { useCallback, useRef } from 'react';
 import useHeader from './hooks/useHeader';
 import useToggle from '../../lib/hooks/uesToggle';
 import styled from 'styled-components'
+import { ToastContainer } from 'react-toastify';
 import HeaderLogo from './HeaderLogo'
 import HeaderMainMenu from './HeaderMainMenu'
 import HeaderUserIcon from './HeaderUserIcon'
 import HeaderUserMenu from './HeaderUserMenu'
 import HeaderNoticeIcon from './HeaderNoticeIcon'
+import HeaderNoticeCard from './HeaderNotifceCard';
 
 function Header() {
-  const { user } = useHeader();
+  const { user, onLogout } = useHeader();
   const [userMenu, toggleUserMenu] = useToggle(false);
   const ref = useRef(null);
 
@@ -25,6 +27,8 @@ function Header() {
     [toggleUserMenu]
   )
 
+  console.log(onLogout)
+
   return (
     <>
       <Block>
@@ -33,17 +37,20 @@ function Header() {
           <HeaderMainMenu user={user} />
 
           <HeaderNoticeIcon />
+          <HeaderNoticeCard user={user}/>
 
           <div ref={ref}>
             <HeaderUserIcon onClick={toggleUserMenu} />
           </div>
           <HeaderUserMenu
+            onLogout={onLogout}
             onClose={onOutesideClick}
             user={user}
             visible={userMenu}
           />
         </HeaderInner>
       </Block>
+      <ToastContainer />
     </>
   )
 }
