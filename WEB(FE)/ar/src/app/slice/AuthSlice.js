@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-  
+import { PURGE } from 'redux-persist';
+
+const initialState = {
+    token: null,
+    isLoggedIn : false
+}
+
 const AuthSlice = createSlice({
     name : 'Auth',
-    initialState : {
-        token: null,
-        isLoggedIn : false
-    },
+    initialState,
     reducers : {
         login(state,action){
             state.token = action.payload;
@@ -20,6 +23,9 @@ const AuthSlice = createSlice({
         statevalue(state){
             return state;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(PURGE, () => initialState);
     }
 });
 

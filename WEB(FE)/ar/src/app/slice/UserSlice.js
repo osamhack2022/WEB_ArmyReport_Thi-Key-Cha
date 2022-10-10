@@ -1,25 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
   
+const initialState = { 
+    UserObj: {
+        UserEmail: "", 
+        UserName: "", 
+        Classes: "", 
+        UserLocation: {
+            Crop : "",
+            Division : "",
+            Brigade : "",
+            Batalion : "",
+            Company : ""
+        },
+        UserLastDate : "",
+    },
+    uid : "",
+    isLocated: "",
+    isVacation : false,
+}
+
 const UserSlice = createSlice({
     name : 'User',
-    initialState : { 
-        UserObj: {
-            UserEmail: "", 
-            UserName: "", 
-            Classes: "", 
-            UserLocation: {
-                Crop : "",
-                Division : "",
-                Brigade : "",
-                Batalion : "",
-                Company : ""
-            },
-            UserLastDate : "",
-        },
-        uid : "",
-        isLocated: "",
-        isVacation : false,
-    },
+    initialState,
     reducers : {
         Creating(state,action){
             state.UserObj = action.payload;
@@ -40,6 +43,9 @@ const UserSlice = createSlice({
         IsVacation(state){
             return state.isVacation;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(PURGE, () => initialState);
     }
 });
 
