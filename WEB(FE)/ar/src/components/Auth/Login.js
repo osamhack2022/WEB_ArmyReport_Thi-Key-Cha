@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Radio } from 'antd';
-
-import styles from "./Login.module.css";
 import "antd/dist/antd.min.css";
+import styled from 'styled-components'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +12,17 @@ import db from '../../database/DB_Manager';
 
 import { UserActions } from '../../app/slice/UserSlice';
 import { AuthActions } from '../../app/slice/AuthSlice';
+
+const AuthLoginBlock = styled.div`
+  position: relative;
+  label {
+    color: white;
+  }
+
+  svg {
+    fill: white;
+  }
+`
 
 const Login = () => {
 
@@ -88,6 +98,7 @@ const Login = () => {
   
   return (
     <>
+    <AuthLoginBlock>
       <Form
         form={form}
         layout="vertical"
@@ -101,7 +112,7 @@ const Login = () => {
           label="Email" 
           required tooltip="작성해주셔야 합니다. ㅡ3ㅡ"
         >
-          <Input 
+          <Input
             name='userid'
             placeholder="이메일입니다만?"
             onChange={onChange}
@@ -123,17 +134,18 @@ const Login = () => {
         </Form.Item>
         {!isLoad && 
         <Button type="primary" htmlType="submit">
-          Submit
+          로그인
         </Button>}
         {isLoad && <Form.Item>
           <Button type="primary" disabled>Loading...</Button>
         </Form.Item>}
         <Form.Item>
           <Button type="primary" onClick={() => history('/register')}>
-            Register
+            회원가입
           </Button>
         </Form.Item>
       </Form>
+    </AuthLoginBlock>
     </>
   )
 }
