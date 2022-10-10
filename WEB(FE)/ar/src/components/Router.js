@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import Home from '../pages/Home';
-import Animation from '../pages/Animation';
+import Auth from '../pages/Auth';
 import Register from './Auth/Register';
 import NotFound from '../pages/NotFound';
 import Post from '../pages/Post';
@@ -12,7 +12,7 @@ const AppRouter = () => {
     <>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Animation />}/>
+          <Route exact path="/" element={<Auth />}/>
         </Routes>
         <Routes>
           <Route exact path="/home" element={<Home />} />
