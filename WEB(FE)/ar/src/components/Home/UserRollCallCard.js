@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const UserRollCallCard = (Uobj) => {
-    console.log(Uobj);
     return (
         <Card sx={{ minWidth: 200 }}>
             <CardContent>

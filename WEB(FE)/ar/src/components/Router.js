@@ -6,6 +6,7 @@ import Animation from '../pages/Animation';
 import Register from './Auth/Register';
 import NotFound from '../pages/NotFound';
 import Post from '../pages/Post';
+import Vacation from '../pages/Vacation';
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
           <Route exact path="/home" element={<Home />} />
           <Route path="/Register" element={<Register />}/>
           <Route path='/post' element={<Post/>} />
+          <Route path='/vacation' element={<Vacation />}/>
           <Route element={<NotFound />}/>
         </Routes>
       </Router>

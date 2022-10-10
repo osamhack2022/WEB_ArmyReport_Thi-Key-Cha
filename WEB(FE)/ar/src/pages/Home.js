@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import useHeader from '../components/base/hooks/useHeader';
 import Header from '../components/base/Header';
 import Footer from '../components/base/Footer';
 import Patient from '../components/Home/Patient';
@@ -9,7 +10,7 @@ import Whereareyou from '../components/Home/Whereareyou';
 import db from '../database/DB_Manager';
 import { UserActions } from '../app/slice/UserSlice';
 
-import {  onSnapshot, doc, getDoc } from "firebase/firestore";
+import { onSnapshot, doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 import "antd/dist/antd.min.css";
@@ -18,7 +19,8 @@ import { Layout } from 'antd';
 const { Content } = Layout;
 
 const Home = () => {
-  const uid = useSelector((state)=>state.User.uid);
+  const { user } = useHeader();
+  const uid = user.uid;
   const [rollcall, setRollCall] = useState(false);
   const [Boss, setBoss] = useState(false);
 
