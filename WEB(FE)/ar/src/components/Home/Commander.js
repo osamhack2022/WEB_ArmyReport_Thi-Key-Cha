@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import db from '../../database/DB_Manager';
-import { UserActions } from '../../slice/UserSlice';
+import { UserActions } from '../../app/slice/UserSlice';
 import UserRollCallCard from './UserRollCallCard';
 import { 
     doc, 
@@ -34,8 +34,6 @@ const Commander = () => {
 
     /* Firebase 에서 user들의 loc 정보를 빼내오는 과정 */
     const Locquery = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "!=" , ""));
-
-
 
     const Locationhandle = onSnapshot(Locquery, (querySnapshot) => {
         querySnapshot.forEach((dataSnap)=>{

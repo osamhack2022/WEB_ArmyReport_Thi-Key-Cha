@@ -15,9 +15,9 @@ const AppRouter = () => {
           <Route exact path="/" element={<Animation />}/>
         </Routes>
         <Routes>
-          <Route exact path="/:id" element={<Home />} />
+          <Route exact path="/home" element={<Home />} />
           <Route path="/Register" element={<Register />}/>
-          <Route path='/Post' element={<Post/>} />
+          <Route path='/post' element={<Post/>} />
           <Route element={<NotFound />}/>
         </Routes>
       </Router>

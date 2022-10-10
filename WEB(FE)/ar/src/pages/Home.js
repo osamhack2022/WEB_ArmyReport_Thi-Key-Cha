@@ -1,18 +1,21 @@
-import { Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-import "antd/dist/antd.min.css";
+import Header from '../components/base/Header';
+import Footer from '../components/base/Footer';
+import Patient from '../components/Home/Patient';
+import Commander from '../components/Home/Commander';
 import Whereareyou from '../components/Home/Whereareyou';
 
-import {  onSnapshot, doc, getDoc } from "firebase/firestore";
 import db from '../database/DB_Manager';
+import { UserActions } from '../app/slice/UserSlice';
 
-import { UserActions } from '../slice/UserSlice';
-import Patient from '../components/Home/Patient';
+import {  onSnapshot, doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
-import Commander from '../components/Home/Commander';
 
-const { Content, Footer } = Layout;
+import "antd/dist/antd.min.css";
+import { Layout } from 'antd';
+
+const { Content } = Layout;
 
 const Home = () => {
   const uid = useSelector((state)=>state.User.uid);
@@ -42,7 +45,7 @@ const Home = () => {
 
   return (
     <Layout className="layout">
-      <Navigation />
+      <Header />
       <Content>
         { !Boss && 
         <>
@@ -60,13 +63,7 @@ const Home = () => {
         }
         { Boss && <Commander />}
       </Content>
-      <Footer
-        style={{
-          textAlign: 'center',
-        }}
-      >
-        @ ThiKeyCha Army-Report All rights reserved.
-      </Footer>
+      <Footer />
     </Layout>
   );
 }

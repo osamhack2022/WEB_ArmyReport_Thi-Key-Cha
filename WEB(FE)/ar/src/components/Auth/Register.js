@@ -4,7 +4,7 @@ import db from '../../database/DB_Manager';
 import { doc, setDoc } from "firebase/firestore";
 import { Cropsdata, Divisiondata, Brigadedata, Bataliondata } from './Unitdata';
 import "antd/dist/antd.min.css";
-import { AuthActions } from '../../app/AuthSlice';
+import { AuthActions } from '../../app/slice/AuthSlice';
 import { useDispatch } from 'react-redux';
 import {
   Form,
