@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 
-const UserLocCard = (User, loc) => {
+const UserLocCard = (User) => {
   return (
     <Card sx={{ minWidth: 300 }}>
       <CardContent>
@@ -14,10 +14,10 @@ const UserLocCard = (User, loc) => {
 
         </Typography>
         <Typography variant="body2">
-          <span>계급 : {}</span> 
-          <span>이름 : {}</span> 
+          <span>계급 : {User.Class}</span> 
+          <span>이름 : {User.Name}</span> 
           <br />
-          <span>장소 : {}</span>
+          <span>장소 : {User.Located}</span>
         </Typography>
       </CardContent>
       <CardActions>
