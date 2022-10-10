@@ -2,7 +2,6 @@ import { Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import "antd/dist/antd.min.css";
-import Navigation from '../components/Navbar/Navigation';
 import Whereareyou from '../components/Home/Whereareyou';
 
 import {  onSnapshot, doc, getDoc } from "firebase/firestore";
@@ -13,7 +12,7 @@ import Patient from '../components/Home/Patient';
 import { useSelector } from 'react-redux';
 import Commander from '../components/Home/Commander';
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 const Home = () => {
   const uid = useSelector((state)=>state.User.uid);
@@ -43,7 +42,6 @@ const Home = () => {
 
   return (
     <Layout className="layout">
-      <Navigation />
       <Content>
         { !Boss && 
         <>
@@ -61,13 +59,6 @@ const Home = () => {
         }
         { Boss && <Commander />}
       </Content>
-      <Footer
-        style={{
-          textAlign: 'center',
-        }}
-      >
-        @ ThiKeyCha Army-Report All rights reserved.
-      </Footer>
     </Layout>
   );
 }
