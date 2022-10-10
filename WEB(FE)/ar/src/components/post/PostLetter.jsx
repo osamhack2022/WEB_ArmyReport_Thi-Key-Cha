@@ -1,19 +1,13 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-/**
- * TODO:
- * PostLetter validation 검증 로직 마무리
- * PostLetter의 데이터가 잘 들어가는지 확인
- * 
- * 나머지 PostSuggest나 PostViwer에서 부족한 부분도 보충해야함.
- * 스타일 역시 디자인해야하고.
- * mui에서 컴포넌트로 디자인하기
- */
+/* mui materials */
+import { Stack, Button, Box, TextField } from '@mui/material';
+import { UserActions } from '../../app/slice/UserSlice';
 
 class Letter {
   /**
@@ -21,33 +15,37 @@ class Letter {
    * @param victim user's name
    * @param attacker the person who hit the user
    */
-  constructor(attacker, content) {
-    this.userId = Math.random().toString().slice(2);
-    this.userName = 'username'
+  constructor(uid, uname, attacker, content) {
+    this.uid = uid;
+    this.uname = uname;
     this.attacker = attacker;
     this.content = content;
     this.date = new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'short'}).format(new Date());
   }
 }
 
-const PostLetter = () => {
+const PostLetter = ({ uid, udata }) => {
   const [letter, setLetter] = useState({
     attacker: "",
     content: "",
     err: ""
   })
-
+  
   const onSaveLetter = async (attacker, content) => {
+    await new Promise((delay) => setTimeout(delay, 1500)); // 중복 전송을 방지하기 위해 딜레이를 걸어줌
+
     const newLetter = new Letter(
+      uid,
+      udata.Username,
       attacker,
       content
     )
 
-    console.log({...newLetter})
-
     try {
+      // TODO: 테스트 중이라 post-letters 컬렉션으로 지정 되어 있습니다.
+      // 추후에 '사단-여단-대대-부대' 콜렉션으로 들어가 데이터를 저장해야 합니다.
       const docRef = await addDoc(collection(db, "post-letters"), {...newLetter});
-      if (docRef.id) toast.success("🦄 슈웅 ! 마음의 편지를 보냈습니다.")
+      if (docRef.id) toast.success("💌 팔랑 ~ 마음의 편지를 보냈습니다.")
     } catch (e) {
       console.log(e);
     }
@@ -66,7 +64,6 @@ const PostLetter = () => {
 
   const handleChange = (e) => {
     setLetter(prev => ({...prev, [e.target.name]:e.target.value}))
-    console.log(letter);
   }
 
   const validateAttacker = () => {
@@ -87,23 +84,34 @@ const PostLetter = () => {
 
   return(
     <>
-    <div className="PostLetterInput">
-      <input type="text" name="attacker" onChange={handleChange} placeholder='누가' required/>
-      {validateAttacker() && <small role="alert">{validateAttacker()}</small>}
-      
-      <input
-        name="content"
-        onChange={handleChange}
-        type="text"
-        maxLength={1000}
-        autoComplete="off"
-        placeholder='1000자 이내로 작성해주세요!'
-        required
-      />
-      {validateContent() && <small role="alert">{validateContent()}</small>}
-      <button onClick={onConfirmSave}>전송</button>
-      <ToastContainer/>
-      </div>
+      <Box sx={{ '& > :not(style)': { m: 1 } }}>
+        <div className="PostLetterInput">
+          <TextField
+            id="outlined-size-small"
+            type="text"
+            name="attacker"
+            onChange={handleChange}
+            label="누가 그랬나요?"
+            placeholder="예) 계급 홍길동"
+            size="small"
+          />
+          {validateAttacker() && <small className="error" role="alert">{validateAttacker()}</small>}
+          <TextField
+            id="outlined-size-normal"
+            name="content"
+            onChange={handleChange}
+            type="text"
+            maxLength={1000}
+            autoComplete="off"
+            placeholder='1000자 이내로 작성해주세요!'
+            label="마음의 편지"
+          />
+          {validateContent() && <small className="error" role="alert">{validateContent()}</small>}
+          <Stack>
+            <Button onClick={onConfirmSave} variant="contained">전송</Button>
+          </Stack>
+        </div>
+      </Box>
     </>
   )
 }

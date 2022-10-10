@@ -11,8 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import db from '../../database/DB_Manager';
 
-import { UserActions } from '../../app/UserSlice';
-import { AuthActions } from '../../app/AuthSlice';
+import { UserActions } from '../../app/slice/UserSlice';
+import { AuthActions } from '../../app/slice/AuthSlice';
 
 const Login = () => {
 
