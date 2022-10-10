@@ -1,8 +1,6 @@
 import React from 'react'
 import PostLetter from './PostLetter';
 import PostSuggest from './PostSuggest';
-import PostLetterList from './PostLetterList';
-import PostSuggestList from './PostSuggestList';
 import { ToastContainer } from 'react-toastify'
 import Header from '../base/Header'
 import Footer from '../base/Footer'
@@ -11,39 +9,22 @@ import { setDoc, query, collection, getDocs } from 'firebase/firestore';
 import styled from "styled-components";
 import useHeader from '../base/hooks/useHeader';
 
-/**
- * 무슨 이유인지 모르겠는데 다른 파일에서 extends 상속이 안됨.
- * 컴포넌트 라는 타입을 가지고 있기 때문인지...
- */
-// class Post {
-//   contructor(userName, content) {
-//     this.userId = Math.random().toString().slice(2);
-//     this.userName = userName
-//     this.content = content; 
-//     this.date = new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'short'}).format(new Date());
-//   }
-
-//   /**
-//    * @param payload Location pointing to the collection => 'letters || suggests'
-//    * @param data data with object type
-//    */
-//   set(payload, data="object") {
-//     setDoc(collection(db, "posts", payload), data);
-//   }
-
-//   /**
-//    * @param payload Location pointing to the collection => 'letters || suggests'
-//    */
-//   get(payload) {
-//     const q = query("posts", payload);
-//     const data = getDocs(q);
-//     const newData = data.docs.map(doc => ({
-//       ...doc.data()
-//     }))
-
-//     return newData;
-//   }
-// }
+export class Post {
+  /**
+   * @param content the contents of a letter of one's heart
+   * @param victim user's name
+   * @param attacker the person who hit the user
+   */
+  constructor(userId, username, attacker, content, deleted, post_status="letter | suggest") {
+    this.userId = userId;
+    this.username = username;
+    this.attacker = attacker;
+    this.content = content;
+    this.deleted = deleted;
+    this.post_status = post_status;
+    this.created_at = new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'short'}).format(new Date());
+  }
+}
 
 export class Firestore {
   contructor() {}
@@ -58,7 +39,6 @@ export class Firestore {
     return newData;
   }
 }
-
 const PostViewer = () => {
   const { user } = useHeader();
 
@@ -66,10 +46,8 @@ const PostViewer = () => {
     <>
       <Header />
       <Block>
-        <PostLetter uid={user.uid} udata={user.data}></PostLetter>
-        <PostSuggest uid={user.uid} udata={user.data}></PostSuggest>
-        <PostLetterList />
-        <PostSuggestList />
+        <PostLetter uid={user.uid} udata={user.data} type="post-letters" />
+        <PostSuggest uid={user.uid} udata={user.data} type="post-suggests" />
       </Block>
       <Footer />
       <ToastContainer />
