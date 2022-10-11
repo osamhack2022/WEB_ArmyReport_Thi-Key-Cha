@@ -27,8 +27,6 @@ function Header() {
     [toggleUserMenu]
   )
 
-  console.log(onLogout)
-
   return (
     <>
       <Block>
@@ -68,12 +66,13 @@ const HeaderInner = styled.div`
   width: 1280px;
   margin: 0 auto;
   position: relative;
-`
-
-const Block = styled.div`
+  `
+  
+  const Block = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
+  z-index: 1500;
   background: #222831;
   .in {
     height: 80px
