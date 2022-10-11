@@ -68,11 +68,11 @@ const HeaderInner = styled.div`
   position: relative;
   `
   
-  const Block = styled.div`
+const Block = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: 1500;
+  z-index: 10;
   background: #222831;
   .in {
     height: 80px
