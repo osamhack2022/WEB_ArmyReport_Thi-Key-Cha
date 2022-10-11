@@ -10,7 +10,7 @@ const Animation = () => {
             src="AR_Logo.png" 
             alt='AR_Logo'
             className='logoimg'
-          />
+        />
         </div>
         <section className='loginform'>
           <Login />

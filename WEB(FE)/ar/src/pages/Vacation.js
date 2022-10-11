@@ -3,16 +3,22 @@ import Footer from '../components/base/Footer';
 import Header from '../components/base/Header';
 import db from '../database/DB_Manager';
 import { UserActions } from '../app/slice/UserSlice';
+import Loading from './Loading';
 
 import { Layout } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 
 import { onSnapshot, doc, getDoc } from "firebase/firestore";
 import VacationCommander from '../components/Vacation/VacationCommander';
+import useHeader from '../components/base/hooks/useHeader';
+import { getVacation, setVacation } from '../components/Vacation/hooks/V_Manager';
+
 
 const Vacation = () => {
+  const [isLoad, setisLoad] = useState(true);
   const [Boss, setBoss] = useState(false);
-  console.log(Boss);
+  const [rows, setRows] = useState([]);
+
   const { user } = useHeader();
   const uid = user.uid;
   console.log(uid);
@@ -31,21 +37,33 @@ const Vacation = () => {
 
   useEffect(() => {
     getData();
+    const promiseObj = getVacation();
+    const Obj = Promise.resolve(promiseObj);
+    Obj.then((data)=>{
+        setRows(data);
+        setisLoad(false);
+      }).catch(error => console.log(error));
   }, []);
 
   return (
-    <Layout className="layout">
-      <Header />
-      <Content>
-        {Boss && <VacationCommander />}
-        {! Boss && 
-        <>
-          Sorry, Close on time.
-        </>
-        }
-      </Content>
-      <Footer />
-    </Layout>
+    <>
+    {isLoad && <Loading />}
+
+    {!isLoad && 
+      <Layout className="layout">
+        <Header />
+        <Content>
+          {Boss && <VacationCommander rows={rows} />}
+          {!Boss && 
+          <>
+            
+          </>
+          }
+        </Content>
+        <Footer />
+      </Layout>
+    }
+    </>
   );
 };
 

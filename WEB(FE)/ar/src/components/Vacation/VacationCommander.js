@@ -1,44 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 import { useMemo } from 'react';
+import { basiccolumns } from './Tablecolumns';
 import { getVacation, setVacation } from './hooks/V_Manager';
+
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 
-const basiccolumns = [
-  { field: 'ID', headerName: 'No', width: 60 },
-  { field: 'Class', headerName: '계급', width: 70 },
-  { field: 'Name', headerName: '이름', width: 130 },
-  { field: 'Destination', headerName: '목적지', width: 130 },
-  {
-    field: 'Startdate',
-    headerName: '출발일',
-    type: 'Date',
-    width: 90,
-  },
-  {
-    field: 'Enddate',
-    headerName: '도착일',
-    type: 'Date',
-    width: 90,
-  },
-  {
-    field: 'Content',
-    headerName: '휴가 내용',
-    sortable: false,
-    width: 160,
-  },
-  {
-    field: 'Note',
-    headerName: '비고',
-    sortable: false,
-    width: 160,
-  },
-];
-
-const VacationCommander = () => {
-  const rows = getVacation();
+const VacationCommander = (rows) => {
   const columns = useMemo(()=>[
     ...basiccolumns,
     {
@@ -54,6 +24,15 @@ const VacationCommander = () => {
   return (
     <>
       <div style={{ height: 600, width: '50%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[6]}
+          checkboxSelection
+        />
+      </div>
+      <div style={{ height: 300, width: '50%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
