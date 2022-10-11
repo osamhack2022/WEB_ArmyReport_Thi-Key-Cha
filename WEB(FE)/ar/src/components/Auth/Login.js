@@ -1,18 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Radio } from 'antd';
-
-import styles from "./Login.module.css";
+import { Form, Input, Radio } from 'antd';
 import "antd/dist/antd.min.css";
+import styled from 'styled-components'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { doc, getDoc } from 'firebase/firestore';
 import db from '../../database/DB_Manager';
 
 import { UserActions } from '../../app/slice/UserSlice';
 import { AuthActions } from '../../app/slice/AuthSlice';
+
+const AuthLoginBlock = styled.div`
+  position: relative;
+  font-famliy: GothicA1 Regular;
+  label {
+    color: white;
+  }
+
+  svg {
+    fill: white;
+  }
+`
 
 const Login = () => {
 
@@ -88,7 +99,8 @@ const Login = () => {
   
   return (
     <>
-      <Form
+    <AuthLoginBlock>
+      <LoginForm
         form={form}
         layout="vertical"
         initialValues={{
@@ -97,45 +109,149 @@ const Login = () => {
         onSubmit={(e) =>e.preventDefault()}
         onFinish={onSubmit}
       >
-        <Form.Item 
-          label="Email" 
-          required tooltip="작성해주셔야 합니다. ㅡ3ㅡ"
+        <LabelItem 
+          required tooltip="이메일 입력란입니다."
         >
-          <Input 
+          <EmailInput
             name='userid'
-            placeholder="이메일입니다만?"
+            placeholder="Email"
             onChange={onChange}
           />
-        </Form.Item>
-        <Form.Item
-          label="Password"
+        </LabelItem>
+        <LabelItem
           tooltip={{
-            title: '조금만 더 힘내요!',
+            title: '비밀번호 입력란입니다.',
             icon: <InfoCircleOutlined />,
           }}
           
         >
-          <Input.Password
+          <PwdInput
             name='userpwd'
-            placeholder="비밀번호입니다만?" 
+            placeholder="Password" 
             onChange={onChange}
           />
-        </Form.Item>
+        </LabelItem>
         {!isLoad && 
         <Button type="primary" htmlType="submit">
-          Submit
+          로그인
         </Button>}
-        {isLoad && <Form.Item>
+        {isLoad && <LabelItem>
           <Button type="primary" disabled>Loading...</Button>
-        </Form.Item>}
-        <Form.Item>
-          <Button type="primary" onClick={() => history('/register')}>
-            Register
-          </Button>
-        </Form.Item>
-      </Form>
+        </LabelItem>}
+        <OtherButton>
+          <ul>
+            <li><Link to="/register">회원가입</Link></li>
+            <li><Link to="/">이메일 찾기</Link></li>
+            <li><Link to="/">비밀번호 찾기</Link></li>
+            <li><Link to="/">관리자 로그인</Link></li>
+          </ul>
+        </OtherButton>
+      </LoginForm>
+    </AuthLoginBlock>
     </>
   )
 }
+
+const LoginForm = styled(Form)`
+  width: 550px;
+  padding-top: 32px;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+`
+  
+const LabelItem = styled(Form.Item)`
+  text-align: center;
+`
+
+const OtherButton = styled.div`
+  float: left;
+  margin-top: 18px;
+  width: 100%;
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    width: 23%;
+    float: left;
+    text-algin: center;
+    border-left: 1px solid #AAC3D6;
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  a {
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    &:hover {
+      font-weight: bold;
+    }
+  }
+`
+
+
+const Button = styled.button`
+  width: 550px;
+  height: 80px;
+  background-color: #574F7D;
+  border-radius: 50px;
+  color: white;
+  font-size: 24px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+`
+
+const EmailInput = styled(Input)`
+  width: 550px;
+  height: 90px;
+  background-color: transparent;
+  color: white;
+  font-size: 18px;
+  padding-left: 32px;
+  border: 5px solid #574F7D;
+  border-radius: 30px;
+  &:hover {
+    border: 5px solid #574F7D;
+  }
+  &:focus {
+    border: 5px solid #574F7D;
+  }
+`
+
+const PwdInput = styled(Input.Password)`
+  margin-top: -50px;
+  width: 550px;
+  height: 90px;
+  background-color: transparent;
+  color: white;
+  padding-left: 32px;
+  border: 5px solid #574F7D;
+  border-radius: 30px;
+  &:hover {
+    border: 5px solid #574F7D;
+  }
+  &:focus {
+    border: 5px solid #574F7D;
+  }
+  
+  input {
+    background-color: transparent;
+    font-size: 18px;
+    color: white;
+  }
+  
+  span {
+    &:hover {
+      border-right-width: none;
+      border-color: none;
+    }
+  }
+`
 
 export default Login;
