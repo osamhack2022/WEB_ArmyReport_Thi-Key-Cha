@@ -10,6 +10,7 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import useHeader from '../base/hooks/useHeader';
 import { doc, setDoc} from "firebase/firestore";
 
 import db from '../../database/DB_Manager';
@@ -28,9 +29,8 @@ const style = {
   };
 
 const Patient = () => {
-    /* Variables */
-    const uid = useSelector((state)=>state.User.uid);
-
+    const user = useHeader();
+    const uid = user.uid;
     const [loading, setLoading] = useState(false);
  
     const [patient, setPatient] = useState(false);
