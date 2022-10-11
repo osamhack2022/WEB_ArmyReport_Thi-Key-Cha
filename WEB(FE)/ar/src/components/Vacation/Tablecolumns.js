@@ -6,14 +6,16 @@ export const basiccolumns = [
     {
       field: 'Startdate',
       headerName: '출발일',
-      type: 'Date',
       width: 90,
+      valueFormatter: params => 
+      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
     },
     {
       field: 'Enddate',
       headerName: '도착일',
-      type: 'Date',
       width: 90,
+      valueFormatter: params => 
+      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
     },
     {
       field: 'Content',
@@ -27,4 +29,9 @@ export const basiccolumns = [
       sortable: false,
       width: 160,
     },
-  ];
+];
+
+export const OutcastColumn = [
+  { field: 'Away', headerName: '금일 휴가 출발자', width: 60 },
+  { field: 'Home', headerName: '금일 휴가 복귀자', width: 60 },
+]

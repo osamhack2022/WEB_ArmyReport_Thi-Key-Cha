@@ -17,7 +17,7 @@ import { getVacation, setVacation } from '../components/Vacation/hooks/V_Manager
 const Vacation = () => {
   const [isLoad, setisLoad] = useState(true);
   const [Boss, setBoss] = useState(false);
-  const [rows, setRows] = useState([]);
+  const rows = [];
 
   const { user } = useHeader();
   const uid = user.uid;
@@ -35,16 +35,20 @@ const Vacation = () => {
     }
   }
 
+  const promiseObj = getVacation();
+  const getRows = () => {
+    promiseObj.then((data)=>{
+      rows.push(data);
+      setisLoad(false);
+    });
+  };
+
   useEffect(() => {
     getData();
-    const promiseObj = getVacation();
-    const Obj = Promise.resolve(promiseObj);
-    Obj.then((data)=>{
-        setRows(data);
-        setisLoad(false);
-      }).catch(error => console.log(error));
+    getRows();
   }, []);
 
+  console.log(rows);
   return (
     <>
     {isLoad && <Loading />}

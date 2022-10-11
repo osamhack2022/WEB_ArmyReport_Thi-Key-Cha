@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     doc, 
     getDoc, 
@@ -9,33 +9,49 @@ import {
     collection,
     where
   } from "firebase/firestore";
-  import db from '../../../database/DB_Manager';
+import db from '../../../database/DB_Manager';
 
-const v_list = [];
-
-async function synthesis(q){
-    let count = 1;
-    const v_Snapshot = await getDocs(q);
-    v_Snapshot.forEach((v)=>{
-        const user = {
-            ID : `${count}`,
-            Name : v.data().Username,
-            Class : v.data().Userclasses,
-            Destination : v.data().Destination,
-            Startdate : v.data().Startdate,
-            Enddate : v.data().Enddate,
-            Content : v.data().Content,
-            Note : v.data().Note,
-        };
-        count += 1;
-    });
+function createData(ID, Class, Name, Destination, Startdate, Enddate, Content, Note) {
+    return {
+        ID,
+        Class,
+        Name,
+        Destination,
+        Startdate,
+        Enddate,
+        Content,
+        Note,
+        history: [
+            
+        ],
+    };
 };
 
+
 export async function getVacation(){
+    const [v_list,setVlist] = useState([]);
     const today = new Date();
-    const q = query(collection(db, "02155004", "본부중대", "Vacation"), where("Startdate", "<" , `${today}`));
-    await synthesis(q);
-    return {v_list};
+    const q = query(collection(db, "02155004", "본부중대", "Vacation"), where("Startdate", ">" , today));
+    let count = 1;
+    const v_Snapshot = await getDocs(q);
+    v_Snapshot.forEach((res)=>{
+        const user = {
+            ID : `${count}`,
+            Name : res.data().Username,
+            Class : res.data().Userclasses,
+            Destination : res.data().Destination,
+            Startdate : res.data().Startdate,
+            Enddate : res.data().Enddate,
+            Content : res.data().Content,
+            Note : res.data().Note,
+        };
+        setVlist([
+            ...v_list,
+            user
+        ]);
+        count += 1;
+    });
+    return { v_list };
 };
 
 export async function setVacation(uid, value){

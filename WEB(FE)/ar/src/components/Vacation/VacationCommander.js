@@ -13,7 +13,7 @@ const VacationCommander = (rows) => {
     ...basiccolumns,
     {
       ...GRID_CHECKBOX_SELECTION_COL_DEF,
-      width: 100,
+      width: 30,
     },
   ], [basiccolumns]);
 
@@ -24,15 +24,6 @@ const VacationCommander = (rows) => {
   return (
     <>
       <div style={{ height: 600, width: '50%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[6]}
-          checkboxSelection
-        />
-      </div>
-      <div style={{ height: 300, width: '50%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
