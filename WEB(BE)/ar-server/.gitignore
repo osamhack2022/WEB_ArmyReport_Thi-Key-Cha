@@ -1,0 +1,13 @@
+.env
+.serverless
+.webpack
+node_modules
+ormconfig.json
+.env.development
+dist
+.env.staging
+.env.production
+google-service-account.json
+cloudflare
+db
+settings.json
