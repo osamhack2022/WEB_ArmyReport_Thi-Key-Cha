@@ -39,15 +39,67 @@ export class Firestore {
     return newData;
   }
 }
+
+
+export const Form = styled.div`
+  max-width: 550px;
+  marign: 1.5rem 0 0;
+  position: relative;
+
+  > small {
+    color: orange;
+  }
+`
+
+export const TextField = styled.div`
+  .text-input {
+    width: 100%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    color: black;
+    outline: none;
+    padding: 10px 40px 11px 1.5rem;
+  }
+  
+  .content-space {
+    height: 80px;
+  }
+`
+
+export const Button = styled.button`
+  display: block;
+  width: 50%;
+  color: white;
+  height: 36px;
+  background-color: #342F4B;
+  border: 0;
+  border-radius: 10px;
+  margin: 0.25rem 0 0;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    > strong {
+      color: tomato;
+      transition: all .2s;
+    }
+  }
+`
+
+
 const PostViewer = () => {
   const { user } = useHeader();
+  const postType = {
+    letter: 'post-letters',
+    suggest: 'post-suggests'
+  }
 
   return (
     <>
       <Header />
       <Block>
-        <PostLetter uid={user.uid} udata={user.data} type="post-letters" />
-        <PostSuggest uid={user.uid} udata={user.data} type="post-suggests" />
+        <PostLetter user_id={user.uid} user_data={user.data} type={postType.suggest} />
+        <PostSuggest user_id={user.uid} user_data={user.data} coll={postType.letter} />
       </Block>
       <Footer />
       <ToastContainer />
