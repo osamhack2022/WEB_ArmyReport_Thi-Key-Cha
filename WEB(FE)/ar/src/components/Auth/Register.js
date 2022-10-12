@@ -19,7 +19,6 @@ import moment from 'moment';
 const { Option } = Select;
 const dateFormat = 'YYYY/MM/DD';
 
-
 const Register = () => {
     const history = useNavigate();
     const [userLocation, setUserLocation] = useState({
@@ -34,6 +33,7 @@ const Register = () => {
         'Userpwd' : '',
         'UserName' : '',
         'UserClasses' : '',
+        'UserPhone' : '',
         'UserLocation' : userLocation,
         'UserLastDate' : '',
         'isLocated' : '',
@@ -70,6 +70,7 @@ const Register = () => {
     const [Brigade, setBrigade] = useState(Brigadedata[Divisiondata[Cropsdata[3]][0]][0]);
     const [Batalion, setBatalion] = useState(Bataliondata[Brigade]);
     const [Company, setCompany] = useState("");
+
     const onCropChange = (value) => {
         setCrop(value);
         setDivision(Divisiondata[value][0]);
@@ -110,6 +111,24 @@ const Register = () => {
             [name] : value,
         });
     };
+
+    const pwdChechhandle=(e)=>{
+        const {
+            target : {value}
+        } = e;
+        const ref = getElementByClassName('CheckUserpwd');
+        if (value.length !== 0){
+            if(value === UserObj[Userpwd]){
+                ref.setAttribute('error');
+                ref.setAttribute('helperText','Incorrect entry.');
+                ref.setAttribute('label','Not Match');
+            }
+        }else{
+            ref.removeAttribute('error');
+            ref.removeAttribute('helperText','Incorrect entry.');
+            ref.removeAttribute('label','Not Match');
+        }
+    }
 
     const enterLoading = (index) => {
         setLoadings((prevLoadings) => {  
@@ -166,6 +185,7 @@ const Register = () => {
                 Useremail : UserObj.UserEmail,
                 Username : UserObj.UserName,
                 Userclass : UserObj.UserClasses,
+                UserPhone : UserObj.UserPhone,
                 Userlocated : UserObj.UserLocation,
                 Userlastdate : UserObj.UserLastDate,
                 IsLocated : UserObj.isLocated,
@@ -216,10 +236,23 @@ const Register = () => {
                     required: true,
                     message: 'Please input your password!',
                 }]}
-                
             >
                 <Input.Password 
                     name='Userpwd'
+                    onChange={onChange}
+                />
+            </Form.Item>
+            <Form.Item
+                label="Password"
+                name="Userpwd"
+                rules={[
+                {
+                    required: true,
+                    message: 'Check the password',
+                }]}
+            >
+                <Input.Password 
+                    name='CheckUserpwd'
                     onChange={onChange}
                 />
             </Form.Item>
@@ -239,6 +272,9 @@ const Register = () => {
                     <Option key={army}>{army}</Option>
                     ))}
                 </Select>
+            </Form.Item>
+            <Form.Item label="이름" name='UserPhone'>
+                <Input name='UserPhone' maxLength={11} onChange={onChange}/>
             </Form.Item>
             <Form.Item label='전역일' name='UserLastDate'>
                 <Space direction="vertical" size={12}>

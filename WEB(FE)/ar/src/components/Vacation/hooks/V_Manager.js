@@ -8,7 +8,7 @@ import {
     query,
     collection,
     where
-  } from "firebase/firestore";
+} from "firebase/firestore";
 import db from '../../../database/DB_Manager';
 
 function createData(ID, Class, Name, Destination, Startdate, Enddate, Content, Note) {
@@ -53,6 +53,7 @@ export async function getVacation(){
     });
     return { v_list };
 };
+
 
 export async function setVacation(uid, value){
     const docRef = doc(db, "02155004", "본부중대", "Vacation",`${uid}`);

@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 export const basiccolumns = [
     { field: 'ID', headerName: 'No', width: 60 },
     { field: 'Class', headerName: '계급', width: 70 },
@@ -8,14 +10,14 @@ export const basiccolumns = [
       headerName: '출발일',
       width: 90,
       valueFormatter: params => 
-      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
+        moment(params?.value).format("DD/MM/YYYY"),
     },
     {
       field: 'Enddate',
       headerName: '도착일',
       width: 90,
       valueFormatter: params => 
-      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
+        moment(params?.value).format("DD/MM/YYYY"),
     },
     {
       field: 'Content',
