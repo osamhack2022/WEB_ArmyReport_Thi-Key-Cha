@@ -6,7 +6,7 @@ import PostViewer from '../components/post/PostViewer'
 const Post = () => {
   return (
     <>
-      <PostViewer></PostViewer>
+      <PostViewer />
     </>
   )
 }

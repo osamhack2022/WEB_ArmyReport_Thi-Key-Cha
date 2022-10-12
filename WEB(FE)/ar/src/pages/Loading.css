@@ -1,0 +1,23 @@
+.loading-img{
+    position: absolute;
+    width: 199px;
+    height: 199px;
+    left: 860px;
+    top: 341px;
+}
+
+.loading-text{
+    position: absolute;
+    width: 229px;
+    height: 80px;
+    left: 845px;
+    top: 579px;
+
+    font-family: 'Gothic A1';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 64px;
+    line-height: 80px;
+    
+    color: #AAC3D6;
+}

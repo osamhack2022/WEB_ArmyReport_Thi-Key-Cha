@@ -91,7 +91,7 @@ const Login = () => {
             dispatch(UserActions.Creating(UserObj));
         }
         dispatch(UserActions.SetUid(uid[0]));
-        history(`/${uid[0]}`);
+        history(`/home`);
       }).catch(err => {
         alert(err.message);
       });

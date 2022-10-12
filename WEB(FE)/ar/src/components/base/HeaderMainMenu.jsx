@@ -44,7 +44,7 @@ const HeaderMainMenu = ({user}) => {
             </Link>
           </li>
           <li className='route-item'>
-            <Link to="/vaction">
+            <Link to="/vacation">
               휴가
             </Link>
           </li>

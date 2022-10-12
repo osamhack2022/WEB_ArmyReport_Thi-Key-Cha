@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import db from '../../database/DB_Manager';
-import { UserActions } from '../../slice/UserSlice';
+import { UserActions } from '../../app/slice/UserSlice';
 import UserRollCallCard from './UserRollCallCard';
 import { 
     doc, 
@@ -26,16 +26,28 @@ const Commander = () => {
     /* Variables */
     const [SoldierList, setSoldierList] = useState([]);
     const [isRollcall, setIsRollcall] = useState(false);
-
     const [Users, setUsers] = useState([]);
 
     /* Firebase 에서 User 들의 uid 정보 빼내오는 과정 */
     const q = query(collection(db, "02155004", "본부중대", "User"), where("IsBoss", "==" , false));
 
     /* Firebase 에서 user들의 loc 정보를 빼내오는 과정 */
+
     const Locquery = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "!=" , ""));
-
-
+    async function CallLocdata(){
+        const locSnapshot = await getDocs(Locquery);
+        locSnapshot.forEach((loc) => {
+            const datasection={
+                Name : loc.data().Username,
+                Class : loc.data().Userclass,
+                Located : loc.data().IsLocated
+            };
+            setUsers([
+                ...Users,
+                datasection
+            ]);
+        });
+    };
 
     const Locationhandle = onSnapshot(Locquery, (querySnapshot) => {
         querySnapshot.forEach((dataSnap)=>{
@@ -44,16 +56,16 @@ const Commander = () => {
                 Class : dataSnap.data().Userclass,
                 Located : dataSnap.data().IsLocated
             };
-            setUsers([
-                ...Users,
-                info
-            ]);
         });
     });
     
     // 지휘관, 당직사관인 아이디를 찾고 난뒤에,
     // 그 인원들을 제외하고 Data 를 가져오는 편이 속도면에서 우수
     
+    useEffect(()=>{
+        CallLocdata();
+    }, [])
+
     const Onrollcallhandle = async() => {
         setIsRollcall(true);
         const querySnapshot = await getDocs(q);
@@ -115,7 +127,7 @@ const Commander = () => {
             <CardContent>
                 { Users.map((User) => {
                     return (
-                        <UserLocCard User={User} />
+                        <UserLocCard key={User.Name} User={User} />
                     )
                 })}
                 <CardActions>
