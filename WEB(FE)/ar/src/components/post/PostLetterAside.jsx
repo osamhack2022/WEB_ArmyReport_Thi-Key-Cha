@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Baby_Ogu_Ask from '../../static/image/baby-ogu-question.png'
 
-const PostLetterAside = ({ uid, udata, type }) => {
+const PostLetterAside = () => {
   return (
     <>
       <PostLetterGuideLink href="https://brunch.co.kr/@steiner7188/41">
