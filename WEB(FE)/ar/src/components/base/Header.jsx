@@ -70,7 +70,6 @@ const HeaderInner = styled.div`
   
 const Block = styled.div`
   width: 100%;
-  position: fixed;
   top: 0;
   z-index: 10;
   background: #222831;
