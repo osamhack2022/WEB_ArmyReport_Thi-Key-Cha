@@ -1,14 +1,10 @@
-import PostLetterList from "./PostLetterList";
-import PostLetterWrite from './PostLetterWrite'
-import { useEffect } from "react";
-import { useRunData } from "./hooks/useRunData";
+import React from 'react';
+import PostLetterWrite from './PostLetterWrite';
+import PostLetterAside from './PostLetterAside';
 import styled from "@emotion/styled";
 import baby_ogu_write from '../../static/image/baby-ogu-write.png'
 
-const PostLetter = ({ uid, udata, type }) => {
-  const [list, runData] = useRunData(type);
-  useEffect(runData, []);
-
+const PostLetter = ({ user_id, user_data, coll }) => {
   return (
     <>
       <Background>
@@ -23,10 +19,10 @@ const PostLetter = ({ uid, udata, type }) => {
             <p>반드시 고쳐져야할, 있으면 안될 병영생활중 하나 입니다.</p>
             <span>군 복무중 왠지 모를 불쾌함을 느끼셨다면 지금 바로 대처하세요.</span>
           </Description>
-          <PostLetterWrite uid={uid} udata={udata} />
-          <PostLetterList list={list} type={type} />
+          <PostLetterWrite user_id={user_id} user_data={user_data} coll={coll} />
         </PostLetterInner>
       </Background>
+      <PostLetterAside />
     </>
   )
 }

@@ -7,7 +7,7 @@ import { UserActions } from '../../app/slice/UserSlice';
 import { Post } from './PostViewer';
 import styled from 'styled-components';
 
-const PostLetterWrite = ({ uid, udata, type }) => {
+const PostLetterWrite = ({ user_id, user_data, coll }) => {
   const [letter, setLetter] = useState({
     attacker: "",
     content: "",
@@ -18,8 +18,8 @@ const PostLetterWrite = ({ uid, udata, type }) => {
     await new Promise((delay) => setTimeout(delay, 1500)); // 중복 전송을 방지하기 위해 딜레이를 걸어줌
 
     const newLetter = new Post(
-      uid,
-      udata.Username,
+      user_id,
+      user_data.Username,
       '마음의 편지',
       attacker,
       content,
@@ -29,7 +29,7 @@ const PostLetterWrite = ({ uid, udata, type }) => {
     try {
       // TODO: 테스트 중이라 post-letters 컬렉션으로 지정 되어 있습니다.
       // 추후에 '사단-여단-대대-부대' 콜렉션으로 들어가 데이터를 저장해야 합니다.
-      const docRef = await addDoc(collection(db, type), {...newLetter});
+      const docRef = await addDoc(collection(db, coll), {...newLetter});
       if (docRef.id) toast.success("💌 팔랑 ~ 마음의 편지를 보냈습니다.")
     } catch (e) {
       console.log(e);
