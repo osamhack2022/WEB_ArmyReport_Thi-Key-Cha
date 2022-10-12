@@ -3,9 +3,9 @@ import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Stack, Button, Box, TextField } from '@mui/material';
 import { UserActions } from '../../app/slice/UserSlice';
 import { Post } from './PostViewer';
+import styled from 'styled-components';
 
 const PostLetterWrite = ({ uid, udata, type }) => {
   const [letter, setLetter] = useState({
@@ -53,52 +53,95 @@ const PostLetterWrite = ({ uid, udata, type }) => {
 
   const validateAttacker = () => {
     if (!letter.attacker) {
-      return setLetterErrorMsg('정확히 누구인지 작성해주세요.');
+      return setLetterErrorMsg('※ 정확히 누구인지 작성해주세요.');
     } else if (letter.attacker.length < 2) {
-      return setLetterErrorMsg('이름은 최소 1자 이상입니다.')
+      return setLetterErrorMsg('※ 이름은 최소 1자 이상입니다.')
     }
   }
 
   const validateContent = () => {
     if (!letter.content) {
-      return setLetterErrorMsg('내용은 필수 기입란 입니다.')
+      return setLetterErrorMsg('※ 내용은 필수 기입란 입니다.')
     } else if (letter.content.length > 1000) {
-      return setLetterErrorMsg('내용은 1000자 이내로 작성해야 합니다.')
+      return setLetterErrorMsg('※ 내용은 1000자 이내로 작성해야 합니다.')
     }
   }
 
   return(
     <>
-      <Box sx={{ '& > :not(style)': { m: 1 } }}>
-        <div className="PostLetterInput">
-          <TextField
-            id="outlined-size-small"
-            type="text"
-            name="attacker"
-            onChange={handleChange}
-            label="누가 그랬나요?"
-            placeholder="예) 계급 홍길동"
-            size="small"
-          />
+      <Form sx={{ '& > :not(style)': { m: 1 } }}>
+          <TextField>
+            <input             
+              type="text"
+              className='text-input'
+              name="attacker"
+              onChange={handleChange}
+              label="누가 그랬나요?"
+              placeholder="예) 계급 홍길동"
+              size="small" />
+          </TextField>
           {validateAttacker() && <small className="error" role="alert">{validateAttacker()}</small>}
-          <TextField
-            id="outlined-size-normal"
-            name="content"
-            onChange={handleChange}
-            type="text"
-            maxLength={1000}
-            autoComplete="off"
-            placeholder='1000자 이내로 작성해주세요!'
-            label="마음의 편지"
-          />
+          <TextField>
+            <textarea
+              name="content"
+              className='text-input content-space'
+              onChange={handleChange}
+              type="text"
+              maxLength={1000}
+              autoComplete="off"
+              placeholder='1000자 이내로 작성해주세요!'
+              label="마음의 편지" />
+          </TextField>
           {validateContent() && <small className="error" role="alert">{validateContent()}</small>}
-          <Stack>
-            <Button onClick={onConfirmSave} variant="contained">전송</Button>
-          </Stack>
-        </div>
-      </Box>
+          <Button onClick={onConfirmSave} variant="contained">아기오구와 함께 <strong>마음의 편지</strong> 보내기</Button>
+      </Form>
     </>
   )
 }
+
+const Form = styled.div`
+  max-width: 550px;
+  marign: 1.5rem 0 0;
+  position: relative;
+
+  > small {
+    color: orange;
+  }
+`
+
+const TextField = styled.div`
+  .text-input {
+    width: 100%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    color: black;
+    outline: none;
+    padding: 10px 40px 11px 1.5rem;
+  }
+  
+  .content-space {
+    height: 80px;
+  }
+`
+
+const Button = styled.button`
+  display: block;
+  width: 50%;
+  color: white;
+  height: 36px;
+  background-color: #342F4B;
+  border: 0;
+  border-radius: 10px;
+  margin: 0.25rem 0 0;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    > strong {
+      color: tomato;
+      transition: all .2s;
+    }
+  }
+`
 
 export default PostLetterWrite;
