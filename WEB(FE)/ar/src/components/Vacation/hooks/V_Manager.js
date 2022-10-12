@@ -27,7 +27,7 @@ function createData(ID, Class, Name, Destination, Startdate, Enddate, Content, N
     };
 };
 
-
+// User Obj information 에 phonenumber 있습니다 <참고하세요>
 export async function getVacation(){
     const [v_list,setVlist] = useState([]);
     const today = new Date();
@@ -36,7 +36,7 @@ export async function getVacation(){
     const v_Snapshot = await getDocs(q);
     v_Snapshot.forEach((res)=>{
         const user = {
-            ID : `${count}`,
+            ID : count,
             Name : res.data().Username,
             Class : res.data().Userclasses,
             Destination : res.data().Destination,
@@ -51,7 +51,7 @@ export async function getVacation(){
         ]);
         count += 1;
     });
-    return { v_list };
+    return v_list;
 };
 
 
@@ -61,3 +61,4 @@ export async function setVacation(uid, value){
         Positive : `${value}`
     });
 };
+
