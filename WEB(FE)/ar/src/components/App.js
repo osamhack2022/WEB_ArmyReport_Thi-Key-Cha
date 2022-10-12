@@ -5,22 +5,15 @@ import store, {persistor} from '../app/store'
 import {Provider} from 'react-redux';
 import AppRouter from './Router';
 import AuthLoadFake from './Auth/AuthLoadFake';
-
-const Block = styled.div`
-  padding-top: 100px;
-`
-
 function App() {
   return (
     <div className="App" >
-      <AuthLoadFake />
-      <Block>        
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <AppRouter />
-          </PersistGate>
-        </Provider>
-      </Block>
+      <AuthLoadFake />   
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppRouter />
+        </PersistGate>
+      </Provider>
     </div>
   );
 }

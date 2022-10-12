@@ -8,7 +8,7 @@ const AuthLoadFake = () => {
   const FakeLoading = async () => {
     setLoaidng(true);
     await new Promise((delay) => {
-      setTimeout(delay, 3000)
+      setTimeout(delay, 1500)
     });
     setLoaidng(false);
 
