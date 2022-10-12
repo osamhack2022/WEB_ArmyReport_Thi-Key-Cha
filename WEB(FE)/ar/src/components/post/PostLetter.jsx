@@ -1,4 +1,3 @@
-import PostLetterList from "./PostLetterList";
 import PostLetterWrite from './PostLetterWrite';
 import PostLetterAside from './PostLetterAside'
 import { useEffect } from "react";

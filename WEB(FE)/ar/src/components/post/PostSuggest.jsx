@@ -21,7 +21,6 @@ const PostSuggest = ({ uid, udata, type }) => {
     <>
       <PostSuggestBlock>
         <PostSuggestWrite uid={uid} udata={udata} type={type} />
-        <PostSuggestList list={list} />
       </PostSuggestBlock>
     </>
   )
