@@ -12,15 +12,15 @@ import { Post } from './PostViewer';
 const PostSuggestWriteBlock = styled.div(`
 `);
 
-const PostSuggestWrite = ({ uid, udata, type }) => {
+const PostSuggestWrite = ({ user_id, user_data, coll }) => {
   const { register, handleSubmit, formState: { isSubmitting, isDirty, errors } } = useForm();
 
   const onSubmit = async (obj) => {
     await new Promise((delay) => setTimeout(delay, 1500)); // 중복 전송을 방지하기 위해 딜레이를 걸어줌
 
     const newSuggest = new Post(
-      uid,
-      udata.Username,
+      user_id,
+      user_data.Username,
       null,
       String(obj.content),
       false,
@@ -30,7 +30,7 @@ const PostSuggestWrite = ({ uid, udata, type }) => {
     try {
       // TODO: 테스트 중이라 post-suggests 컬렉션으로 지정 되어 있습니다.
       // 추후에 '사단-여단-대대-부대' 콜렉션으로 들어가 데이터를 저장해야 합니다.
-      const docRef = await addDoc(collection(db, type), {...newSuggest});
+      const docRef = await addDoc(collection(db, coll), {...newSuggest});
       if (docRef.id) toast.success("🚀 슈웅 ! 건의사항을 보냈습니다.")
     } catch (e) {
       console.log(e);
