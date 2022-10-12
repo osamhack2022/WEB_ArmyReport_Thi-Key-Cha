@@ -4,10 +4,11 @@ import { toast } from 'react-toastify';
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 import styled from "styled-components";
-
-/* mui materials */
-import { Stack, Button, TextField, Box } from '@mui/material';
+import { TextField } from '@mui/material';
+import { Button, Form } from './PostViewer'
 import { Post } from './PostViewer';
+
+import { TextField } from '@mui/material';
 
 const PostSuggestWriteBlock = styled.div(`
 `);
@@ -40,24 +41,36 @@ const PostSuggestWrite = ({ user_id, user_data, coll }) => {
   return(
     <>
       <PostSuggestWriteBlock>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Box>
-            <TextField id="outlined-basic" label="건의사항" variant="outlined" type="text" placeholder='건의사항' aria-invalid={!isDirty ? undefined : errors.content ? "true" : "false"} {...register('content', {
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <TextField 
+            id="outlined-basic" 
+            label="건의사항" 
+            variant="outlined" 
+            type="text" 
+            placeholder='건의사항' 
+            aria-invalid={!isDirty ? undefined : errors.content ? "true" : "false"} 
+            {...register('content', {
               required: '내용은 필수 입력입니다.',
               minLength: {
                 value: 30,
                 message: "최소 30자 이상은 작성해야 합니다."
-              }
-            })} />
-          </Box>
-        <Stack>
+            }})} />
           {errors.content && <small role="alert">{errors.content.message}</small>}
-          <Button type="submit" variant="contained">전송</Button>
-        </Stack>
-        </form>
+          <Button type="submit">전송</Button>
+        </Form>
       </PostSuggestWriteBlock>
     </>
   )
 }
+
+const Textarea = styled(TextField)`
+  width: 100%;
+  color: black;
+  border: 1px solid black;
+  box-sizing: border-box;
+  outline: none;
+  padding: 10px 40px 11px 1.5rem;
+  height: 80px;
+`
 
 export default PostSuggestWrite;
