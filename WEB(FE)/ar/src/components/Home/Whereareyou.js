@@ -19,6 +19,7 @@ import Select from '@mui/material/Select';
 const Whereareyou = () => {
   const user = useHeader();
   const uid = user.uid;
+  console.log(uid);
   const dispatch = useDispatch();
   const locations = [
     '생활관', '연병장', '화장실', '행정반', '사이버 지식 정보방',
@@ -80,9 +81,6 @@ const Whereareyou = () => {
               ))}
             </Select>
           </FormControl>
-        </CardContent>
-        <CardContent>
-          <span>다들 어디 계신지..?</span>
         </CardContent>
         <CardActions>
           <Button size="small" onClick={onhandlelocation}>보고</Button>
