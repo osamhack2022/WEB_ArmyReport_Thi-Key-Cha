@@ -27,3 +27,8 @@
   font-family: "Roboto Regular";
   src: url("../fonts/Roboto/Roboto-Regular.ttf");
 }
+
+@font-face {
+  font-family: "BM JUA";
+  src: url("../fonts/BM/BMJUA_ttf.ttf");
+}
