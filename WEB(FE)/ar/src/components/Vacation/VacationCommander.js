@@ -5,8 +5,8 @@ import { getVacation, setVacation } from './hooks/V_Manager';
 import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@mui/material';
 
-
-const rows = getVacation();
+let rows = [];
+const raw_rows = getVacation().then((test)=>rows = test);
 console.log(rows);
 
 const VacationCommander = () => {
@@ -34,6 +34,7 @@ const VacationCommander = () => {
       <div style={{ height: 600, width: '50%' }}>
         <DataGrid
           rows={rows}
+          getRowId={(row)=>row.id}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[6]}
