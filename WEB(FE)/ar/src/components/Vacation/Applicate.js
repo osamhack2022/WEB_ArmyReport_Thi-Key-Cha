@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import useHeader from '../base/hooks/useHeader';
-import { doc, setDoc} from "firebase/firestore";
+import { doc, getDoc, setDoc} from "firebase/firestore";
 
 import db from '../../database/DB_Manager';
 import { useSelector } from 'react-redux';
@@ -78,15 +78,11 @@ const Applicate = () => {
             Enddate : new Date(),
             Content : '',
             Note : '',
+            Examine : false,
         });
     };
 
     useEffect(()=>{
-        DesRef.current.focus();
-        StartdateRef.current.focus();
-        EnddateRef.current.focus();
-        ContentRef.current.focus();
-        NoteRef.current.focus();
         getData(uid);
         setData(uid);
     }, []);
@@ -103,11 +99,11 @@ const Applicate = () => {
 
         setUserData({
             ...UserData,
-            [Destination] : DesRef.current.value(),
-            [Startdate] : StartdateRef.current.value(),
-            [Enddate] : EnddateRef.current.value(),
-            [Content] : ContentRef.current.value(),
-            [Note] : NoteRef.current.value()
+            ['Destination'] : DesRef.current.value(),
+            ['Startdate'] : StartdateRef.current.value(),
+            ['Enddate'] : EnddateRef.current.value(),
+            ['Content'] : ContentRef.current.value(),
+            ['Note'] : NoteRef.current.value()
         });
 
         await setDoc(doc(db, "02155004", "본부중대", "Vacation",`${uid}`), {
