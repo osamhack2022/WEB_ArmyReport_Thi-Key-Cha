@@ -21,6 +21,7 @@ import {
 import VacationCommander from '../components/Vacation/VacationCommander';
 import useHeader from '../components/base/hooks/useHeader';
 import Button from '@mui/material/Button';
+import PersonPage from '../components/Vacation/PersonPage';
 
 const Vacation = () => {
   const [isLoad, setisLoad] = useState(true);
@@ -62,11 +63,7 @@ const Vacation = () => {
           {Boss && 
           <VacationCommander />
         }
-          {!Boss && 
-          <>
-            
-          </>
-          }
+          {!Boss && <PersonPage />}
         </Content>
         <Footer />
       </Layout>
