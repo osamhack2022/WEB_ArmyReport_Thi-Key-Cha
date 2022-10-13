@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserActions } from '../../app/slice/UserSlice';
 import { Post } from './PostViewer';
-import styled from 'styled-components';
+import { Button, TextField, Form } from './PostViewer' // material
 
 const PostLetterWrite = ({ user_id, user_data, coll }) => {
   const [letter, setLetter] = useState({
@@ -98,50 +98,5 @@ const PostLetterWrite = ({ user_id, user_data, coll }) => {
     </>
   )
 }
-
-const Form = styled.div`
-  max-width: 550px;
-  marign: 1.5rem 0 0;
-  position: relative;
-
-  > small {
-    color: orange;
-  }
-`
-
-const TextField = styled.div`
-  .text-input {
-    width: 100%;
-    border: 1px solid black;
-    box-sizing: border-box;
-    color: black;
-    outline: none;
-    padding: 10px 40px 11px 1.5rem;
-  }
-  
-  .content-space {
-    height: 80px;
-  }
-`
-
-const Button = styled.button`
-  display: block;
-  width: 50%;
-  color: white;
-  height: 36px;
-  background-color: #342F4B;
-  border: 0;
-  border-radius: 10px;
-  margin: 0.25rem 0 0;
-  text-align: center;
-  cursor: pointer;
-
-  &:hover {
-    > strong {
-      color: tomato;
-      transition: all .2s;
-    }
-  }
-`
 
 export default PostLetterWrite;
