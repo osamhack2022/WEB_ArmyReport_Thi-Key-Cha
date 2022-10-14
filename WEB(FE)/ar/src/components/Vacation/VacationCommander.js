@@ -1,15 +1,15 @@
 import React, { useMemo, useEffect, useState } from 'react';
 
 import { basiccolumns } from './Tablecolumns';
-import { getVacation, setVacation } from './hooks/V_Manager';
+import { getVacation, setVacation, getId } from './hooks/V_Manager';
 import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@mui/material';
 
-let rows = [];
+let rows = null;
 const raw_rows = getVacation().then((test)=>rows = test);
-console.log(rows);
 
 const VacationCommander = () => {
+  const [select, setSelect] = useState([]);
   const columns = useMemo(()=>[
     ...basiccolumns,
     {
@@ -21,10 +21,15 @@ const VacationCommander = () => {
   const Submithandle = (e) => {
     e.preventDefault();
     if (e.target.value === false){
-      setVacation('admin', false); // admin 자리에 폰번호를 통해 uid 를 알아내야됨.
-      
+      select.map((val)=>{
+        const uid = getId(val.Name);
+        setVacation(uid, false);
+      });
     }else{
-      setVacation('admin', true);
+      select.map((val)=>{
+        const uid = getId(val.Name);
+        setVacation(uid, true);
+      });
       alert("승인하셨습니다!");
     }
   };
@@ -36,9 +41,12 @@ const VacationCommander = () => {
           rows={rows}
           getRowId={(row)=>row.id}
           columns={columns}
-          pageSize={10}
+          pageSize={5}
           rowsPerPageOptions={[6]}
           checkboxSelection
+          onSelectionModelChange={(newSelection) => {
+            setSelect(newSelection.row);
+          }}
         />
       </div>
       <div className="bottom-btns">
@@ -46,7 +54,7 @@ const VacationCommander = () => {
         <div className="right-btns">
           <ButtonGroup variant="contained">
             <Button value={false} onClick={Submithandle}>반려</Button>
-            <Button value={false} onClick={Submithandle}>승인</Button>
+            <Button value={true} onClick={Submithandle}>승인</Button>
           </ButtonGroup>
         </div>
       </div> 
