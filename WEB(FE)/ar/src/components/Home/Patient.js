@@ -29,7 +29,7 @@ const style = {
   };
 
 const Patient = () => {
-    const user = useHeader();
+    const {user} = useHeader();
     const uid = user.uid;
     const [loading, setLoading] = useState(false);
  
