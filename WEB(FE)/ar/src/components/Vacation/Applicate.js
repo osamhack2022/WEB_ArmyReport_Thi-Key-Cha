@@ -29,9 +29,8 @@ const style = {
   };
 
 const Applicate = () => {
-    const user = useHeader();
-    const uid = user.uid;
-
+    const {user} = useHeader();
+    const userid = user.uid;
     const [UserData, setUserData] = useState({
         Name : '',
         Class : '',
@@ -53,8 +52,13 @@ const Applicate = () => {
     const ContentRef = useRef();
     const NoteRef = useRef();
 
-    async function getData(uid){
-        const docRef = doc(db,"02155004", "본부중대", "User",`${uid}`);
+    useEffect(()=>{
+        getData(userid);
+        setData(userid);
+    }, []);
+
+    async function getData(userid){
+        const docRef = doc(db,"02155004", "본부중대", "User",`${userid}`);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()){
@@ -68,8 +72,8 @@ const Applicate = () => {
         }
     };
 
-    async function setData(uid){
-        await setDoc(doc(db,"02155004", "본부중대", "Vacation",`${uid}`),{
+    async function setData(userid){
+        await setDoc(doc(db,"02155004", "본부중대", "Vacation",`${userid}`),{
             Username : UserData.Name,
             Userclasses : UserData.Class,
             UserPhone : UserData.Number,
@@ -82,10 +86,16 @@ const Applicate = () => {
         });
     };
 
-    useEffect(()=>{
-        getData(uid);
-        setData(uid);
-    }, []);
+    const onChange = (e) => {
+        const {
+            target : {name, value}
+        } = e;
+
+        setUserData({
+            ...UserData,
+            [name] : value,
+        });
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -97,16 +107,7 @@ const Applicate = () => {
         setLoading(true);
         e.preventDefault();
 
-        setUserData({
-            ...UserData,
-            ['Destination'] : DesRef.current.value(),
-            ['Startdate'] : StartdateRef.current.value(),
-            ['Enddate'] : EnddateRef.current.value(),
-            ['Content'] : ContentRef.current.value(),
-            ['Note'] : NoteRef.current.value()
-        });
-
-        await setDoc(doc(db, "02155004", "본부중대", "Vacation",`${uid}`), {
+        await setDoc(doc(db, "02155004", "본부중대", "Vacation",`${userid}`), {
             Username : UserData.Name,
             Userclasses : UserData.Class,
             UserPhone : UserData.Number,
@@ -137,20 +138,19 @@ const Applicate = () => {
                 <Box sx={style}>
                     <FormControl required>
                         <FormLabel id="demo-controlled-radio-buttons-group">행선지</FormLabel>
-                        <TextField id="outlined-basic" inputRef={DesRef} label="ex) 서울 강북, 부산 해운대구" variant="outlined" required/>
+                        <TextField name="Destination" inputRef={DesRef} label="ex) 서울 강북, 부산 해운대구" variant="outlined" onChange={onChange} required/>
                         
-
                         <FormLabel id="demo-controlled-radio-buttons-group">출발일</FormLabel>
-                        <TextField id="outlined-basic" inputRef={StartdateRef} label="ex) 2022년 10월 1일" variant="outlined" required/>
+                        <TextField name="Startdate" inputRef={StartdateRef} label="ex) 2022년 10월 1일" variant="outlined" onChange={onChange} required/>
                         
                         <FormLabel id="demo-controlled-radio-buttons-group">도착일</FormLabel>
-                        <TextField id="outlined-basic" inputRef={EnddateRef} label="ex) 2022년 10월 5일" variant="outlined" required/>
+                        <TextField name="Enddate" inputRef={EnddateRef} label="ex) 2022년 10월 5일" variant="outlined" onChange={onChange} required/>
 
                         <FormLabel id="demo-controlled-radio-buttons-group">휴가 내용 기입</FormLabel>
-                        <TextField id="outlined-basic" inputRef={ContentRef} label="ex) 연가 3일 모범용사 2일" variant="outlined" required/>
+                        <TextField name="Content" inputRef={ContentRef} label="ex) 연가 3일 모범용사 2일" variant="outlined" onChange={onChange} required/>
 
                         <FormLabel id="demo-controlled-radio-buttons-group">비고</FormLabel>
-                        <TextField id="outlined-basic" inputRef={NoteRef} label="적고 싶은 내용 작성해주세요" variant="outlined" required/>
+                        <TextField name="Note" inputRef={NoteRef} label="적고 싶은 내용 작성해주세요" variant="outlined" onChange={onChange} required/>
 
                         <LoadingButton
                             onClick={onhandleApplicate}
