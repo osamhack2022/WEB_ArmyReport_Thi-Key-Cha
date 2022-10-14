@@ -15,10 +15,10 @@ import {
   Space
 } from 'antd';
 import moment from 'moment';
+import styled from 'styled-components';
 
 const { Option } = Select;
 const dateFormat = 'YYYY/MM/DD';
-
 
 const Register = () => {
     const history = useNavigate();
@@ -179,153 +179,161 @@ const Register = () => {
         });
     }
     return (
-        <Form
-            labelCol={{
-                span: 5,
-            }}
-            wrapperCol={{
-                span: 15,
-            }}
-            initialValues={{
-                UserObj : UserObj,
-            }}
-            onFinish={onSubmit}
-            autoComplete="off"
-            layout="horizontal"
-            onSubmit={(e)=>e.preventDefault()}
-        >
-            <Form.Item
-                label="Email"
-                name="UserEmail"
-                rules={[
-                {
-                    required: true,
-                    message: 'Please input your Email!',
-                }]}
+        <Background>
+            <Form
+                labelCol={{
+                    span: 5,
+                }}
+                wrapperCol={{
+                    span: 15,
+                }}
+                initialValues={{
+                    UserObj : UserObj,
+                }}
+                onFinish={onSubmit}
+                autoComplete="off"
+                layout="horizontal"
+                onSubmit={(e)=>e.preventDefault()}
             >
-                <Input 
-                    name='UserEmail'
-                    onChange={onChange}
-                />
-            </Form.Item>
-            <Form.Item
-                label="Password"
-                name="Userpwd"
-                rules={[
-                {
-                    required: true,
-                    message: 'Please input your password!',
-                }]}
-                
-            >
-                <Input.Password 
-                    name='Userpwd'
-                    onChange={onChange}
-                />
-            </Form.Item>
-            <Form.Item label="이름" name='UserName'>
-                <Input name='UserName' maxLength={8} onChange={onChange}/>
-            </Form.Item>
-            <Form.Item label="계급" name='UserClasses' >
-                <Select
-                    name='UserClasses'
-                    initialvalue={army_classes[0]}
-                    style={{
-                    width: 80,
-                    }}
-                    onChange={onhandleclass}
+                <Form.Item
+                    label="Email"
+                    name="UserEmail"
+                    rules={[
+                    {
+                        required: true,
+                        message: 'Please input your Email!',
+                    }]}
                 >
-                    {army_classes.map((army) => (
-                    <Option key={army}>{army}</Option>
-                    ))}
-                </Select>
-            </Form.Item>
-            <Form.Item label='전역일' name='UserLastDate'>
-                <Space direction="vertical" size={12}>
-                    <DatePicker 
-                        name='UserLastDate'
-                        initialvalue={moment(new Date(), dateFormat)} 
-                        format={dateFormat} 
-                        onChange={onhandledate}
+                    <Input 
+                        name='UserEmail'
+                        onChange={onChange}
                     />
-                </Space>
-            </Form.Item>
-            <Form.Item label='소속부대'>
-                <Select
-                    name='Crop'
-                    initialvalue={Cropsdata[0]}
-                    style={{
-                    width: 120,
+                </Form.Item>
+                <Form.Item
+                    label="Password"
+                    name="Userpwd"
+                    rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password!',
+                    }]}
+                    
+                >
+                    <Input.Password 
+                        name='Userpwd'
+                        onChange={onChange}
+                    />
+                </Form.Item>
+                <Form.Item label="이름" name='UserName'>
+                    <Input name='UserName' maxLength={8} onChange={onChange}/>
+                </Form.Item>
+                <Form.Item label="계급" name='UserClasses' >
+                    <Select
+                        name='UserClasses'
+                        initialvalue={army_classes[0]}
+                        style={{
+                        width: 80,
+                        }}
+                        onChange={onhandleclass}
+                    >
+                        {army_classes.map((army) => (
+                        <Option key={army}>{army}</Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='전역일' name='UserLastDate'>
+                    <Space direction="vertical" size={12}>
+                        <DatePicker 
+                            name='UserLastDate'
+                            initialvalue={moment(new Date(), dateFormat)} 
+                            format={dateFormat} 
+                            onChange={onhandledate}
+                        />
+                    </Space>
+                </Form.Item>
+                <Form.Item label='소속부대'>
+                    <Select
+                        name='Crop'
+                        initialvalue={Cropsdata[0]}
+                        style={{
+                        width: 120,
+                        }}
+                        onChange={onCropChange}
+                    >
+                        {Cropsdata.map((crop) => (
+                        <Option key={crop}>{crop}</Option>
+                        ))}
+                    </Select>
+                    <Select
+                        name='Division'
+                        style={{
+                        width: 120,
+                        }}
+                        initialvalue={Divisiondata[Cropsdata[0]]}
+                        onChange={onDivisionChange}
+                    >
+                        {Divisiondata[Crop].map((division) => (
+                        <Option key={division}>{division}</Option>
+                        ))}
+                    </Select>
+                    <Select
+                        name="Brigade"
+                        style={{
+                        width: 120,
+                        }}
+                        initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
+                        onChange={onBrigadeChange}
+                    >
+                        {Brigadedata[Division].map((brigade) => (
+                        <Option key={brigade}>{brigade}</Option>
+                        ))}
+                    </Select>
+                    <Select
+                        name="Batalion"
+                        style={{
+                        width: 120,
+                        }}
+                        initialvalue={Bataliondata[Brigade]}
+                        onChange={onBatalionChange}
+                    >
+                        {Bataliondata[Brigade].map((batalion) => (
+                        <Option key={batalion}>{batalion}</Option>
+                        ))}
+                    </Select>
+                    <Input placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
+                </Form.Item>
+                <Form.Item
+                    wrapperCol={{
+                        offset: 8,
+                        span: 16,
                     }}
-                    onChange={onCropChange}
                 >
-                    {Cropsdata.map((crop) => (
-                    <Option key={crop}>{crop}</Option>
-                    ))}
-                </Select>
-                <Select
-                    name='Division'
-                    style={{
-                    width: 120,
+                    <Button 
+                        type="primary" 
+                        loading={loadings[0]} 
+                        onClick={() => enterLoading(0)}
+                        htmlType="submit"
+                    >
+                        회원가입
+                    </Button>
+                </Form.Item>
+                <Form.Item
+                    wrapperCol={{
+                        offset: 8,
+                        span: 16,
                     }}
-                    initialvalue={Divisiondata[Cropsdata[0]]}
-                    onChange={onDivisionChange}
                 >
-                    {Divisiondata[Crop].map((division) => (
-                    <Option key={division}>{division}</Option>
-                    ))}
-                </Select>
-                <Select
-                    name="Brigade"
-                    style={{
-                    width: 120,
-                    }}
-                    initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
-                    onChange={onBrigadeChange}
-                >
-                    {Brigadedata[Division].map((brigade) => (
-                    <Option key={brigade}>{brigade}</Option>
-                    ))}
-                </Select>
-                <Select
-                    name="Batalion"
-                    style={{
-                    width: 120,
-                    }}
-                    initialvalue={Bataliondata[Brigade]}
-                    onChange={onBatalionChange}
-                >
-                    {Bataliondata[Brigade].map((batalion) => (
-                    <Option key={batalion}>{batalion}</Option>
-                    ))}
-                </Select>
-                <Input placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
-            </Form.Item>
-            <Form.Item
-                wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                }}
-            >
-                <Button 
-                    type="primary" 
-                    loading={loadings[0]} 
-                    onClick={() => enterLoading(0)}
-                    htmlType="submit"
-                >
-                    회원가입
-                </Button>
-            </Form.Item>
-            <Form.Item
-                wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                }}
-            >
-                <Button type="button" onClick={() => history('/')}>취소</Button>
-            </Form.Item>
-        </Form>
+                    <Button type="button" onClick={() => history('/')}>취소</Button>
+                </Form.Item>
+            </Form>
+        </Background>
     )
 }
+
+const Background = styled.div`
+    width: 1920px;
+    height: 1080px;
+    background-color: #222831;
+`
 
 export default Register;
