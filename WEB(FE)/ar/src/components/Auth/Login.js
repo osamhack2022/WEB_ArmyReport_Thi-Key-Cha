@@ -138,14 +138,14 @@ const Login = () => {
         {isLoad && <LabelItem>
           <Button type="primary" disabled>Loading...</Button>
         </LabelItem>}
-        <OtherButton>
+        <MiddleButton>
           <ul>
             <li><Link to="/register">회원가입</Link></li>
             <li><Link to="/">이메일 찾기</Link></li>
             <li><Link to="/">비밀번호 찾기</Link></li>
             <li><Link to="/">관리자 로그인</Link></li>
           </ul>
-        </OtherButton>
+        </MiddleButton>
       </LoginForm>
     </AuthLoginBlock>
     </>
@@ -165,7 +165,7 @@ const LabelItem = styled(Form.Item)`
   text-align: center;
 `
 
-const OtherButton = styled.div`
+const MiddleButton = styled.div`
   float: left;
   margin-top: 18px;
   width: 100%;
