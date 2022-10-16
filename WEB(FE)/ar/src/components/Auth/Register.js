@@ -9,13 +9,13 @@ import { useDispatch } from 'react-redux';
 import {
   Form,
   Input,
-  Button,
   Select,
   DatePicker,
   Space
 } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
+import logo from '../../static/image/head.png'
 
 const { Option } = Select;
 const dateFormat = 'YYYY/MM/DD';
@@ -180,160 +180,201 @@ const Register = () => {
     }
     return (
         <Background>
-            <Form
-                labelCol={{
-                    span: 5,
-                }}
-                wrapperCol={{
-                    span: 15,
-                }}
-                initialValues={{
-                    UserObj : UserObj,
-                }}
-                onFinish={onSubmit}
-                autoComplete="off"
-                layout="horizontal"
-                onSubmit={(e)=>e.preventDefault()}
-            >
-                <Form.Item
-                    label="Email"
-                    name="UserEmail"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please input your Email!',
-                    }]}
+            <LogoImage src={logo} />
+            <div className='register-form'>
+                <RegisterForm
+                    labelCol={{
+                        span: 5,
+                    }}
+                    wrapperCol={{
+                        span: 15,
+                    }}
+                    initialValues={{
+                        UserObj : UserObj,
+                    }}
+                    onFinish={onSubmit}
+                    autoComplete="off"
+                    layout="horizontal"
+                    onSubmit={(e)=>e.preventDefault()}
                 >
-                    <Input 
-                        name='UserEmail'
-                        onChange={onChange}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Password"
-                    name="Userpwd"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please input your password!',
-                    }]}
-                    
-                >
-                    <Input.Password 
-                        name='Userpwd'
-                        onChange={onChange}
-                    />
-                </Form.Item>
-                <Form.Item label="이름" name='UserName'>
-                    <Input name='UserName' maxLength={8} onChange={onChange}/>
-                </Form.Item>
-                <Form.Item label="계급" name='UserClasses' >
-                    <Select
-                        name='UserClasses'
-                        initialvalue={army_classes[0]}
-                        style={{
-                        width: 80,
-                        }}
-                        onChange={onhandleclass}
+                    <EmailInput
+                        label="Email"
+                        name="UserEmail"
+                        rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Email!',
+                        }]}
                     >
-                        {army_classes.map((army) => (
-                        <Option key={army}>{army}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item label='전역일' name='UserLastDate'>
-                    <Space direction="vertical" size={12}>
-                        <DatePicker 
-                            name='UserLastDate'
-                            initialvalue={moment(new Date(), dateFormat)} 
-                            format={dateFormat} 
-                            onChange={onhandledate}
+                        <Input 
+                            name='UserEmail'
+                            onChange={onChange}
                         />
-                    </Space>
-                </Form.Item>
-                <Form.Item label='소속부대'>
-                    <Select
-                        name='Crop'
-                        initialvalue={Cropsdata[0]}
-                        style={{
-                        width: 120,
-                        }}
-                        onChange={onCropChange}
+                    </EmailInput>
+                    <Form.Item
+                        label="Password"
+                        name="Userpwd"
+                        rules={[
+                        {
+                            required: true,
+                            message: 'Please input your password!',
+                        }]}
+                        
                     >
-                        {Cropsdata.map((crop) => (
-                        <Option key={crop}>{crop}</Option>
-                        ))}
-                    </Select>
-                    <Select
-                        name='Division'
-                        style={{
-                        width: 120,
-                        }}
-                        initialvalue={Divisiondata[Cropsdata[0]]}
-                        onChange={onDivisionChange}
-                    >
-                        {Divisiondata[Crop].map((division) => (
-                        <Option key={division}>{division}</Option>
-                        ))}
-                    </Select>
-                    <Select
-                        name="Brigade"
-                        style={{
-                        width: 120,
-                        }}
-                        initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
-                        onChange={onBrigadeChange}
-                    >
-                        {Brigadedata[Division].map((brigade) => (
-                        <Option key={brigade}>{brigade}</Option>
-                        ))}
-                    </Select>
-                    <Select
-                        name="Batalion"
-                        style={{
-                        width: 120,
-                        }}
-                        initialvalue={Bataliondata[Brigade]}
-                        onChange={onBatalionChange}
-                    >
-                        {Bataliondata[Brigade].map((batalion) => (
-                        <Option key={batalion}>{batalion}</Option>
-                        ))}
-                    </Select>
-                    <Input placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
-                </Form.Item>
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <Button 
-                        type="primary" 
-                        loading={loadings[0]} 
-                        onClick={() => enterLoading(0)}
-                        htmlType="submit"
-                    >
-                        회원가입
-                    </Button>
-                </Form.Item>
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <Button type="button" onClick={() => history('/')}>취소</Button>
-                </Form.Item>
-            </Form>
+                        <Input.Password 
+                            name='Userpwd'
+                            onChange={onChange}
+                        />
+                    </Form.Item>
+                    <Form.Item label="이름" name='UserName'>
+                        <Input name='UserName' maxLength={8} onChange={onChange}/>
+                    </Form.Item>
+                    <Form.Item label="계급" name='UserClasses' >
+                        <Select
+                            name='UserClasses'
+                            initialvalue={army_classes[0]}
+                            style={{
+                            width: 80,
+                            }}
+                            onChange={onhandleclass}
+                        >
+                            {army_classes.map((army) => (
+                            <Option key={army}>{army}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label='전역일' name='UserLastDate'>
+                        <Space direction="vertical" size={12}>
+                            <DatePicker 
+                                name='UserLastDate'
+                                initialvalue={moment(new Date(), dateFormat)} 
+                                format={dateFormat} 
+                                onChange={onhandledate}
+                            />
+                        </Space>
+                    </Form.Item>
+                    <Form.Item label='소속부대'>
+                        <Select
+                            name='Crop'
+                            initialvalue={Cropsdata[0]}
+                            style={{
+                            width: 120,
+                            }}
+                            onChange={onCropChange}
+                        >
+                            {Cropsdata.map((crop) => (
+                            <Option key={crop}>{crop}</Option>
+                            ))}
+                        </Select>
+                        <Select
+                            name='Division'
+                            style={{
+                            width: 120,
+                            }}
+                            initialvalue={Divisiondata[Cropsdata[0]]}
+                            onChange={onDivisionChange}
+                        >
+                            {Divisiondata[Crop].map((division) => (
+                            <Option key={division}>{division}</Option>
+                            ))}
+                        </Select>
+                        <Select
+                            name="Brigade"
+                            style={{
+                            width: 120,
+                            }}
+                            initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
+                            onChange={onBrigadeChange}
+                        >
+                            {Brigadedata[Division].map((brigade) => (
+                            <Option key={brigade}>{brigade}</Option>
+                            ))}
+                        </Select>
+                        <Select
+                            name="Batalion"
+                            style={{
+                            width: 120,
+                            }}
+                            initialvalue={Bataliondata[Brigade]}
+                            onChange={onBatalionChange}
+                        >
+                            {Bataliondata[Brigade].map((batalion) => (
+                            <Option key={batalion}>{batalion}</Option>
+                            ))}
+                        </Select>
+                        <Input placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
+                    </Form.Item>
+                    <ButtonLayout>
+                        <Button type="primary" loading={loadings[0]} onClick={() => enterLoading(0)} htmlType="submit">회원가입</Button>
+                        <Button type="button" onClick={() => history('/')}>취소</Button>
+                    </ButtonLayout>
+                </RegisterForm>
+            </div>
         </Background>
     )
 }
+
+const ButtonLayout = styled.div`
+    position: absolute;
+    width: 100%;
+    margin: 0 auto;
+    float: left;
+`
+
+const EmailInput = styled(Form.Item)`
+  width: 550px;
+  height: 90px;
+  background-color: transparent;
+  color: white;
+  font-size: 18px;
+  padding-left: 32px;
+  border: 5px solid #574F7D;
+  border-radius: 30px;
+  &:hover {
+    border: 5px solid #574F7D;
+  }
+  &:focus {
+    border: 5px solid #574F7D;
+  }
+`
+
+const Button = styled.button`
+  width: 250px;
+  height: 60px;
+  background-color: #574F7D;
+  border-radius: 50px;
+  color: white;
+  font-size: 24px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+`
+
+const LogoImage = styled.img`
+  padding-top: 200px;
+  display: block;
+  margin: auto;
+
+  width: 96px;
+`
+
+const RegisterForm = styled(Form)`
+  width: 550px;
+  padding-top: 32px;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+`
 
 const Background = styled.div`
     width: 1920px;
     height: 1080px;
     background-color: #222831;
+
+    .register-form {
+        margin-top: 32px;
+    }
 `
 
 export default Register;
