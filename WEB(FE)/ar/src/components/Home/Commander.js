@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import db from '../../database/DB_Manager';
 import { UserActions } from '../../app/slice/UserSlice';
@@ -15,14 +16,12 @@ import {
 } from "firebase/firestore";
 
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import UserLocCard from './UserLocCard';
 
 const Commander = () => {
-
     /* Variables */
     const [SoldierList, setSoldierList] = useState([]);
     const [isRollcall, setIsRollcall] = useState(false);
@@ -34,9 +33,11 @@ const Commander = () => {
     /* Firebase 에서 user들의 loc 정보를 빼내오는 과정 */
 
     const Locquery = query(collection(db, "02155004", "본부중대", "User"), where("IsLocated", "!=" , ""));
+
     async function CallLocdata(){
         const locSnapshot = await getDocs(Locquery);
         locSnapshot.forEach((loc) => {
+            console.log(loc);
             const datasection={
                 Name : loc.data().Username,
                 Class : loc.data().Userclass,
@@ -49,23 +50,10 @@ const Commander = () => {
         });
     };
 
-    const Locationhandle = onSnapshot(Locquery, (querySnapshot) => {
-        querySnapshot.forEach((dataSnap)=>{
-            const info = {
-                Name : dataSnap.data().Username,
-                Class : dataSnap.data().Userclass,
-                Located : dataSnap.data().IsLocated
-            };
-        });
-    });
-    
-    // 지휘관, 당직사관인 아이디를 찾고 난뒤에,
-    // 그 인원들을 제외하고 Data 를 가져오는 편이 속도면에서 우수
-    
     useEffect(()=>{
         CallLocdata();
-    }, [])
-
+    }, []);
+    
     const Onrollcallhandle = async() => {
         setIsRollcall(true);
         const querySnapshot = await getDocs(q);
@@ -122,28 +110,29 @@ const Commander = () => {
 
     return (
     <>
-        <Card sx={{ minWidth: 275 }}>
-
-            <CardContent>
-                { Users.map((User) => {
-                    return (
-                        <UserLocCard key={User.Name} User={User} />
-                    )
-                })}
-                <CardActions>
-                    <Button size="small" onClick={Locationhandle}>너네 다 어디있냐?</Button>
-                </CardActions>
-            </CardContent>
+        { Users.map((User) => {
+            return (
+                <UserLocCard key={User.Name} User={User} />
+            )
+        })}
+        <Card className='command-rollcall'>
             { !isRollcall && 
             <>
-                <CardContent>
-                    <Typography variant="h5" component="div">
-                        점호 시작하겠습니다!
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small" onClick={Onrollcallhandle}>점호를 시작한다</Button>
-                </CardActions> 
+                <div className="rollcall">
+                    <CardContent>
+                        <Typography variant="h5" component="div">
+                            점호 시작하겠습니다!
+                        </Typography>
+                    </CardContent>
+                    <Button 
+                        variant="contained"
+                        size="small" 
+                        onClick={Onrollcallhandle}
+                        color="primary"
+                    >
+                        점호를 시작한다
+                    </Button>
+                </div>
             </>
             }
             { isRollcall && 
@@ -153,10 +142,22 @@ const Commander = () => {
                         <UserRollCallCard key={obj.Name} Uobj={obj} />
                     )
                 })}
-                <CardActions>
-                    <Button size="small" onClick={Loadhandle}>새로고침</Button>
-                    <Button size="small" onClick={Offrollcallhandle}>점호 끝!</Button>
-                </CardActions>
+                <Button 
+                    variant="contained"
+                    size="small" 
+                    onClick={Loadhandle}
+                    color="default"
+                >
+                    새로고침
+                </Button>
+                <Button 
+                    variant="contained"
+                    size="small" 
+                    onClick={Offrollcallhandle}
+                    color="secondary"
+                >
+                    점호 끝!
+                </Button>
             </>
             }
         </Card>
