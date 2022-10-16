@@ -61,8 +61,10 @@ const Vacation = () => {
         <Header />
         <Content>
           {Boss && 
-          <VacationCommander />
-        }
+          <div>
+            <VacationCommander />
+          </div>
+          }
           {!Boss && <PersonPage />}
         </Content>
         <Footer />
