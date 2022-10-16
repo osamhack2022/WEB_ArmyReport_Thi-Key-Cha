@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Baby_Ogu_work from '../../static/baby-ogu-shovel.png'
+import Baby_Ogu_work from '../../static/image/baby-ogu-shovel.png'
 
 const ProfileUserContainerBlock = styled.div`
   position: relative;
