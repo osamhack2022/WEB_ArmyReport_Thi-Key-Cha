@@ -183,127 +183,94 @@ const Register = () => {
             <LogoImage src={logo} />
             <div className='register-form'>
                 <RegisterForm
-                    labelCol={{
-                        span: 5,
-                    }}
-                    wrapperCol={{
-                        span: 15,
-                    }}
-                    initialValues={{
-                        UserObj : UserObj,
-                    }}
+                    labelCol={{ span: 5, }}
+                    wrapperCol={{ span: 15, }}
+                    initialValues={{ UserObj : UserObj, }}
                     onFinish={onSubmit}
                     autoComplete="off"
                     layout="horizontal"
-                    onSubmit={(e)=>e.preventDefault()}
-                >
-                    <EmailInput
-                        label="Email"
+                    onSubmit={(e)=>e.preventDefault()}>
+                    <LabelItem
                         name="UserEmail"
                         rules={[
                         {
                             required: true,
                             message: 'Please input your Email!',
-                        }]}
-                    >
-                        <Input 
+                        }]}>
+                        <ValidateInput 
+                            placeholder='이메일'
                             name='UserEmail'
-                            onChange={onChange}
-                        />
-                    </EmailInput>
-                    <Form.Item
-                        label="Password"
+                            onChange={onChange} />
+                    </LabelItem>
+                    <LabelItem
                         name="Userpwd"
                         rules={[
                         {
                             required: true,
                             message: 'Please input your password!',
-                        }]}
-                        
-                    >
-                        <Input.Password 
+                        }]}>
+                        <PwdInput
+                            placeholder='비밀번호'
                             name='Userpwd'
-                            onChange={onChange}
-                        />
-                    </Form.Item>
-                    <Form.Item label="이름" name='UserName'>
-                        <Input name='UserName' maxLength={8} onChange={onChange}/>
-                    </Form.Item>
-                    <Form.Item label="계급" name='UserClasses' >
+                            onChange={onChange} />
+                    </LabelItem>
+                    <LabelItem name='UserName'>
+                        <ValidateInput placeholder='이름' name='UserName' maxLength={8} onChange={onChange}/>
+                    </LabelItem>
+                    <LabelItem name='UserClasses' >
                         <Select
+                            placeholder='계급'
                             name='UserClasses'
-                            initialvalue={army_classes[0]}
-                            style={{
-                            width: 80,
-                            }}
-                            onChange={onhandleclass}
-                        >
-                            {army_classes.map((army) => (
-                            <Option key={army}>{army}</Option>
-                            ))}
+                            style={{ width: 80, }}
+                            onChange={onhandleclass}>
+                            {army_classes.map((army) => (<Option key={army}>{army}</Option>))}
                         </Select>
-                    </Form.Item>
-                    <Form.Item label='전역일' name='UserLastDate'>
+                    </LabelItem>
+                    <LabelItem name='UserLastDate'>
                         <Space direction="vertical" size={12}>
                             <DatePicker 
                                 name='UserLastDate'
+                                placeholder='전역일'
                                 initialvalue={moment(new Date(), dateFormat)} 
                                 format={dateFormat} 
-                                onChange={onhandledate}
-                            />
+                                onChange={onhandledate} />
                         </Space>
-                    </Form.Item>
-                    <Form.Item label='소속부대'>
+                    </LabelItem>
+                    <LabelItem>
                         <Select
                             name='Crop'
+                            value='군단'
                             initialvalue={Cropsdata[0]}
-                            style={{
-                            width: 120,
-                            }}
-                            onChange={onCropChange}
-                        >
-                            {Cropsdata.map((crop) => (
-                            <Option key={crop}>{crop}</Option>
-                            ))}
+                            style={{ width: 120, }}
+                            onChange={onCropChange}>
+                            {Cropsdata.map((crop) => (<Option key={crop}>{crop}</Option>))}
                         </Select>
                         <Select
                             name='Division'
-                            style={{
-                            width: 120,
-                            }}
+                            value='사단'
+                            style={{ width: 120, }}
                             initialvalue={Divisiondata[Cropsdata[0]]}
-                            onChange={onDivisionChange}
-                        >
-                            {Divisiondata[Crop].map((division) => (
-                            <Option key={division}>{division}</Option>
-                            ))}
+                            onChange={onDivisionChange}>
+                            {Divisiondata[Crop].map((division) => (<Option key={division}>{division}</Option>))}
                         </Select>
                         <Select
                             name="Brigade"
-                            style={{
-                            width: 120,
-                            }}
+                            value='여단'
+                            style={{ width: 120, }}
                             initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
-                            onChange={onBrigadeChange}
-                        >
-                            {Brigadedata[Division].map((brigade) => (
-                            <Option key={brigade}>{brigade}</Option>
-                            ))}
+                            onChange={onBrigadeChange}>
+                            {Brigadedata[Division].map((brigade) => (<Option key={brigade}>{brigade}</Option>))}
                         </Select>
                         <Select
                             name="Batalion"
-                            style={{
-                            width: 120,
-                            }}
+                            value='대대'
+                            style={{ width: 120, }}
                             initialvalue={Bataliondata[Brigade]}
-                            onChange={onBatalionChange}
-                        >
-                            {Bataliondata[Brigade].map((batalion) => (
-                            <Option key={batalion}>{batalion}</Option>
-                            ))}
+                            onChange={onBatalionChange}>
+                            {Bataliondata[Brigade].map((batalion) => (<Option key={batalion}>{batalion}</Option>))}
                         </Select>
-                        <Input placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
-                    </Form.Item>
+                        <ValidateInput placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
+                    </LabelItem>
                     <ButtonLayout>
                         <Button type="primary" loading={loadings[0]} onClick={() => enterLoading(0)} htmlType="submit">회원가입</Button>
                         <Button type="button" onClick={() => history('/')}>취소</Button>
@@ -321,7 +288,41 @@ const ButtonLayout = styled.div`
     float: left;
 `
 
-const EmailInput = styled(Form.Item)`
+const LabelItem = styled(Form.Item)`
+  text-align: center;
+`
+
+const PwdInput = styled(Input.Password)`
+  margin-top: -50px;
+  width: 550px;
+  height: 90px;
+  background-color: transparent;
+  color: white;
+  padding-left: 32px;
+  border: 5px solid #574F7D;
+  border-radius: 30px;
+  &:hover {
+    border: 5px solid #574F7D;
+  }
+  &:focus {
+    border: 5px solid #574F7D;
+  }
+  
+  input {
+    background-color: transparent;
+    font-size: 18px;
+    color: white;
+  }
+  
+  span {
+    &:hover {
+      border-right-width: none;
+      border-color: none;
+    }
+  }
+`
+
+const ValidateInput = styled(Input)`
   width: 550px;
   height: 90px;
   background-color: transparent;
