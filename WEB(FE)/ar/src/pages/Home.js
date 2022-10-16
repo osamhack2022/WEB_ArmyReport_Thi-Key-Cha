@@ -6,6 +6,7 @@ import Footer from '../components/base/Footer';
 import Patient from '../components/Home/Patient';
 import Commander from '../components/Home/Commander';
 import Whereareyou from '../components/Home/Whereareyou';
+import AuthLoadBackground from '../components/Auth/AuthLoadBackground';
 
 import db from '../database/DB_Manager';
 import { UserActions } from '../app/slice/UserSlice';
@@ -19,6 +20,7 @@ import { Layout } from 'antd';
 const { Content } = Layout;
 
 const Home = () => {
+  const [isLoad, setIsLoad] = useState(true);
   const { user } = useHeader();
   const uid = user.uid;
   const [rollcall, setRollCall] = useState(false);
@@ -38,35 +40,51 @@ const Home = () => {
       }
     }else{
       console.log("데이터가 없는데요?");
+      unsub();
     }
-  }
+  };
+
+  function wait1Second(){
+    setTimeout(()=>{
+      setIsLoad(false);
+    },1000);
+  };
+
   useEffect(() => {
     getData(); 
-    unsub();
+    wait1Second();
   }, []);
 
   return (
-    <Layout className="layout">
-      <Header />
-      <Content>
-        { !Boss && 
-        <>
-          <Content
-          style={{
-            padding: '0 50px',
-          }}
-        >
-          <div className="site-layout-content">
-            <Whereareyou />
-          </div>
+    <>
+      {!isLoad &&
+      <>
+        <Layout className="layout">
+          <Header />
+          <Content>
+            { !Boss && 
+            <>
+              <Content
+              style={{
+                padding: '0 50px',
+              }}
+            >
+              <div className="site-layout-content">
+                <Whereareyou />
+              </div>
+              </Content>
+              { rollcall && <Patient /> }
+            </>
+            }
+            { Boss && <Commander />}
           </Content>
-          { rollcall && <Patient /> }
-        </>
-        }
-        { Boss && <Commander />}
-      </Content>
-      <Footer />
-    </Layout>
+          <Footer />
+        </Layout>
+      </>
+      }
+      {isLoad && <AuthLoadBackground />}
+    </>
+    
   );
 }
 
