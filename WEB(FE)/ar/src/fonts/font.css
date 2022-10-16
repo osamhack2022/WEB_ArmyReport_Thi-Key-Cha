@@ -1,0 +1,8 @@
+/* Gothic */
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
+
+/* Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+body {
+  font-family: 'Roboto', 'Gothic A1', sans-serif;
+}
