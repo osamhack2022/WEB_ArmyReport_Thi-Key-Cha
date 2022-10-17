@@ -27,16 +27,31 @@ const LocCardStyle = styled.div`
   }
 `
 
-const UserLocCard = (User) => {
+const UserLocCard = ({IsVacation}, User) => {
   return (
     <LocCardStyle>
       <div className="card-design">
+        {IsVacation && 
+          <Card>
+            <CardContent className='user-info'>
+              <Typography variant="h6">
+                휴가
+              </Typography>
+              <Typography variant="body2">
+                <span>계급 : {User.Class}</span> 
+                <span>이름 : {User.Name}</span> 
+                <br />
+              </Typography>
+            </CardContent>
+          </Card>
+        }
         <Card>
           <CardContent className='user-info'>
             <Typography variant="body2">
               <span>계급 : {User.Class}</span> 
+              <br/>
               <span>이름 : {User.Name}</span> 
-              <br />
+              <br/>
               <span>장소 : {User.Located}</span>
             </Typography>
           </CardContent>
