@@ -26,6 +26,7 @@ const Commander = () => {
     const [SoldierList, setSoldierList] = useState([]);
     const [isRollcall, setIsRollcall] = useState(false);
     const [Users, setUsers] = useState([]);
+    const [V_Users,setVusers] = useState([]);
 
     /* Firebase 에서 User 들의 uid 정보 빼내오는 과정 */
     const q = query(collection(db, "02155004", "본부중대", "User"), where("IsBoss", "==" , false));
@@ -43,17 +44,24 @@ const Commander = () => {
                 Class : loc.data().Userclass,
                 Located : loc.data().IsLocated
             };
-            setUsers([
-                ...Users,
-                datasection
-            ]);
+            if (loc.data().IsVacation === false){
+                setUsers([
+                    ...Users,
+                    datasection
+                ]);
+            }else{
+                setVusers([
+                    ...V_Users,
+                    datasection
+                ]);
+            }
         });
     };
 
     useEffect(()=>{
         CallLocdata();
     }, []);
-    
+
     const Onrollcallhandle = async() => {
         setIsRollcall(true);
         const querySnapshot = await getDocs(q);
@@ -96,7 +104,7 @@ const Commander = () => {
                         Reason : docSnap.data().Reason,
                         Islastlight : docSnap.data().Islastlight,
                         Content : docSnap.data().Content
-                    }
+                    };
                     setSoldierList(prevSoldierList => [...prevSoldierList, test]);
                     await updateDoc(doc(db,"02155004", "본부중대", "User",`${data.id}`),{
                         Timetorollcall : false,
@@ -113,6 +121,11 @@ const Commander = () => {
         { Users.map((User) => {
             return (
                 <UserLocCard key={User.Name} User={User} />
+            )
+        })}
+        { V_Users.map((User)=>{
+            return (
+                <UserLocCard key={User.Name} User={User} IsVacation={true}/>
             )
         })}
         <Card className='command-rollcall'>
