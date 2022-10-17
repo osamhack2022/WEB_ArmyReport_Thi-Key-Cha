@@ -159,34 +159,35 @@ const Applicate = ({ onComplete }) => {
             >
                 <Box sx={style}>
                     <FormControl required>
-                        <FormLabel id="demo-controlled-radio-buttons-group">행선지</FormLabel>
-                        <TextField name="Destination" inputRef={DesRef} label="ex) 서울 강북, 부산 해운대구" variant="outlined" onChange={onChange} required/>
-                        
                         <Stack spacing={3}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DesktopDatePicker
-                                    renderInput={(params) => <TextField {...params} name="startdate"/>}
-                                    label="출발일"
-                                    inputFormat="YYYY/MM/DD"
-                                    value={Startvalue}
-                                    onChange={StarthandleChange}
-                                />
-                            </LocalizationProvider>
-                
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DesktopDatePicker
-                                    renderInput={(params) => <TextField {...params} name="startdate"/>}
-                                    label="도착일"
-                                    inputFormat="YYYY/MM/DD"
-                                    value={Endvalue}
-                                    onChange={EndhandleChange}
-                                />
-                            </LocalizationProvider>
+                            <FormLabel id="demo-controlled-radio-buttons-group">행선지</FormLabel>
+                            <TextField name="Destination" inputRef={DesRef} label="ex) 서울 강북, 부산 해운대구" variant="outlined" onChange={onChange} required/>
+                            
+                            
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DesktopDatePicker
+                                        renderInput={(params) => <TextField {...params} name="startdate"/>}
+                                        label="출발일"
+                                        inputFormat="YYYY/MM/DD"
+                                        value={Startvalue}
+                                        onChange={StarthandleChange}
+                                    />
+                                </LocalizationProvider>
+                    
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DesktopDatePicker
+                                        renderInput={(params) => <TextField {...params} name="startdate"/>}
+                                        label="도착일"
+                                        inputFormat="YYYY/MM/DD"
+                                        value={Endvalue}
+                                        onChange={EndhandleChange}
+                                    />
+                                </LocalizationProvider>
+                            
+                            
+                            <FormLabel id="demo-controlled-radio-buttons-group">휴가 내용 기입</FormLabel>
+                            <TextField name="Content" inputRef={ContentRef} label="ex) 연가 3일 모범용사 2일" variant="outlined" onChange={onChange} required/>
                         </Stack>
-                        
-                        <FormLabel id="demo-controlled-radio-buttons-group">휴가 내용 기입</FormLabel>
-                        <TextField name="Content" inputRef={ContentRef} label="ex) 연가 3일 모범용사 2일" variant="outlined" onChange={onChange} required/>
-
                         <FormLabel id="demo-controlled-radio-buttons-group">비고</FormLabel>
                         <TextField name="Note" inputRef={NoteRef} label="적고 싶은 내용 작성해주세요" variant="outlined" onChange={onChange} required/>
 
