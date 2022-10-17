@@ -284,7 +284,7 @@ const Register = () => {
                         </Button>
                         <Button type="button" onClick={() => history('/')}>취소</Button>
                     </ButtonLayout>
-                    <AuthRegisterModal to="/home" handleClose={handleClose} open={open}></AuthRegisterModal>                    
+                    <AuthRegisterModal to="/home" handleClose={handleClose} open={open} />
                 </RegisterForm>
             </div>
         </Background>
