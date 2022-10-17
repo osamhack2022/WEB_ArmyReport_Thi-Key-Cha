@@ -21,10 +21,11 @@ const columns = OutcastColumn;
 const OutcastTable = () => {
   return (
     <DataGrid
-        rows={StartRows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+      sx={{ m : 2 }}
+      rows={StartRows}
+      columns={columns}
+      pageSize={5}
+      rowsPerPageOptions={[5]}
     />
   )
 };
