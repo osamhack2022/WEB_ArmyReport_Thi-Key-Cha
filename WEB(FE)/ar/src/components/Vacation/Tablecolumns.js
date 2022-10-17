@@ -1,9 +1,9 @@
 const moment = require('moment');
 
 export const basiccolumns = [
-    { field: 'id', headerName: 'No', width: 60 },
-    { field: 'Class', headerName: '계급', width: 70 },
-    { field: 'Name', headerName: '이름', width: 100 },
+    { field: 'id', headerName: 'No', width: 20, flex: 1 },
+    { field: 'Class', headerName: '계급', width: 50, flex: 1 },
+    { field: 'Name', headerName: '이름', width: 100,flex: 1 },
     { field: 'Destination', headerName: '목적지', width: 130 },
     {
       field: 'Startdate',
@@ -36,6 +36,6 @@ export const basiccolumns = [
 ];
 
 export const OutcastColumn = [
-  { field: 'Away', headerName: '금일 휴가 출발자', width: 135 },
-  { field: 'Home', headerName: '금일 휴가 복귀자', width: 135 },
+  { field: 'Away', headerName: '금일 휴가 출발자', width: 70,flex: 1 },
+  { field: 'Home', headerName: '금일 휴가 복귀자', width: 70,flex: 1 },
 ]
