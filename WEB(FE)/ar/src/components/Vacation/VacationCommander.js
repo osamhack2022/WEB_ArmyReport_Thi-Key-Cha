@@ -5,7 +5,7 @@ import { basiccolumns } from './Tablecolumns';
 import OutcastTable from './OutcastTable';
 
 import { getVacation, setVacation, getId } from './hooks/V_Manager';
-import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF, GridToolbarContainer, useGridApiContext } from '@mui/x-data-grid';
+import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF, GridToolbarContainer, useGridApiContext, gridColumnGroupsLookupSelector } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@mui/material';
 
 const CommandStyle = styled.div`
@@ -15,16 +15,18 @@ const CommandStyle = styled.div`
     flex-wrap: wrap;
     flex-direction: row;
     margin-top: 50px;
-    width: calc(100%);
+    width: calc(40%-100px);
     margin-left: 50px;
-    margin-right: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 140px;
+  }
+  .ar-outcasttable{
+    margin-left: 10px;
+    width: calc(20%);
   }
   .left-btn{
     margin-left: 50px;
   }
 `
-
 
 let rows = null;
 const raw_rows = getVacation().then((test)=>{
@@ -39,57 +41,42 @@ const CustomToolbar = () => {
   const end = new Date();
   const Endday = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
 
-  const [select, setSelect] = useState([]);
-  const [user,setUser] = useState({
-    Name: '',
-    Class : '',
-    Destination : '',
-    Startdate : Startday,
-    Enddate: Endday,
-    Content : '',
-    Note : '',
-  });
-
-
   const handleGetData = (e) => {
     e.preventDefault();
-    
-    console.log(e.target.value);
+    let select = [];
     const data = gridRef.current.getSelectedRows();
-    console.log(data);
     
-
-    let obj = Object.fromEntries(data);
-    for (let key of obj.keys()){
-      setUser({
-        ...user,
-          Name: obj[key].Name,
-          Class: obj[key].Class,
-          Destination : obj[key].Destination,
-          Startdate : obj[key].Startdate,
-          Enddate : obj[key].Enddate,
-          Content : obj[key].Content,
-          Note : obj[key].Note
-      });
-      console.log(user);
-      setSelect([
-        ...Select,
-        user
-      ]);
-    };
-
-    console.log(select);
-
+    data.forEach(function(value, key){
+      let user={
+        Name: value.Name,
+        Class: value.Class,
+        Destination : value.Destination,
+        Startdate : value.Startdate,
+        Enddate : value.Enddate,
+        Content : value.Content,
+        Note : value.Note
+      };
+      select.push(user);
+    });
+    
     if (e.target.value === false){
       select.map((val)=>{
-        const uid = getId(val.Name);
-        setVacation(uid, false);
+        const testing = getId(val.Name).then((uid)=>{
+          setVacation(uid, false);
+        });
       });
+      setTimeout(() => {
+        alert("반려하였습니다.");
+      }, 750);
     }else{
       select.map((val)=>{
-        const uid = getId(val.Name);
-        setVacation(uid, true);
+        const testing = getId(val.Name).then((uid)=>{
+          setVacation(uid, true);
+        });
       });
+      setTimeout(() => {
+        alert("승인하였습니다!");
+      }, 750);
     }
   };
 
@@ -131,7 +118,9 @@ const VacationCommander = () => {
               Toolbar: CustomToolbar,
             }}
           />
-          <OutcastTable />
+          <div className="ar-outcasttable">
+            <OutcastTable />
+          </div>
         </div>
         
         <Button 

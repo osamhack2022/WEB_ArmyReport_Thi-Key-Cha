@@ -19,7 +19,8 @@ export async function getVacation(){
     const q = query(collection(db, "02155004", "본부중대", "Vacation"), where("Examine", "==", false), where("Startdate", ">" , toend));
     let count = 1;
     const v_Snapshot = await getDocs(q);
-    v_Snapshot.forEach((res)=>{
+
+    v_Snapshot.forEach(async(res)=>{
         const start = new Date(res.data().Startdate.seconds * 1000);
         const Startday = start.getFullYear() + "-" + (start.getMonth()+1) + "-" + start.getDate();
         const end = new Date(res.data().Enddate.seconds * 1000);
@@ -27,8 +28,8 @@ export async function getVacation(){
 
         const user = {
             id : count,
-            Name : res.data().Username,
-            Class : res.data().Userclasses,
+            Name : res.data().Name,
+            Class : res.data().Class,
             Destination : res.data().Destination,
             Startdate : Startday,
             Enddate : Endday,
@@ -48,6 +49,7 @@ export async function StartToday(){
     const end = new Date();
     const today = end.getDate()  + "-" + (end.getMonth()+1) + "-" + end.getFullYear();
     const q = query(collection(db, "02155004", "본부중대", "Vacation"), where("Startdate", "==" , today));
+
     const v_Snapshot = await getDocs(q);
     v_Snapshot.forEach((res)=>{
         console.log(res.id, "=>",res.data());
@@ -90,19 +92,13 @@ export async function setVacation(uid, value){
 };
 
 export async function getId(name){
-    let uid = '';
     const q = query(collection(db, "02155004", "본부중대", "User"), where("Username", "==", name));
     const v_Snapshot = await getDocs(q);
-    if (v_Snapshot.data().exists()){
-        uid = v_Snapshot.data().Username;
+    v_Snapshot.forEach((val)=>{
+        let uid = val.data().Useremail;
         uid = uid.split('@');
-        uid = uid[0];
-        console.log(uid);
-        return uid;
-    }else{
-        console.log("이런 데이터는 없는데요..?");
-        return false;
-    }
+        return Promise.resolve(uid[0]);
+    });
 };
 
 // PersonPage functions
