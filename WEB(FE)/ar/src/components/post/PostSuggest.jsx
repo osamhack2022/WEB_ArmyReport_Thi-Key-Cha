@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import PostSuggestWrite from './PostSuggestWrite';
-import baby_duck_suggest from '../../static/image/baby-duck-suggest.png'
+import baby_duck_suggest from '../../static/image/baby-ogu-good.png'
 
 const PostSuggest = ({ user_id, user_data, coll }) => {
   return(
@@ -10,12 +10,8 @@ const PostSuggest = ({ user_id, user_data, coll }) => {
         <PostSuggestInner>
           <div className="title-wrap">
             <Title>건의 사항</Title>
-            <SubTitle>무분별한 비방이나 욕설은 자제해주세요.</SubTitle>
-            <SubTitle>내부 운영 정책에 맞지 않는 글은 게시가 제한될 수 있어요.</SubTitle>
+            <span>부대 생활에 불편함이 있나요? <br /> 아래 있는 건의함을 통해 여러분의 생각을 마음껏 표출해주세요! </span>
           </div>
-          <PostSuggestSide>
-            <img src={baby_duck_suggest} alt="" />
-          </PostSuggestSide>
           <PostSuggestWrite user_id={user_id} user_data={user_data} coll={coll} />
         </PostSuggestInner>
       </Background>
@@ -26,11 +22,7 @@ const PostSuggest = ({ user_id, user_data, coll }) => {
 const Title = styled.h1`
   text-align: center;
   font-size: 36px;
-`
-
-const SubTitle = styled.p`
-  text-align: center;
-  font-size: 18px;
+  font-weight: 900;
 `
 
 const Background = styled.div`
@@ -39,24 +31,18 @@ const Background = styled.div`
   border: 0;
 `
 
-const PostSuggestSide = styled.div`
-  position: relative;
-  text-align: center;
-  
-  > p {
-    color: white;
-    font-size: 18px;
-    line-height: 0.5rem;
-  }
-`
-
 const PostSuggestInner = styled.div`
   width: 1200px;
   margin: 0 auto;
   padding: 0.5rem;
 
   .title-wrap {
-    line-height: 1.2rem;
+    line-height: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    span {
+      font-size: 18px;
+    }
   }
 `
 
