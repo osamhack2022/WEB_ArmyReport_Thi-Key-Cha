@@ -5,6 +5,8 @@ import store, {persistor} from '../app/store'
 import {Provider} from 'react-redux';
 import AppRouter from './Router';
 import AuthLoadFake from './Auth/AuthLoadFake';
+import '../fonts/font.css'
+
 function App() {
   return (
     <div className="App" >

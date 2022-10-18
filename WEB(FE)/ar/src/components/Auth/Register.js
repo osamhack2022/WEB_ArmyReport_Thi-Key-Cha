@@ -16,11 +16,16 @@ import {
 import moment from 'moment';
 import styled from 'styled-components';
 import logo from '../../static/image/head.png'
+import AuthRegisterModal from './AuthRegisterModal'
 
 const { Option } = Select;
 const dateFormat = 'YYYY/MM/DD';
 
 const Register = () => {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const history = useNavigate();
     const [userLocation, setUserLocation] = useState({
         'Crop' : '',
@@ -217,69 +222,81 @@ const Register = () => {
                     <LabelItem name='UserName'>
                         <ValidateInput placeholder='이름' name='UserName' maxLength={8} onChange={onChange}/>
                     </LabelItem>
-                    <LabelItem name='UserClasses' >
-                        <Select
-                            placeholder='계급'
-                            name='UserClasses'
-                            style={{ width: 80, }}
-                            onChange={onhandleclass}>
-                            {army_classes.map((army) => (<Option key={army}>{army}</Option>))}
-                        </Select>
-                    </LabelItem>
-                    <LabelItem name='UserLastDate'>
-                        <Space direction="vertical" size={12}>
-                            <DatePicker 
-                                name='UserLastDate'
-                                placeholder='전역일'
-                                initialvalue={moment(new Date(), dateFormat)} 
-                                format={dateFormat} 
-                                onChange={onhandledate} />
-                        </Space>
-                    </LabelItem>
-                    <LabelItem>
-                        <Select
-                            name='Crop'
-                            value='군단'
-                            initialvalue={Cropsdata[0]}
-                            style={{ width: 120, }}
-                            onChange={onCropChange}>
-                            {Cropsdata.map((crop) => (<Option key={crop}>{crop}</Option>))}
-                        </Select>
-                        <Select
-                            name='Division'
-                            value='사단'
-                            style={{ width: 120, }}
-                            initialvalue={Divisiondata[Cropsdata[0]]}
-                            onChange={onDivisionChange}>
-                            {Divisiondata[Crop].map((division) => (<Option key={division}>{division}</Option>))}
-                        </Select>
-                        <Select
-                            name="Brigade"
-                            value='여단'
-                            style={{ width: 120, }}
-                            initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
-                            onChange={onBrigadeChange}>
-                            {Brigadedata[Division].map((brigade) => (<Option key={brigade}>{brigade}</Option>))}
-                        </Select>
-                        <Select
-                            name="Batalion"
-                            value='대대'
-                            style={{ width: 120, }}
-                            initialvalue={Bataliondata[Brigade]}
-                            onChange={onBatalionChange}>
-                            {Bataliondata[Brigade].map((batalion) => (<Option key={batalion}>{batalion}</Option>))}
-                        </Select>
-                        <ValidateInput placeholder="중대를 입력하세요 :-)" onChange={onCompanyChange}/>
-                    </LabelItem>
+                    <SelectorBlock>
+                        <LabelItem name='UserClasses' >
+                            <Select
+                                placeholder='계급'
+                                name='UserClasses'
+                                style={{ width: 80, }}
+                                onChange={onhandleclass}>
+                                {army_classes.map((army) => (<Option key={army}>{army}</Option>))}
+                            </Select>
+                        </LabelItem>
+                        <LabelItem name='UserLastDate'>
+                            <Space direction="vertical" size={12}>
+                                <DatePicker 
+                                    name='UserLastDate'
+                                    placeholder='전역일'
+                                    initialvalue={moment(new Date(), dateFormat)} 
+                                    format={dateFormat} 
+                                    onChange={onhandledate} />
+                            </Space>
+                        </LabelItem>
+                        <LabelItem>
+                            <Select
+                                name='Crop'
+                                placeholder='군단'
+                                initialvalue={Cropsdata[0]}
+                                style={{ width: 120, }}
+                                onChange={onCropChange}>
+                                {Cropsdata.map((crop) => (<Option key={crop}>{crop}</Option>))}
+                            </Select>
+                            <Select
+                                name='Division'
+                                placeholder='사단'
+                                style={{ width: 120, }}
+                                initialvalue={Divisiondata[Cropsdata[0]]}
+                                onChange={onDivisionChange}>
+                                {Divisiondata[Crop].map((division) => (<Option key={division}>{division}</Option>))}
+                            </Select>
+                            <Select
+                                name="Brigade"
+                                placeholder='여단'
+                                style={{ width: 120, }}
+                                initialvalue={Brigadedata[Divisiondata[Cropsdata[0]]]}
+                                onChange={onBrigadeChange}>
+                                {Brigadedata[Division].map((brigade) => (<Option key={brigade}>{brigade}</Option>))}
+                            </Select>
+                            <Select
+                                name="Batalion"
+                                placeholder='대대'
+                                style={{ width: 120, }}
+                                initialvalue={Bataliondata[Brigade]}
+                                onChange={onBatalionChange}>
+                                {Bataliondata[Brigade].map((batalion) => (<Option key={batalion}>{batalion}</Option>))}
+                            </Select>
+                            <Input placeholder="중대를 입력하세요" onChange={onCompanyChange}/>
+                        </LabelItem>
+                    </SelectorBlock>
                     <ButtonLayout>
-                        <Button type="primary" loading={loadings[0]} onClick={() => enterLoading(0)} htmlType="submit">회원가입</Button>
+                        <Button type="primary" onClick={handleOpen} htmlType="submit">
+                                회원가입
+                        </Button>
                         <Button type="button" onClick={() => history('/')}>취소</Button>
                     </ButtonLayout>
+                    <AuthRegisterModal to="/home" handleClose={handleClose} open={open} />
                 </RegisterForm>
             </div>
         </Background>
     )
 }
+
+const SelectorBlock = styled.div`
+    width: 100%;
+    border-radius: 30px;
+    background-color: #574F7D;
+    text-algin: center;
+`
 
 const ButtonLayout = styled.div`
     position: absolute;
@@ -349,6 +366,9 @@ const Button = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
+  &:first-child {
+    margin-right: 18px;
+  }
 `
 
 const LogoImage = styled.img`
