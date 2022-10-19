@@ -36,13 +36,6 @@ const HeaederUserMenu = ({
       <OutsideClickHandler>
         <HeaederUserMenuBlock>
           <div className="user-menu">
-            <p>이름 {user.data.Username}</p>
-            <p>계급 {user.data.Userclass}</p>
-            {/* TODO: Userlocated 내부의 프로퍼티들을 순회하여 <span> 으로 출력할 것 군단-사단-여단-대대-중대*/}
-            <p>소속 {user.data.Userlocated.Batalion}</p>
-            <p>상태메세지: 집 보내줘...</p>
-            <p>전역일: </p>
-            <p>위치:</p>
             <HeaderUserMenuItem to={`/@${user.uid}`}>정보</HeaderUserMenuItem>
             <HeaderUserMenuItem onClick={onLogout}>로그아웃</HeaderUserMenuItem>
           </div>

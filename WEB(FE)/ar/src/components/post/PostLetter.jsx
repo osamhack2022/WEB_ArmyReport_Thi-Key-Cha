@@ -35,8 +35,9 @@ const PostLetterSide = styled.div`
   
   > p {
     color: white;
-    font-size: 18px;
+    font-size: 24px;
     line-height: 0.5rem;
+    font-family: 'ImcreSoojin'
   }
 `
 
@@ -49,7 +50,8 @@ const Description = styled.div`
 
 const Background = styled.div`
   background: #574F7D;
-  padding: 2rem;
+  padding: 5rem;
+  height: 500px;
 `
 
 const PostLetterInner = styled.div`
