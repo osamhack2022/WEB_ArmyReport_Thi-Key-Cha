@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import db from '../../database/DB_Manager';
 import { addDoc, collection } from 'firebase/firestore';
 import styled from "styled-components";
-import { Button } from './PostViewer'
 import { Post } from './PostViewer';
 
 const PostSuggestWrite = ({ user_id, user_data, coll }) => {
@@ -50,7 +49,7 @@ const PostSuggestWrite = ({ user_id, user_data, coll }) => {
                   message: "최소 30자 이상은 작성해야 합니다."
               }})} />
             {errors.content && <small role="alert">{errors.content.message}</small>}
-          <Button type="submit" disabled={isSubmitting}>아기오구에게 <strong>건의내용</strong> 전달하기</Button>
+          <Button type="submit" disabled={isSubmitting}><strong>보내기</strong></Button>
         </Form>
       </FormBackground>
     </>
@@ -59,7 +58,7 @@ const PostSuggestWrite = ({ user_id, user_data, coll }) => {
 
 const FormBackground = styled.div`
   width: 860px;
-  height: 480px;
+  height: 420px;
   border: 0;
   margin: 0 auto;
   border-radius: 30px;
@@ -78,6 +77,23 @@ export const Form = styled.form`
   }
 `
 
+const Button = styled.button`
+  width: 15%;
+  color: white;
+  height: 36px;
+  background-color: #342F4B;
+  border: 0;
+  border-radius: 10px;
+  margin: 0.25rem 0 0;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    > strong {
+      color: tomato;
+    }
+  }
+`
 
 const Textarea = styled.textarea`
   width: 760px;
