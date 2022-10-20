@@ -11,7 +11,7 @@ const PostLetterAside = () => {
           </TextLogo>
           <TextGuide>
             <h3>마음의 편지를 어떻게 쓰는지 모르겠다구요?</h3>
-            <p>자유를 꿈꾸는 선생님이 작성한 <strong>마음의 편지 제대로 쓰는 법</strong> 매거진을 확인해보세요!</p>
+            <p><span>자유를 꿈꾸는 선생님</span>이 작성한 <strong>마음의 편지 제대로 쓰는 법</strong> 매거진을 확인해보세요!</p>
           </TextGuide>
         </PostLetterAsideBlock>
       </PostLetterGuideLink>
@@ -32,6 +32,10 @@ const PostLetterAsideBlock = styled.div`
     strong {
       background-color: #95ADBE;
       color: white;
+    }
+    span {
+      color: tomato;
+      transition: all .2s;
     }
   }
 `
@@ -58,6 +62,5 @@ const TextGuide = styled.div`
     font-weight: 400;
   }
 `
-
 
 export default PostLetterAside;
