@@ -5,10 +5,11 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
 
 const UserRollCallCard = (Uobj) => {
     return (
-        <Card sx={{ minWidth: 200 }}>
+        <Card>
             <CardContent>
                 <Typography variant="h5">
                     계급 : {Uobj.Uobj.Classes}
@@ -53,6 +54,7 @@ const UserRollCallCard = (Uobj) => {
                 </CardContent>
             </CardContent>
         </Card>
+       
     );
 };
 

@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 const Whereareyou = () => {
-  const user = useHeader();
+  const {user} = useHeader();
   const uid = user.uid;
   console.log(uid);
   const dispatch = useDispatch();
