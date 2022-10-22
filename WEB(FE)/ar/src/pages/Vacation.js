@@ -3,7 +3,7 @@ import Footer from '../components/base/Footer';
 import Header from '../components/base/Header';
 import db from '../database/DB_Manager';
 import { UserActions } from '../app/slice/UserSlice';
-import Loading from './Loading';
+import AuthLoadBackground from '../components/Auth/AuthLoadBackground';
 
 import { Layout } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
@@ -55,7 +55,7 @@ const Vacation = () => {
 
   return (
     <>
-    {isLoad && <Loading />}
+    {isLoad && <AuthLoadBackground />}
     {!isLoad && 
       <Layout className="layout">
         <Header />

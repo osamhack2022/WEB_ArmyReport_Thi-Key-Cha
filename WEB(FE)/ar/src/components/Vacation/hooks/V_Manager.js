@@ -92,13 +92,15 @@ export async function setVacation(uid, value){
 };
 
 export async function getId(name){
+    let uid=null;
     const q = query(collection(db, "02155004", "본부중대", "User"), where("Username", "==", name));
     const v_Snapshot = await getDocs(q);
     v_Snapshot.forEach((val)=>{
-        let uid = val.data().Useremail;
+        uid = val.data().Useremail;
         uid = uid.split('@');
-        return Promise.resolve(uid[0]);
+        console.log(uid[0]);
     });
+    return uid;
 };
 
 // PersonPage functions

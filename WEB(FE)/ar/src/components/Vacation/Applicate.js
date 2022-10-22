@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import dayjs from "dayjs";
+
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
@@ -9,6 +11,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import useHeader from '../base/hooks/useHeader';
 import { doc, getDoc, setDoc} from "firebase/firestore";
@@ -17,6 +20,7 @@ import db from '../../database/DB_Manager';
 import { useSelector } from 'react-redux';
 import { Stack } from '@mui/material';
 import moment from 'moment';
+import { Firebase } from 'firebase/app';
 
 const style = {
     position: 'absolute',
@@ -55,12 +59,11 @@ const Applicate = ({ onComplete }) => {
 
     /* Reference */
     const DesRef = useRef();
-    const StartdateRef = useRef();
-    const EnddateRef = useRef();
     const ContentRef = useRef();
     const NoteRef = useRef();
 
     useEffect(()=>{
+        getData(userid);
         setData(userid);
     }, []);
 
@@ -106,14 +109,11 @@ const Applicate = ({ onComplete }) => {
     }
 
     const StarthandleChange = (Value) => {
-        
-        console.log(Value);
-        setStartvalue(Value);
+        setStartvalue(Value.$d);
     };
 
     const EndhandleChange = (Value) => {
-        setEndvalue(Value);
-        console.log(Value);
+        setEndvalue(Value.$d);
     };
 
     const handleClose = () => {
@@ -126,15 +126,13 @@ const Applicate = ({ onComplete }) => {
         getData(userid);
         setLoading(true);
         e.preventDefault();
-        console.log(Startvalue);
-        console.log(Endvalue);
         await setDoc(doc(db, "02155004", "본부중대", "Vacation",`${userid}`), {
             Name : UserData.Name,
             Class : UserData.Class,
             UserPhone : UserData.Number,
             Destination : UserData.Destination,
-            Startdate : Startvalue,
-            Enddate : Endvalue,
+            Startdate : firebase.firestore.Timestamp.fromDate(Startvalue),
+            Enddate : firebase.firestore.Timestamp.fromDate(Endvalue),
             Content : UserData.Content,
             Note : UserData.Note,
             Examine: false,
@@ -162,8 +160,6 @@ const Applicate = ({ onComplete }) => {
                         <Stack spacing={3}>
                             <FormLabel id="demo-controlled-radio-buttons-group">행선지</FormLabel>
                             <TextField name="Destination" inputRef={DesRef} label="ex) 서울 강북, 부산 해운대구" variant="outlined" onChange={onChange} required/>
-                            
-                            
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DesktopDatePicker
                                         renderInput={(params) => <TextField {...params} name="startdate"/>}
@@ -176,7 +172,7 @@ const Applicate = ({ onComplete }) => {
                     
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DesktopDatePicker
-                                        renderInput={(params) => <TextField {...params} name="startdate"/>}
+                                        renderInput={(params) => <TextField {...params} name="enddate"/>}
                                         label="도착일"
                                         inputFormat="YYYY/MM/DD"
                                         value={Endvalue}

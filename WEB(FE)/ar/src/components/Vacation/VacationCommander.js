@@ -30,8 +30,17 @@ const CommandStyle = styled.div`
 
 let rows = null;
 const raw_rows = getVacation().then((test)=>{
+  console.log(test);
   rows = test;
 });
+
+const Refreshhandle = (e) => {
+  e.preventDefault();
+  const get_rows = getVacation().then((test)=>{
+    console.log(test);
+    rows = test;
+  });
+};
 
 const CustomToolbar = () => {
   const gridRef = useGridApiContext();
@@ -71,7 +80,7 @@ const CustomToolbar = () => {
     }else{
       select.map((val)=>{
         const testing = getId(val.Name).then((uid)=>{
-          setVacation(uid, true);
+          setVacation(uid[0], true);
         });
       });
       setTimeout(() => {
@@ -105,7 +114,7 @@ const VacationCommander = () => {
 
   return (
     <>
-    <CommandStyle>
+      <CommandStyle>
         <div style={{ height: 600, width: '100%' }} className="ar-datagrid">
           <DataGrid
             rows={rows}

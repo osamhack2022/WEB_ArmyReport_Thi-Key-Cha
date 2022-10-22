@@ -20,19 +20,15 @@ const Item = styled(Paper)(({theme}) => ({
 const PersonPage = () => {
     const {user} = useHeader();
     const uid = user.uid;
-        
-    const [Userdata, setUserdata] = useState({
-        'Startdate' : new Date(),
-        'Enddate' : new Date(),
-        'Content' : '',
-        'Examine' : false
-    });
+    
+    const [IsExamine, setIsExamine] = useState(false);
+
     useEffect(()=>{
         getUserVacation(uid).then((v)=>{
             if (v === 'false'){
                 console.log('데이터가 없습니다..ㅠㅠㅠㅠ');
             }else{
-                setUserdata(v);
+                setIsExamine(v.Examine);
             }
         });
     }, [uid]);
@@ -45,7 +41,7 @@ const PersonPage = () => {
     return (
         <>
             <Box>
-                { Userdata.Examine && 
+                { IsExamine && 
                     <Item elevation={3}>
                         <Typography variant="h2" gutterBottom>
                             내 휴가
@@ -61,7 +57,7 @@ const PersonPage = () => {
                         </Typography>
                     </Item>
                 }
-                { !Userdata.Examine && 
+                { !IsExamine && 
                 <>
                     <Item elevation={3}>
                         <Typography variant="h2" gutterBottom>
