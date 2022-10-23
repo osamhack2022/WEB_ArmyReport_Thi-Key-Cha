@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-const ProfileTables = ({ list }) => {
+const ProfileTableTemplate = ({ list }) => {
   return (
     <>
       <TableContainer component={Paper}>
@@ -41,4 +41,4 @@ const ProfileTables = ({ list }) => {
   );
 }
 
-export default ProfileTables;
+export default ProfileTableTemplate;

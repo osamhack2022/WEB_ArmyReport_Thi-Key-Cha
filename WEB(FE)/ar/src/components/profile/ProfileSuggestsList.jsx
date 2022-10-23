@@ -5,14 +5,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ProfileTables from './ProfileTables'
+import ProfileTableTemplate from './ProfileTableTemplate'
 import { Firestore } from './ProfileViewer';
 
 const ProfileSuggestsList = () => {
   const db = new Firestore('post-suggests');
   return (
     <>
-      <ProfileTables list={db.fetchCollection()} />
+      <ProfileTableTemplate list={db.fetchCollection()} />
     </>
   );
 }
