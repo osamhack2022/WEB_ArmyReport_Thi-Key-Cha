@@ -14,7 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import useHeader from '../base/hooks/useHeader';
-import { doc, getDoc, setDoc} from "firebase/firestore";
+import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 
 import db from '../../database/DB_Manager';
 import { useSelector } from 'react-redux';
@@ -45,7 +45,6 @@ const Applicate = ({ onComplete }) => {
     const [UserData, setUserData] = useState({
         Name : '',
         Class : '',
-        Number : '', 
         Destination : '',
         Startdate : new Date(),
         Enddate : new Date(),
@@ -74,7 +73,6 @@ const Applicate = ({ onComplete }) => {
             setUserData({
                 Name : docSnap.data().Username,
                 Class : docSnap.data().Userclass,
-                Number : docSnap.data().PhoneNumber
             });
         }else{
             console.log("No such Data");
@@ -85,7 +83,6 @@ const Applicate = ({ onComplete }) => {
         await setDoc(doc(db,"02155004", "본부중대", "Vacation",`${userid}`),{
             Name : UserData.Name,
             Class : UserData.Class,
-            UserPhone : UserData.Number,
             Destination : '',
             Startdate : new Date(),
             Enddate : new Date(),
@@ -128,10 +125,9 @@ const Applicate = ({ onComplete }) => {
         await setDoc(doc(db, "02155004", "본부중대", "Vacation",`${userid}`), {
             Name : UserData.Name,
             Class : UserData.Class,
-            UserPhone : UserData.Number,
             Destination : UserData.Destination,
-            Startdate : db.Timestamp.fromDate(Startvalue),
-            Enddate : db.Timestamp.fromDate(Endvalue),
+            Startdate : Timestamp.fromDate(Startvalue),
+            Enddate : Timestamp.fromDate(Endvalue),
             Content : UserData.Content,
             Note : UserData.Note,
             Examine: false,

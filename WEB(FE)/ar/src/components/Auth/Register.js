@@ -185,7 +185,6 @@ const Register = () => {
                 Useremail : UserObj.UserEmail,
                 Username : UserObj.UserName,
                 Userclass : UserObj.UserClasses,
-                UserPhone : UserObj.UserPhone,
                 Userlocated : UserObj.UserLocation,
                 Userlastdate : UserObj.UserLastDate,
                 IsLocated : UserObj.isLocated,
@@ -272,9 +271,6 @@ const Register = () => {
                     <Option key={army}>{army}</Option>
                     ))}
                 </Select>
-            </Form.Item>
-            <Form.Item label="이름" name='UserPhone'>
-                <Input name='UserPhone' maxLength={11} onChange={onChange}/>
             </Form.Item>
             <Form.Item label='전역일' name='UserLastDate'>
                 <Space direction="vertical" size={12}>

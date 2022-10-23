@@ -112,13 +112,12 @@ export async function getUserVacation(uid){
         'Content' : '',
         'Examine' : false,
     };
-    const UserRef = doc(db, '02155004', '본부중대', 'User', `${uid}`);
+    const UserRef = doc(db, '02155004', '본부중대', 'Vacation', `${uid}`);
     const docSnap = await getDoc(UserRef);
 
     if(docSnap.exists()){
-        console.log(docSnap.data());
-        UserData.Startdate = docSnap.data().Startdate;
-        UserData.Enddate = docSnap.data().Enddate;
+        UserData.Startdate = new Date(docSnap.data().Startdate.seconds * 1000);
+        UserData.Enddate = new Date(docSnap.data().Enddate.seconds * 1000);
         UserData.Content = docSnap.data().Content;
         UserData.Examine = docSnap.data().Examine;
     }else{
