@@ -14,7 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import useHeader from '../base/hooks/useHeader';
-import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 
 import db from '../../database/DB_Manager';
 import { useSelector } from 'react-redux';
@@ -126,8 +126,8 @@ const Applicate = ({ onComplete }) => {
             Name : UserData.Name,
             Class : UserData.Class,
             Destination : UserData.Destination,
-            Startdate : Timestamp.fromDate(Startvalue),
-            Enddate : Timestamp.fromDate(Endvalue),
+            Startdate : Timestamp.fromMillis(Startvalue),
+            Enddate : Timestamp.fromMillis(Endvalue),
             Content : UserData.Content,
             Note : UserData.Note,
             Examine: false,
