@@ -20,7 +20,6 @@ import db from '../../database/DB_Manager';
 import { useSelector } from 'react-redux';
 import { Stack } from '@mui/material';
 import moment from 'moment';
-import { Firebase } from 'firebase/app';
 
 const style = {
     position: 'absolute',
@@ -131,8 +130,8 @@ const Applicate = ({ onComplete }) => {
             Class : UserData.Class,
             UserPhone : UserData.Number,
             Destination : UserData.Destination,
-            Startdate : firebase.firestore.Timestamp.fromDate(Startvalue),
-            Enddate : firebase.firestore.Timestamp.fromDate(Endvalue),
+            Startdate : db.Timestamp.fromDate(Startvalue),
+            Enddate : db.Timestamp.fromDate(Endvalue),
             Content : UserData.Content,
             Note : UserData.Note,
             Examine: false,

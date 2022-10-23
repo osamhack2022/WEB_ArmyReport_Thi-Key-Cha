@@ -20,6 +20,9 @@ import { CallLocdata } from './hooks/HomeValue';
 import UserLocCard from './UserLocCard';
 import wait from '../../static/image/wait.png';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -29,7 +32,7 @@ import { Grid } from '@mui/material';
 
 const RollCallCardStyle = styled.div`
   box-sizing: border-box;
-  display: grid;
+  display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   margin-top: 30px;
@@ -37,13 +40,10 @@ const RollCallCardStyle = styled.div`
   margin-left: 30px;
   margin-right: 30px;
   margin-bottom: 30px;
+  space-around : 10px;
 
   .command-rollcall{
     box-sizing: border-box;
-    flex-direction: column;
-    padding-left:10px;
-    padding-right:10px;
-    padding-top: 10px;
   }
 `
 
@@ -85,6 +85,58 @@ const LocCardStyle = styled.div`
   }
 `
 
+const notifyReject = (str) => {
+    toast.error(str,{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
+
+const notifyWarn = (str) => {
+    toast.warn(str,{
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
+
+const notifySucess = (str)=>{
+    toast.success(str,{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
+
+const notifyStart = (str)=>{
+    toast(str,{
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
+
 const Commander = () => {
     /* Variables */
     const [SoldierList, setSoldierList] = useState([]);
@@ -104,7 +156,7 @@ const Commander = () => {
     const onLocationhandle = () =>{
         setTimeout(() => {
             setReady(true);
-            alert("파악했어요!");
+            notifySucess("인원 위치 종합했습니다!");
         }, 1000);
     };
 
@@ -116,6 +168,7 @@ const Commander = () => {
                 Timetorollcall : true,
             });
         });
+        notifyWarn("점호 시작하겠습니다!");
     };
 
     const Offrollcallhandle = async() => {
@@ -128,6 +181,7 @@ const Commander = () => {
         setTimeout(() => {
             setIsRollcall(false);    
         }, 1000);
+        notifySucess("점호 마치겠습니다!");
     };
 
     const Loadhandle = async() => {
@@ -175,7 +229,20 @@ const Commander = () => {
     return (
     <>
         <div className="user-location-info">
-            <Button onClick={onLocationhandle}>인원 위치 파악</Button>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            >
+                <Button onClick={onLocationhandle}>인원 위치 파악</Button>
+            </ToastContainer>
             { Ready &&
             <>  
                 <LocCardStyle>

@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import { basiccolumns } from './Tablecolumns';
 import OutcastTable from './OutcastTable';
 
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { getVacation, setVacation, getId } from './hooks/V_Manager';
 import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF, GridToolbarContainer, useGridApiContext, gridColumnGroupsLookupSelector } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@mui/material';
@@ -11,7 +15,7 @@ import { Button, ButtonGroup } from '@mui/material';
 const CommandStyle = styled.div`
   .ar-datagrid {  
     box-sizing: border-box;
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
     flex-direction: row;
     margin-top: 50px;
@@ -50,6 +54,45 @@ const CustomToolbar = () => {
   const end = new Date();
   const Endday = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
 
+  const notifyReject = (str) => {
+    toast.error(str,{
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const notifySucess = (str)=>{
+    toast.success(str,{
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const notifyStart = (str)=>{
+    toast.info(str,{
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   const handleGetData = (e) => {
     e.preventDefault();
     let select = [];
@@ -75,7 +118,7 @@ const CustomToolbar = () => {
         });
       });
       setTimeout(() => {
-        alert("반려하였습니다.");
+        notifyReject("반려하였습니다...");
       }, 750);
     }else{
       select.map((val)=>{
@@ -84,7 +127,7 @@ const CustomToolbar = () => {
         });
       });
       setTimeout(() => {
-        alert("승인하였습니다!");
+        notifySucess("승인하였습니다!");
       }, 750);
     }
   };
@@ -94,8 +137,21 @@ const CustomToolbar = () => {
       <div className="bottom-btns">
         <div className="right-btns">
           <ButtonGroup variant="contained">
-            <Button value={false} onClick={handleGetData}>반려</Button>
-            <Button value={true} onClick={handleGetData}>승인</Button>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            >
+              <Button value={false} onClick={handleGetData}>반려</Button>
+              <Button value={true} onClick={handleGetData}>승인</Button>
+            </ToastContainer>
           </ButtonGroup>
         </div>
       </div> 
@@ -132,13 +188,26 @@ const VacationCommander = () => {
           </div>
         </div>
         
-        <Button 
-          variant="contained" 
-          color="primary" 
-          className="left-btn"
+        <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
         >
-          새로고침
-        </Button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            className="left-btn"
+          >
+            새로고침
+          </Button>
+        </ToastContainer>
       </CommandStyle>
     </>
   )

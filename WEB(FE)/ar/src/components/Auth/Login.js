@@ -52,7 +52,7 @@ const Login = () => {
     const enteredEmail = UserInfo.userid;
     const enteredPassword = UserInfo.userpwd;
     setisLoad(true);
-    const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0';
+    const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCOOTGrItVa4Ul8YcitFoUnc1Z1HKj4J9k';
     fetch(
         url,
         {
