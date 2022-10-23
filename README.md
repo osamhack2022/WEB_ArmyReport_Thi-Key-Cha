@@ -48,17 +48,13 @@
 - `Redux`
 - `JavaScript`
 
-### 백엔드
-
-- `Django`
-- `Python`
-
 ### 데이터베이스
 
 - `Firebase`
 
 ### 디자인
 
+- `Material-UI`
 - `Figma`
 - `LucidChart`
 
@@ -70,7 +66,7 @@
 
 | 부문 | 스택 | 담당자 |
 | --- | --- | --- |
-| 개발 | 프론트엔드 백엔드 | FE : 안선우  BE : 남경찬 |
+| 개발 | 프론트엔드  | 안선우, 남경찬 |
 | 디자인 | UI 디자이너 설계 디자이너 순서도 디자이너 | Flowchar, UI Manager : 남경찬 Design Manager : 안선우  |
 | 기획 | 디렉터  | Director : 남경찬 |
 

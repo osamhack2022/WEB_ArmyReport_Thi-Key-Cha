@@ -35,8 +35,6 @@ const Text = styled.div`
   font-size: 36px;
 `
 
-
-
 const AuthLoadBackground = () => {
   return (
     <>

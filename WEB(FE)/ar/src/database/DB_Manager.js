@@ -9,14 +9,13 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0",
-    authDomain: "thi-key-cha.firebaseapp.com",
-    databaseURL: "https://thi-key-cha-default-rtdb.firebaseio.com",
-    projectId: "thi-key-cha",
-    storageBucket: "thi-key-cha.appspot.com",
-    messagingSenderId: "484944617909",
-    appId: "1:484944617909:web:93e2e955a3ed375b5e79fc",
-    measurementId: "G-X1NYBHGJBX"
+    apiKey: "AIzaSyCOOTGrItVa4Ul8YcitFoUnc1Z1HKj4J9k",
+    authDomain: "thikeycha.firebaseapp.com",
+    projectId: "thikeycha",
+    storageBucket: "thikeycha.appspot.com",
+    messagingSenderId: "594210782648",
+    appId: "1:594210782648:web:cdc18225053156f949234d",
+    measurementId: "G-PGFQ4H039P"
 };
 
 export const app = initializeApp(firebaseConfig);

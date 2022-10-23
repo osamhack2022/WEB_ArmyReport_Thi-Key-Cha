@@ -132,7 +132,7 @@ const Register = () => {
         
         setisLoad(true);
         fetch(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBY5XFBwy8nrbepRvQdj7k4vPi3GCSBjG0',
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCOOTGrItVa4Ul8YcitFoUnc1Z1HKj4J9k',
             {
                 method: 'POST',
                 body: JSON.stringify({
