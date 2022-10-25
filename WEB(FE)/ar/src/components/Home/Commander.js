@@ -143,13 +143,12 @@ const Commander = () => {
     const [isRollcall, setIsRollcall] = useState(false);
     const [Ready, setReady] = useState(false);
     const [element,setElement] = useState([]);
-
-    const getUser = CallLocdata().then((user)=>setElement(user));
     /* Firebase 에서 User 들의 uid 정보 빼내오는 과정 */
     
     const q = query(collection(db, "02155004", "본부중대", "User"), where("IsBoss", "==" , false));
     
     useEffect(()=>{
+        const getUser = CallLocdata().then((user)=>setElement(user));
         console.log('Ready value is changed');
     }, [Ready]);
 
@@ -229,27 +228,14 @@ const Commander = () => {
     return (
     <>
         <div className="user-location-info">
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            >
-                <Button onClick={onLocationhandle}>인원 위치 파악</Button>
-            </ToastContainer>
+            <Button onClick={onLocationhandle}>인원 위치 파악</Button>
             { Ready &&
             <>  
                 <LocCardStyle>
                     <div>
                         <Grid container>
                             { element.map((User, index)=>(
-                                <Grid item xs={6} md={2} lg={2} index={index}>
+                                <Grid item xs={6} md={2} lg={2} key={index}>
                                     <UserLocCard  User={User} />
                                 </Grid>
                             ))}

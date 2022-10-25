@@ -95,7 +95,7 @@ const Login = () => {
       }).catch(err => {
         alert(err.message);
       });
-  }
+  };
   
   return (
     <>

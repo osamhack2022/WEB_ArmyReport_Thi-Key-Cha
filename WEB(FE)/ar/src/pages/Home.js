@@ -16,6 +16,7 @@ import { onSnapshot, doc, getDoc, query, getDocs, collection, where } from "fire
 
 import "antd/dist/antd.min.css";
 import { Layout } from 'antd';
+import Onvacation from '../components/Home/Onvacation';
 
 const { Content } = Layout;
 
@@ -26,7 +27,7 @@ const Home = () => {
   const uid = user.uid;
   const [rollcall, setRollCall] = useState(false);
   const [Boss, setBoss] = useState(false);
-
+  const [isVacation, setIsVacation] = useState(false);
 
   const unsub = onSnapshot(doc(db,"02155004", "본부중대", "User",`${uid}`), (doc) => {
     setRollCall(doc.data().Timetorollcall);
@@ -40,14 +41,15 @@ const Home = () => {
       if(docSnap.data().IsBoss){
         setBoss(docSnap.data().IsBoss);
       }
+
+      if(docSnap.data().isVacation){
+        setIsVacation(doc.apply.data().IsVacation);
+      }
     }else{
       console.log("데이터가 없는데요?");
       unsub();
     }
   };
-
-  
-  
 
   function wait1Second(){
     setTimeout(()=>{
@@ -68,18 +70,25 @@ const Home = () => {
           <Header />
           <Content>
             { !Boss && 
-            <>
-              <Content
-              style={{
-                padding: '0 50px',
-              }}
-            >
-              <div className="site-layout-content">
-                <Whereareyou />
-              </div>
-              </Content>
-              { rollcall && <Patient /> }
-            </>
+              <>
+              { isVacation &&
+                <Onvacation />
+              }
+              { !isVacation &&
+                <>
+                  <Content
+                    style={{
+                      padding: '0 50px',
+                    }}
+                  >
+                    <div className="site-layout-content">
+                      <Whereareyou />
+                    </div>
+                  </Content>
+                  { rollcall && <Patient /> }
+                </>
+              }
+              </>
             }
             { Boss && <Commander />}
           </Content>
