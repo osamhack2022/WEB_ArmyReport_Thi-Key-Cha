@@ -8,7 +8,7 @@ import OutcastTable from './OutcastTable';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { getVacation, setVacation, getId } from './hooks/V_Manager';
+import { StartToday, EndToday, getVacation, setVacation, getId, CombineRows } from './hooks/V_Manager';
 import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF, GridToolbarContainer, useGridApiContext, gridColumnGroupsLookupSelector } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@mui/material';
 
@@ -32,6 +32,18 @@ const CommandStyle = styled.div`
   }
 `
 
+let StartRows = null;
+const Startrow = StartToday().then((test)=>{
+  console.log(test);
+  StartRows = test;
+});
+
+let EndRows = null;
+const Endrow = EndToday().then((test)=>{
+  console.log(test);
+  EndRows = test;
+});
+
 let rows = null;
 const raw_rows = getVacation().then((test)=>{
   console.log(test);
@@ -46,59 +58,59 @@ const Refreshhandle = (e) => {
   });
 };
 
+const notifyReject = (str) => {
+  toast.error(str,{
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+};
+
+const notifySucess = (str)=>{
+  toast.success(str,{
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+};
+
+const notifyStart = (str)=>{
+  toast.info(str,{
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+};
+
 const CustomToolbar = () => {
   const gridRef = useGridApiContext();
-
   const start = new Date();
   const Startday = start.getFullYear() + "-" + (start.getMonth()+1) + "-" + start.getDate();
   const end = new Date();
   const Endday = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
 
-  const notifyReject = (str) => {
-    toast.error(str,{
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
-  const notifySucess = (str)=>{
-    toast.success(str,{
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
-  const notifyStart = (str)=>{
-    toast.info(str,{
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
   const handleGetData = (e) => {
     e.preventDefault();
+    
     let select = [];
     const data = gridRef.current.getSelectedRows();
     
-    data.forEach(function(value, key){
+    data.forEach(function(value){
       let user={
         Name: value.Name,
         Class: value.Class,
@@ -110,48 +122,49 @@ const CustomToolbar = () => {
       };
       select.push(user);
     });
-    
-    if (e.target.value === false){
+
+    const judge = e.target.value;
+
+    if (judge === "false"){
+      console.log("false");
       select.map((val)=>{
         const testing = getId(val.Name).then((uid)=>{
-          setVacation(uid, false);
+          setVacation(uid[0], false);
         });
+      });
+      const raw_rows = getVacation().then((test)=>{
+        rows = test;
       });
       setTimeout(() => {
         notifyReject("반려하였습니다...");
       }, 750);
-    }else{
+    }else if (judge === "true"){
+      console.log(true);
       select.map((val)=>{
         const testing = getId(val.Name).then((uid)=>{
           setVacation(uid[0], true);
         });
       });
+      getVacation().then((test)=>{
+        rows = test;
+      });
       setTimeout(() => {
         notifySucess("승인하였습니다!");
       }, 750);
+    }else{
+      console.log("값을 잘못 입력하였습니다.");
     }
   };
+
+
 
   return (
     <GridToolbarContainer>
       <div className="bottom-btns">
         <div className="right-btns">
           <ButtonGroup variant="contained">
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            >
-              <Button value={false} onClick={handleGetData}>반려</Button>
-              <Button value={true} onClick={handleGetData}>승인</Button>
-            </ToastContainer>
+            <Button value={false} onClick={handleGetData}>반려</Button>
+            <Button value={true} onClick={handleGetData}>승인</Button>
           </ButtonGroup>
         </div>
       </div> 
@@ -160,6 +173,11 @@ const CustomToolbar = () => {
 };
 
 const VacationCommander = () => {
+  const [Outcast, setOutcast] = useState([]);
+  useEffect(()=>{
+    setOutcast(CombineRows(StartRows,EndRows).OutcastRows);
+  }, []);
+
   const columns = useMemo(()=>[
     ...basiccolumns,
     {
@@ -167,7 +185,7 @@ const VacationCommander = () => {
       width: 30,
     },
   ], [basiccolumns]);
-
+  
   return (
     <>
       <CommandStyle>
@@ -184,30 +202,18 @@ const VacationCommander = () => {
             }}
           />
           <div className="ar-outcasttable">
-            <OutcastTable />
+            <OutcastTable Rows={Outcast}/>
           </div>
         </div>
         
-        <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
+        <Button 
+          variant="contained" 
+          color="primary" 
+          className="left-btn"
+          onClick={Refreshhandle}
         >
-          <Button 
-            variant="contained" 
-            color="primary" 
-            className="left-btn"
-          >
-            새로고침
-          </Button>
-        </ToastContainer>
+          새로고침
+        </Button>
       </CommandStyle>
     </>
   )

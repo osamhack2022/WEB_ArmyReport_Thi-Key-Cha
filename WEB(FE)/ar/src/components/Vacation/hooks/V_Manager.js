@@ -11,7 +11,6 @@ import {
 } from "firebase/firestore";
 import db from '../../../database/DB_Manager';
 
-// User Obj information 에 phonenumber 있습니다 <참고하세요>
 // VacationCommander.js  Functions
 export async function getVacation(){
     const v_list = [];
@@ -25,7 +24,7 @@ export async function getVacation(){
         const Startday = start.getFullYear() + "-" + (start.getMonth()+1) + "-" + start.getDate();
         const end = new Date(res.data().Enddate.seconds * 1000);
         const Endday = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
-
+        console.log(res.data().Examine);
         const user = {
             id : count,
             Name : res.data().Name,
@@ -47,19 +46,22 @@ export async function StartToday(){
     let v_list = [];
     let count = 0;
     const end = new Date();
-    const today = end.getDate()  + "-" + (end.getMonth()+1) + "-" + end.getFullYear();
-    const q = query(collection(db, "02155004", "본부중대", "Vacation"), where("Startdate", "==" , today));
+    const yesterday = new Date(end.getDate()-1);
+    const today = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
+    const sq = query(collection(db, "02155004", "본부중대", "Vacation"), where("Startdate", ">" , yesterday));
 
-    const v_Snapshot = await getDocs(q);
+    const v_Snapshot = await getDocs(sq);
     v_Snapshot.forEach((res)=>{
-        console.log(res.id, "=>",res.data());
-        const user = {
-            id : count,
-            Name : res.data().Username,
-            Class : res.data().Userclasses,
-        };
-        v_list.push(user);
-        count += 1;
+        const start = new Date(res.data().Startdate.seconds * 1000);
+        const startdate = start.getFullYear() + "-" + (start.getMonth()+1) + "-" + start.getDate(); 
+        if (startdate == today){
+            const user = {
+                id : count,
+                Start : res.data().Class+ " " + res.data().Name,
+            };
+            v_list.push(user);
+            count += 1;
+        }
     });
     return v_list;
 };
@@ -68,31 +70,45 @@ export async function EndToday(){
     let v_list = [];
     let count = 0;
     const end = new Date();
-    const today = end.getDate()  + "-" + (end.getMonth()+1) + "-" + end.getFullYear();
-    const q = query(collection(db, "02155004", "본부중대", "Vacation"), where("Startdate", "==" , today));
-    const v_Snapshot = await getDocs(q);
+    const yesterday = new Date(end.getDate()-1);
+    const today = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
+    const eq = query(collection(db, "02155004", "본부중대", "Vacation"), where("Enddate", ">" , yesterday));
+
+    const v_Snapshot = await getDocs(eq);
     v_Snapshot.forEach((res)=>{
-        const user = {
-            id : count,
-            Name : res.data().Username,
-            Class : res.data().Userclasses,
-        };
-        v_list.push(user);
-        count += 1;
+        const end = new Date(res.data().Enddate.seconds * 1000);
+        const enddate = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate(); 
+        if (enddate == today){
+            const user = {
+                id : count,
+                End : res.data().Class+ " " + res.data().Name,
+            };
+            v_list.push(user);
+            count += 1;
+        }
     });
     return v_list;
 };
 
 export async function setVacation(uid, value){
     const docRef = doc(db, "02155004", "본부중대", "Vacation",`${uid}`);
-    await updateDoc(docRef, {
-        Positive : `${value}`,
-        Examine : true,
-    });
+    if (value===true){
+        await updateDoc(docRef, {
+            Positive : 1,
+            Examine : true,
+        });
+    }else if(value === false){
+        await updateDoc(docRef, {
+            Positive : -1,
+            Examine : true,
+        });
+    }else{
+        console.log("wrong value inputed");
+    }
 };
 
 export async function getId(name){
-    let uid=null;
+    let uid = null;
     const q = query(collection(db, "02155004", "본부중대", "User"), where("Username", "==", name));
     const v_Snapshot = await getDocs(q);
     v_Snapshot.forEach((val)=>{
@@ -102,6 +118,50 @@ export async function getId(name){
     });
     return uid;
 };
+
+export function CombineRows(StartRows, EndRows){
+    let OutcastRows = [];
+    console.log(StartRows, EndRows);
+    if (StartRows.length < EndRows.length ){
+        for(let k=0; k < EndRows.length; k++){
+            console.log(EndRows[k].End, StartRows[k].Start);
+            if (k === StartRows.length){
+                OutcastRows.push({
+                Home : EndRows[k].End,
+                });
+            }else{
+                OutcastRows.push({
+                Away : StartRows[k].Start,
+                Home : EndRows[k].End,
+                });
+            }
+        }
+    }else if(StartRows.length > EndRows.length){
+        for(let k = 0; k < StartRows.length;k++){
+            if (k === EndRows.length){
+                console.log(StartRows[k].Start);
+                OutcastRows.push({
+                Away : StartRows[k].Start,
+                });
+            }else{
+                OutcastRows.push({
+                Away : StartRows[k].Start,
+                Home : EndRows[k].End,
+                });
+            }
+        } 
+    }else{
+        for(let k = 0; k< StartRows.length;k++){
+            console.log(EndRows[k].End, StartRows[k].Start);
+            OutcastRows.push({
+                Away : StartRows[k].Start,
+                Home : EndRows[k].End,
+            });
+        }
+    }
+    return {OutcastRows};
+};
+
 
 // PersonPage functions
 
@@ -116,12 +176,41 @@ export async function getUserVacation(uid){
     const docSnap = await getDoc(UserRef);
 
     if(docSnap.exists()){
-        UserData.Startdate = new Date(docSnap.data().Startdate.seconds * 1000);
-        UserData.Enddate = new Date(docSnap.data().Enddate.seconds * 1000);
-        UserData.Content = docSnap.data().Content;
-        UserData.Examine = docSnap.data().Examine;
+        if(docSnap.data().Positive === false || docSnap.data().Positive === true){
+            UserData.Startdate = new Date(docSnap.data().Startdate.seconds * 1000);
+            UserData.Enddate = new Date(docSnap.data().Enddate.seconds * 1000);
+            UserData.Content = docSnap.data().Content;
+            UserData.Examine = docSnap.data().Examine;
+            UserData.Positive = docSnap.data().Positive;
+        }else{
+            UserData.Startdate = new Date(docSnap.data().Startdate.seconds * 1000);
+            UserData.Enddate = new Date(docSnap.data().Enddate.seconds * 1000);
+            UserData.Content = docSnap.data().Content;
+            UserData.Examine = docSnap.data().Examine;
+        }        
     }else{
         return false;
+    }
+    return UserData;
+};
+
+export async function getApplication(uid){
+    let UserData = {
+        'Startdate' : new Date(),
+        'Enddate' : new Date(),
+        'Content' : '',
+        'Examine' : false,
+    };
+    const UserRef = doc(db, '02155004', '본부중대', 'Vacation', `${uid}`);
+    const docSnap = await getDoc(UserRef);
+    if(docSnap.exists()){
+        if(docSnap.Examine == false){
+            UserData.Startdate = new Date(docSnap.data().Startdate.seconds * 1000);
+            UserData.Enddate = new Date(docSnap.data().Enddate.seconds * 1000);
+            UserData.Content = docSnap.data().Content;
+        }
+    }else{
+        return true;
     }
     return UserData;
 };
