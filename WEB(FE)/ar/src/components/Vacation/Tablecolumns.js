@@ -1,9 +1,9 @@
 const moment = require('moment');
 
 export const basiccolumns = [
-    { field: 'id', headerName: 'No', width: 20, flex: 1 },
-    { field: 'Class', headerName: '계급', width: 50, flex: 1 },
-    { field: 'Name', headerName: '이름', width: 100,flex: 1 },
+    { field: 'id', headerName: 'No', width: 20 },
+    { field: 'Class', headerName: '계급', width: 50 },
+    { field: 'Name', headerName: '이름', width: 100 },
     { field: 'Destination', headerName: '목적지', width: 130 },
     {
       field: 'Startdate',
