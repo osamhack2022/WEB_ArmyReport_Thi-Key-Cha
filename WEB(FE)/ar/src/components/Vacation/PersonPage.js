@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import useHeader from '../base/hooks/useHeader';
 import Button from '@mui/material/Button';
 
+import { useDetectClickOutside } from 'react-detect-click-outside';
+
 import Approve from './VacationJudge/Approve';
 import Reject from './VacationJudge/Reject';
 import Pending from './VacationJudge/Pending';
@@ -18,29 +20,10 @@ const DesignPerson = styled.div`
 
 `;
 
-function useOutsideAlerter(ref) {
-    useEffect(() => {
-      /**
-       * Alert if clicked on outside of element
-       */
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          alert("You clicked outside of me!");
-        }
-      }
-      // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        // Unbind the event listener on clean up
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-}
-
 const PersonPage = () => {
     const {user} = useHeader();
     const uid = user.uid;
-
+    
     const [IsApplicate, setIsApplicate] = useState(false);
     const [IsExamine, setIsExamine] = useState(false);
     const [IsPositive, setIsPositive] = useState(false);
@@ -50,9 +33,6 @@ const PersonPage = () => {
         'Enddate' : new Date(),
         'Content' : '',
     });
-
-    const personRef = useRef(null);
-    useOutsideAlerter(personRef);
 
     useEffect(()=>{
         getUserVacation(uid).then((v)=>{

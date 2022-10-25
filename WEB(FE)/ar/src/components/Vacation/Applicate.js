@@ -13,6 +13,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
+import { useDetectClickOutside } from 'react-detect-click-outside';
+
 import useHeader from '../base/hooks/useHeader';
 import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 
@@ -35,7 +37,7 @@ const style = {
 
 
 
-const Applicate = ({ onComplete }) => {
+const Applicate = ({ onComplete, closeDropdown }) => {
     const {user} = useHeader();
     const userid = user.uid;
 
@@ -59,6 +61,7 @@ const Applicate = ({ onComplete }) => {
     const DesRef = useRef();
     const ContentRef = useRef();
     const NoteRef = useRef();
+    const Openref = useDetectClickOutside({onTriggered: closeDropdown});
 
     useEffect(()=>{
         getData(userid);
@@ -145,6 +148,7 @@ const Applicate = ({ onComplete }) => {
     return (
         <>
             <Modal
+                ref={Openref}
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
