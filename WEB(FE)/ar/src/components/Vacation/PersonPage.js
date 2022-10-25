@@ -1,34 +1,82 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import baby_ogu_running from '../../static/image/baby-ogu-running.png'
 
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Applicate from './Applicate';
 import { getUserVacation } from './hooks/V_Manager';
-import useHeader from '../base/hooks/useHeader';
-import { Typography } from '@mui/material';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { Button } from 'antd';
 
-const Item = styled(Paper)(({theme}) => ({
-    textAlign: 'center',
-    height: 60,
-    lineHeight: '60px',
-}));
+import Box from '@mui/material/Box';
+import useHeader from '../base/hooks/useHeader';
+import Button from '@mui/material/Button';
+
+import Approve from './VacationJudge/Approve';
+import Reject from './VacationJudge/Reject';
+import Pending from './VacationJudge/Pending';
+import NotApplicate from './VacationJudge/NotApplicate';
+import styled from 'styled-components';
+
+const DesignPerson = styled.div`
+
+`;
+
+function useOutsideAlerter(ref) {
+    useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          alert("You clicked outside of me!");
+        }
+      }
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+}
 
 const PersonPage = () => {
     const {user} = useHeader();
     const uid = user.uid;
-    
+
+    const [IsApplicate, setIsApplicate] = useState(false);
     const [IsExamine, setIsExamine] = useState(false);
+    const [IsPositive, setIsPositive] = useState(false);
+
+    const [UserInfo, setUserInfo] = useState({
+        'Startdate' : new Date(),
+        'Enddate' : new Date(),
+        'Content' : '',
+    });
+
+    const personRef = useRef(null);
+    useOutsideAlerter(personRef);
 
     useEffect(()=>{
         getUserVacation(uid).then((v)=>{
             if (v === 'false'){
-                console.log('데이터가 없습니다..ㅠㅠㅠㅠ');
+                setIsApplicate(false);
             }else{
-                setIsExamine(v.Examine);
+                if(v.Positive === false || v.Positive === true){
+                    setUserInfo({
+                        'Startdate' : v.Startdate,
+                        'Enddate' : v.Enddate,
+                        'Content' : v.Content,
+                    })
+                    setIsApplicate(true);
+                    setIsExamine(v.Examine);
+                    setIsPositive(v.Positive);
+                }else{
+                    setUserInfo({
+                        'Startdate' : v.Startdate,
+                        'Enddate' : v.Enddate,
+                        'Content' : v.Content,
+                    })
+                    setIsApplicate(true);
+                    setIsExamine(v.Examine);
+                }
             }
         });
     }, [uid]);
@@ -39,45 +87,36 @@ const PersonPage = () => {
     }
 
     return (
-        <>
+        <div>
             <Box>
-                { IsExamine && 
-                    <Item elevation={3}>
-                        <Typography variant="h2" gutterBottom>
-                            내 휴가
-                        </Typography>
-                        <Typography variant="h4" gutterBottom>
-                            출발일 : {Userdata.Startdate}
-                        </Typography>
-                        <Typography variant="h4" gutterBottom>
-                            도착일 : {Userdata.Enddate}
-                        </Typography>
-                        <Typography variant="h4" gutterBottom>
-                            휴가내용 : {Userdata.Content}
-                        </Typography>
-                    </Item>
-                }
-                { !IsExamine && 
+                { IsApplicate && 
                 <>
-                    <Item elevation={3}>
-                        <Typography variant="h2" gutterBottom>
-                            신청한 휴가가 없습니다..
-                        </Typography>
-                        <img
-                            src={baby_ogu_running}
-                            alt=""
-                        />
-                    </Item>
+                    { IsExamine && 
+                    <>
+                        { IsPositive &&
+                            <Approve user={UserInfo}/>
+                        }
+                        { !IsPositive &&
+                            <Reject />
+                        }
+                    </>
+                    }
+                    { !IsExamine && 
+                        <Pending user={UserInfo}/>
+                    }
                 </>
                 }
-                <Button onClick={onOpenhandle} size="small" sx={{ m:1 }}>
-                    휴가신청!
-                    {Open && <Applicate onComplete={()=>{
+                { !IsApplicate &&
+                    <NotApplicate />
+                }
+                <Button  onClick={onOpenhandle} variant="contained">
+                    휴가신청
+                    {Open && <Applicate  onComplete={()=>{
                         setOpen(false);
                     }}/>}
                 </Button>
             </Box>
-        </>
+        </div>
     );
 }
 
