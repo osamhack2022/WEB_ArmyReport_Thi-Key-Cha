@@ -14,7 +14,7 @@ import { UserActions } from '../../app/slice/UserSlice';
 import { AuthActions } from '../../app/slice/AuthSlice';
 
 const AuthLoginBlock = styled.div`
-  position: relative;
+  position: fixed;
   font-famliy: GothicA1 Regular;
   label {
     color: white;

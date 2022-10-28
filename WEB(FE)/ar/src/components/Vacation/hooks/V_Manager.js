@@ -24,7 +24,6 @@ export async function getVacation(){
         const Startday = start.getFullYear() + "-" + (start.getMonth()+1) + "-" + start.getDate();
         const end = new Date(res.data().Enddate.seconds * 1000);
         const Endday = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate();
-        console.log(res.data().Examine);
         const user = {
             id : count,
             Name : res.data().Name,
@@ -35,7 +34,6 @@ export async function getVacation(){
             Content : res.data().Content,
             Note : res.data().Note,
         };
-        console.log(user);
         v_list.push(user);
         count += 1;
     });
@@ -114,52 +112,80 @@ export async function getId(name){
     v_Snapshot.forEach((val)=>{
         uid = val.data().Useremail;
         uid = uid.split('@');
-        console.log(uid[0]);
     });
     return uid;
 };
 
 export function CombineRows(StartRows, EndRows){
+    let count = 1;
     let OutcastRows = [];
-    console.log(StartRows, EndRows);
+
+    if (StartRows.length === 0 && EndRows.length === 0){
+        return 0;
+    }else if(StartRows.length === 0){
+        for(let k=0; k< EndRows.length; k++){
+            OutcastRows.push({
+                id : count,
+                Home : EndRows[k].End,
+            });
+            count += 1;
+        }
+        return OutcastRows;
+    }else if(EndRows.length === 0){
+        for(let k=0; k< StartRows.length; k++){
+            OutcastRows.push({
+                id : count,
+                Away : StartRows[k].Start,
+            });
+            count += 1;
+        }
+        return OutcastRows;
+    }
     if (StartRows.length < EndRows.length ){
         for(let k=0; k < EndRows.length; k++){
-            console.log(EndRows[k].End, StartRows[k].Start);
             if (k === StartRows.length){
                 OutcastRows.push({
-                Home : EndRows[k].End,
+                    id : count,
+                    Home : EndRows[k].End,
                 });
+                count += 1;
             }else{
                 OutcastRows.push({
-                Away : StartRows[k].Start,
-                Home : EndRows[k].End,
+                    id: count,
+                    Away : StartRows[k].Start,
+                    Home : EndRows[k].End,
                 });
+                count += 1;
             }
         }
     }else if(StartRows.length > EndRows.length){
         for(let k = 0; k < StartRows.length;k++){
             if (k === EndRows.length){
-                console.log(StartRows[k].Start);
                 OutcastRows.push({
-                Away : StartRows[k].Start,
+                    id : count,
+                    Away : StartRows[k].Start,
                 });
+                count += 1;
             }else{
                 OutcastRows.push({
-                Away : StartRows[k].Start,
-                Home : EndRows[k].End,
+                    id : count,
+                    Away : StartRows[k].Start,
+                    Home : EndRows[k].End,
                 });
+                count += 1;
             }
         } 
     }else{
         for(let k = 0; k< StartRows.length;k++){
-            console.log(EndRows[k].End, StartRows[k].Start);
             OutcastRows.push({
+                id : count,
                 Away : StartRows[k].Start,
                 Home : EndRows[k].End,
             });
+            count += 1;
         }
     }
-    return {OutcastRows};
+    return OutcastRows;
 };
 
 
