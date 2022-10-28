@@ -5,7 +5,7 @@ import { basiccolumns } from './Tablecolumns';
 import OutcastTable from './OutcastTable';
 
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { StartToday, EndToday, getVacation, setVacation, getId, CombineRows } from './hooks/V_Manager';
@@ -13,19 +13,22 @@ import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF, GridToolbarContainer, useGri
 import { Button, ButtonGroup } from '@mui/material';
 
 const CommandStyle = styled.div`
-  .ar-datagrid {  
+  .ar-datagrid { 
     box-sizing: border-box;
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     margin-top: 50px;
-    width: calc(40%-100px);
     margin-left: 50px;
     margin-bottom: 140px;
   }
+  .datagrid-show-vacation{
+    width: calc(70%);
+  }
   .ar-outcasttable{
+    display: inline,
     margin-left: 10px;
-    width: calc(20%);
+    width: calc(30%);
   }
   .left-btn{
     margin-left: 50px;
@@ -34,26 +37,22 @@ const CommandStyle = styled.div`
 
 let StartRows = null;
 const Startrow = StartToday().then((test)=>{
-  console.log(test);
   StartRows = test;
 });
 
 let EndRows = null;
 const Endrow = EndToday().then((test)=>{
-  console.log(test);
   EndRows = test;
 });
 
 let rows = null;
 const raw_rows = getVacation().then((test)=>{
-  console.log(test);
   rows = test;
 });
 
 const Refreshhandle = (e) => {
   e.preventDefault();
   const get_rows = getVacation().then((test)=>{
-    console.log(test);
     rows = test;
   });
 };
@@ -175,7 +174,7 @@ const CustomToolbar = () => {
 const VacationCommander = () => {
   const [Outcast, setOutcast] = useState([]);
   useEffect(()=>{
-    setOutcast(CombineRows(StartRows,EndRows).OutcastRows);
+    setOutcast(CombineRows(StartRows,EndRows));
   }, []);
 
   const columns = useMemo(()=>[
@@ -189,18 +188,20 @@ const VacationCommander = () => {
   return (
     <>
       <CommandStyle>
-        <div style={{ height: 600, width: '100%' }} className="ar-datagrid">
-          <DataGrid
-            rows={rows}
-            getRowId={(row)=>row.id}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[6]}
-            checkboxSelection
-            components={{
-              Toolbar: CustomToolbar,
-            }}
-          />
+        <div style={{ height: 600 }} className="ar-datagrid">
+          <div className="datagrid-show-vacation">
+            <DataGrid
+              rows={rows}
+              getRowId={(row)=>row.id}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[6]}
+              checkboxSelection
+              components={{
+                Toolbar: CustomToolbar,
+              }}
+            />
+          </div>
           <div className="ar-outcasttable">
             <OutcastTable Rows={Outcast}/>
           </div>

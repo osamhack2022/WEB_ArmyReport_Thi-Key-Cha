@@ -22,6 +22,7 @@ import VacationCommander from '../components/Vacation/VacationCommander';
 import useHeader from '../components/base/hooks/useHeader';
 import Button from '@mui/material/Button';
 import PersonPage from '../components/Vacation/PersonPage';
+import styled from 'styled-components';
 
 const Vacation = () => {
   const [isLoad, setisLoad] = useState(true);
@@ -55,21 +56,21 @@ const Vacation = () => {
 
   return (
     <>
-    {isLoad && <AuthLoadBackground />}
-    {!isLoad && 
-      <Layout className="layout">
-        <Header />
-        <Content>
-          {Boss && 
-          <div>
-            <VacationCommander />
-          </div>
-          }
-          {!Boss && <PersonPage />}
-        </Content>
-        <Footer />
-      </Layout>
-    }
+      {isLoad && <AuthLoadBackground />}
+      {!isLoad && 
+        <Layout className="layout">
+          <Header />
+          <Content>
+            {Boss && 
+            <div>
+              <VacationCommander />
+            </div>
+            }
+            {!Boss && <PersonPage />}
+          </Content>
+          <Footer />
+        </Layout>
+      }
     </>
   );
 };
