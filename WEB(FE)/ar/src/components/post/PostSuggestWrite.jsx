@@ -18,7 +18,6 @@ const PostSuggestWrite = ({ user_id, user_data, coll }) => {
       null,
       String(obj.content),
       false,
-      "건의사항"
     )
     
     try {

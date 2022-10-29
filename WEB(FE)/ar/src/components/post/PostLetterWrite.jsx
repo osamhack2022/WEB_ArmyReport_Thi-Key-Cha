@@ -20,10 +20,9 @@ const PostLetterWrite = ({ user_id, user_data, coll }) => {
     const newLetter = new Post(
       user_id,
       user_data.Username,
-      '마음의 편지',
       attacker,
       content,
-      false
+      false,
     )
 
     try {

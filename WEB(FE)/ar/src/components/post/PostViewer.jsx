@@ -15,13 +15,12 @@ export class Post {
    * @param victim user's name
    * @param attacker the person who hit the user
    */
-  constructor(userId, username, attacker, content, deleted, post_status="letter | suggest") {
+  constructor(userId, username, attacker, content, hidden) {
     this.userId = userId;
     this.username = username;
     this.attacker = attacker;
     this.content = content;
-    this.deleted = deleted;
-    this.post_status = post_status;
+    this.hidden = hidden;
     this.created_at = new Intl.DateTimeFormat('kr', {dateStyle: 'full', timeStyle: 'short'}).format(new Date());
   }
 }
@@ -98,8 +97,8 @@ const PostViewer = () => {
     <>
       <Header />
       <Block>
-        <PostLetter user_id={user.uid} user_data={user.data} type={postType.suggest} />
-        <PostSuggest user_id={user.uid} user_data={user.data} coll={postType.letter} />
+        <PostLetter user_id={user.uid} user_data={user.data} coll={postType.letter} />
+        <PostSuggest user_id={user.uid} user_data={user.data} coll={postType.suggest} />
       </Block>
       <Footer />
       <ToastContainer />
